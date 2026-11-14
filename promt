@@ -1,0 +1,988 @@
+# AGENT 1 — FRONTEND DEVELOPMENT MASTER PROMPT
+## Customer Loyalty Rewards System
+
+### 1. YOUR ROLE
+
+You are Agent 1, a Senior Frontend Developer and UI/UX Engineer.
+
+Your responsibility is to build the complete frontend UI for a professional Customer Loyalty Rewards System.
+
+**STRICT RULE: FRONTEND ONLY.**
+
+You must develop the complete frontend using:
+
+- React.js
+- Tailwind CSS
+- JavaScript
+- React Router DOM
+- Lucide React Icons
+- Recharts (for dashboard analytics)
+- React Hot Toast (for notifications)
+
+Do not implement backend functionality.
+
+Do not create APIs, database connections, authentication servers, or backend logic.
+
+Use realistic dummy data and frontend-only interactions.
+
+---
+
+# 2. PROJECT OVERVIEW
+
+Build a modern Customer Loyalty Rewards Platform for a factory that manufactures physical products sold in boxes.
+
+The platform allows customers to:
+
+1. Register and log in.
+2. Enter unique product codes.
+3. Earn loyalty points.
+4. View their points balance.
+5. Explore available rewards.
+6. Redeem rewards using points.
+7. View redemption history.
+8. Manage their profiles.
+
+The factory owner has a separate Admin Dashboard to:
+
+1. Monitor business performance.
+2. Manage customers.
+3. Manage products.
+4. Generate product reward codes (UI only).
+5. Manage reward programs.
+6. Monitor code redemption.
+7. Monitor suspicious activities.
+8. View analytics and reports.
+
+The application must have two separate experiences:
+
+- Customer Portal
+- Admin Portal
+
+---
+
+# 3. DESIGN SYSTEM — STRICTLY FOLLOW
+
+Implement the provided Neo-Brutalist design direction throughout the application.
+
+### Color Palette
+
+Primary Yellow: #ffe17c
+
+Deep Charcoal: #171e19
+
+Sage Accent: #b7c6c2
+
+White: #ffffff
+
+Black: #000000
+
+Additional neutral colors may be used for secondary information, disabled states, and error indicators.
+
+### Typography
+
+Headings:
+Cabinet Grotesk — weights 400–800.
+
+Body:
+Satoshi — Medium 500.
+
+Use bold geometric typography, strong hierarchy, and high readability.
+
+Import both fonts using Google Fonts if available.
+
+### Borders
+
+- All interactive elements must have 2px solid black borders.
+- Cards must use 2px borders.
+- Sections should use strong visual separation.
+- Avoid unnecessary decorative effects.
+
+### Hard Shadows
+
+Standard:
+box-shadow: 4px 4px 0px 0px #000000;
+
+Large:
+box-shadow: 8px 8px 0px 0px #000000;
+
+Dashboard containers:
+box-shadow: 12px 12px 0px 0px #000000;
+
+IMPORTANT:
+- Never use blurred shadows.
+- Never use gradients.
+- Maintain a consistent Neo-Brutalist aesthetic.
+
+### Button Interactions
+
+Buttons should behave like physical push buttons.
+
+Hover:
+transform: translate(4px, 4px);
+
+Active:
+transform: translate(4px, 4px);
+
+Remove the hard shadow when pressed.
+
+Use smooth transitions.
+
+### Border Radius
+
+- Buttons: Maximum 12px.
+- Dashboard cards: 8px–16px.
+- Marketing cards: Can use larger asymmetric corners.
+- Avoid excessive rounded UI.
+
+---
+
+# 4. LANDING PAGE
+
+Route: /
+
+Create a premium SaaS-style landing page introducing the Customer Loyalty Rewards Platform.
+
+### Navigation
+
+- Fixed navigation.
+- Height: 80px.
+- Yellow background.
+- Black bottom border (2px).
+
+Left:
+Brand logo with a black square and yellow lightning/reward icon.
+
+Brand name:
+LOYALTYBOX
+
+Center navigation:
+
+- Home
+- How It Works
+- Features
+- Rewards
+- About
+
+Right:
+
+- Login
+- Get Started
+
+### Hero Section
+
+Background: #ffe17c.
+
+Add a subtle radial dot pattern.
+
+Two-column layout.
+
+LEFT:
+
+Badge:
+"SMART CUSTOMER REWARDS PLATFORM"
+
+Main heading:
+
+"Every Box.
+Every Purchase.
+Every Reward."
+
+Highlight the word "Reward" using outlined typography.
+
+Description:
+
+"Turn every product purchase into a rewarding experience. Scan unique product codes, collect points, and unlock exciting rewards."
+
+Buttons:
+
+- Start Earning Rewards
+- Explore How It Works
+
+RIGHT:
+
+Create a realistic browser mockup showing a customer loyalty dashboard.
+
+Include:
+
+- Available points: 1,250
+- Total products redeemed: 25
+- Available rewards: 8
+- Recent activity
+- Points earning chart
+- Reward progress card
+
+Use white, sage, and charcoal dashboard panels.
+
+### Social Proof Marquee
+
+Dark charcoal background.
+
+Continuous horizontal marquee displaying:
+
+- SMART REWARDS
+- CUSTOMER LOYALTY
+- SECURE REDEMPTION
+- EXCLUSIVE BENEFITS
+- REWARD YOURSELF
+
+Use sage typography.
+
+### Problem vs Solution
+
+White background.
+
+Two-column card layout.
+
+PROBLEM CARD:
+
+- Customers have no reason to stay loyal.
+- No transparent reward tracking.
+- Traditional loyalty programs are complicated.
+- Difficult to monitor customer engagement.
+
+SOLUTION CARD:
+
+- Earn points on every purchase.
+- Secure unique product codes.
+- Instant reward tracking.
+- Easy reward redemption.
+
+### Feature Grid
+
+Yellow background.
+
+Three-column responsive grid.
+
+Create six feature cards:
+
+1. Unique Product Codes
+2. Instant Points
+3. Exciting Rewards
+4. Secure Redemption
+5. Customer Dashboard
+6. Business Analytics
+
+Each card should contain an icon, title, description, and hover interaction.
+
+### How It Works
+
+Dark charcoal background.
+
+Three-step horizontal process:
+
+01 — Buy a Product
+
+Purchase a product box from an authorized retailer.
+
+02 — Enter Your Code
+
+Enter the unique code printed inside the product packaging.
+
+03 — Earn & Redeem
+
+Collect points and exchange them for exciting rewards.
+
+Use large numbered circles connected by a horizontal line.
+
+### User Personas
+
+Three cards:
+
+CUSTOMER:
+Buy products, collect points, and redeem rewards.
+
+FACTORY OWNER:
+Manage products, customers, reward programs, and business performance.
+
+ADMINISTRATOR:
+Monitor codes, security, and suspicious redemption attempts.
+
+### Testimonials
+
+Sage background.
+
+Create three testimonial cards with sample fictional customer feedback.
+
+Do not represent fictional testimonials as verified real reviews.
+
+### Final CTA
+
+Yellow background.
+
+Heading:
+
+"Your Next Purchase Deserves a Reward."
+
+CTA:
+"Join the Rewards Program"
+
+### Footer
+
+Dark charcoal background.
+
+Four columns:
+
+- Brand information
+- Platform
+- Customer Support
+- Legal
+
+Include social media icon buttons.
+
+---
+
+# 5. CUSTOMER AUTHENTICATION UI
+
+Routes:
+
+/login
+/register
+/forgot-password
+
+### Login Page
+
+Create a premium split-screen design.
+
+Left:
+Yellow branded promotional panel.
+
+Right:
+White login form.
+
+Fields:
+
+- Email
+- Password
+- Remember Me
+
+Buttons:
+
+- Login
+- Continue
+
+Additional:
+- Forgot Password
+- Create Account
+
+### Registration Page
+
+Fields:
+
+- Full Name
+- Email Address
+- Mobile Number
+- Password
+- Confirm Password
+- Accept Terms & Conditions
+
+Add password visibility toggle and frontend validation.
+
+### Forgot Password
+
+Fields:
+
+- Registered Email
+- Send Reset Link
+
+Use frontend-only simulated interactions.
+
+---
+
+# 6. CUSTOMER DASHBOARD
+
+Route: /customer/dashboard
+
+Create a premium customer dashboard.
+
+### Sidebar
+
+- Overview
+- Redeem Product Code
+- My Points
+- Rewards
+- Redemption History
+- My Profile
+- Logout
+
+### Top Navbar
+
+- Welcome message
+- Notification icon
+- Customer avatar
+- Profile dropdown
+
+### Dashboard Overview
+
+Welcome message:
+
+"Welcome back, Rahul!"
+
+Stats cards:
+
+- Available Points: 1,250
+- Total Points Earned: 2,500
+- Redeemed Rewards: 5
+- Products Scanned: 25
+
+### Points Overview
+
+Create a Recharts visualization showing points earned over the last six months.
+
+### Recent Activity
+
+Show:
+
+- Product code redeemed
+- Points earned
+- Reward redeemed
+- Date and status
+
+### Reward Progress
+
+Display progress toward the next reward.
+
+Example:
+
+"You need 250 more points to unlock your Premium Gift."
+
+---
+
+# 7. PRODUCT CODE REDEMPTION
+
+Route: /customer/redeem-code
+
+Create an attractive redemption interface.
+
+Main heading:
+
+"Turn Your Purchase Into Points."
+
+Input:
+
+Enter your unique product code.
+
+Example:
+ABC-8X92-KL
+
+Button:
+"Verify & Redeem"
+
+Include:
+
+- Product box illustration.
+- Instructions on finding the code.
+- Security information.
+- Recent redemption history.
+
+Simulate the following frontend states:
+
+1. Valid code.
+2. Invalid code.
+3. Already redeemed code.
+4. Expired code.
+5. Loading state.
+
+Display appropriate success and error notifications.
+
+IMPORTANT:
+All code verification must be simulated using dummy data.
+
+Never claim real server-side verification.
+
+---
+
+# 8. MY POINTS
+
+Route: /customer/points
+
+Include:
+
+- Total available points.
+- Total earned points.
+- Total redeemed points.
+- Points transaction history.
+- Earning activity.
+- Points expiration information (sample data).
+
+Create a clean points history table.
+
+---
+
+# 9. REWARDS CATALOG
+
+Route: /customer/rewards
+
+Create a visually attractive rewards marketplace.
+
+Sample rewards:
+
+| Reward | Points |
+|---|---:|
+| ₹50 Discount Coupon | 50 |
+| ₹100 Discount Coupon | 100 |
+| Free Product | 150 |
+| Premium Gift Box | 500 |
+| Special Shopping Voucher | 750 |
+
+Each reward card should show:
+
+- Reward image or illustration.
+- Reward name.
+- Required points.
+- Redeem button.
+- Availability badge.
+
+Add category filters.
+
+Create reward redemption confirmation modal.
+
+---
+
+# 10. REDEMPTION HISTORY
+
+Route: /customer/history
+
+Display a table containing:
+
+- Transaction ID
+- Product Code
+- Points Earned
+- Reward Redeemed
+- Date
+- Status
+
+Add search, filters, and pagination UI.
+
+---
+
+# 11. CUSTOMER PROFILE
+
+Route: /customer/profile
+
+Include:
+
+- Profile avatar.
+- Full name.
+- Email.
+- Mobile number.
+- Registration date.
+- Edit Profile button.
+- Change Password UI.
+
+Use frontend-only interactions.
+
+---
+
+# 12. ADMIN DASHBOARD
+
+Routes:
+
+/admin/dashboard
+/admin/customers
+/admin/products
+/admin/codes
+/admin/rewards
+/admin/redemptions
+/admin/fraud-monitoring
+/admin/analytics
+/admin/settings
+
+Create a completely separate professional Admin Dashboard.
+
+### Admin Sidebar
+
+- Dashboard
+- Customers
+- Products
+- Code Management
+- Rewards Management
+- Redemptions
+- Fraud Monitoring
+- Analytics
+- Settings
+- Logout
+
+### Admin Dashboard Overview
+
+Stats:
+
+- Total Customers: 5,000
+- Total Products: 125
+- Generated Codes: 50,000
+- Redeemed Codes: 12,500
+- Points Distributed: 1,25,000
+- Rewards Redeemed: 2,500
+
+Create:
+
+- Revenue/engagement analytics.
+- Customer growth chart.
+- Points distribution chart.
+- Redemption activity.
+- Recent customer registrations.
+- Recent redemptions.
+
+Use Recharts.
+
+All dashboard information must use clearly identified sample data.
+
+---
+
+# 13. CUSTOMER MANAGEMENT
+
+Route: /admin/customers
+
+Create a customer management interface.
+
+Features:
+
+- Customer listing.
+- Search customers.
+- Filter by status.
+- View customer details.
+- View points balance.
+- View redemption history.
+- Active/Inactive badges.
+
+Use realistic dummy customers.
+
+---
+
+# 14. PRODUCT MANAGEMENT
+
+Route: /admin/products
+
+Include:
+
+- Product listing.
+- Add Product modal.
+- Edit Product modal.
+- Delete confirmation.
+- Product name.
+- Product SKU.
+- Category.
+- Points per product.
+- Product status.
+
+All operations should work locally in frontend state.
+
+---
+
+# 15. CODE MANAGEMENT
+
+Route: /admin/codes
+
+Create a unique product code management interface.
+
+Include:
+
+- Generate Codes UI.
+- Product selection.
+- Number of codes.
+- Points per code.
+- Generated code listing.
+- Code status.
+- Search and filters.
+- Export CSV button (frontend implementation).
+
+Code statuses:
+
+- Unused
+- Redeemed
+- Expired
+- Suspicious
+
+Simulate code generation using random demo codes.
+
+Do not implement actual secure code generation or backend persistence.
+
+Clearly label the interface as a frontend demonstration.
+
+---
+
+# 16. REWARDS MANAGEMENT
+
+Route: /admin/rewards
+
+Features:
+
+- Add reward.
+- Edit reward.
+- Delete reward.
+- Reward name.
+- Description.
+- Points required.
+- Available quantity.
+- Reward category.
+- Active/Inactive status.
+
+Use modals and local React state.
+
+---
+
+# 17. REDEMPTION MANAGEMENT
+
+Route: /admin/redemptions
+
+Display:
+
+- Customer name.
+- Redemption ID.
+- Product code.
+- Points awarded.
+- Reward claimed.
+- Date.
+- Status.
+
+Add search and filters.
+
+---
+
+# 18. FRAUD MONITORING
+
+Route: /admin/fraud-monitoring
+
+Design a security monitoring dashboard.
+
+Display sample suspicious activities:
+
+- Repeated code redemption attempts.
+- Multiple failed verification attempts.
+- Suspicious customer activity.
+- Duplicate redemption attempts.
+- Unusual redemption patterns.
+
+Include:
+
+- Risk level badges.
+- Customer information.
+- Attempt count.
+- Timestamp.
+- Activity status.
+- View Details modal.
+
+Risk levels:
+
+- Low
+- Medium
+- High
+- Critical
+
+Add filter by risk level.
+
+IMPORTANT:
+This is only a frontend monitoring interface. Do not claim actual fraud detection functionality.
+
+---
+
+# 19. ANALYTICS
+
+Route: /admin/analytics
+
+Include:
+
+- Customer growth.
+- Monthly points distribution.
+- Reward redemption trends.
+- Most popular rewards.
+- Top customers.
+- Product performance.
+
+Use Recharts and dummy datasets.
+
+---
+
+# 20. RESPONSIVE DESIGN
+
+The entire application must work on:
+
+- 375px mobile.
+- 768px tablet.
+- 1024px laptop.
+- 1440px desktop.
+
+Mobile requirements:
+
+- Collapsible sidebar.
+- Hamburger menu.
+- Responsive cards.
+- Scrollable tables.
+- Proper spacing.
+- No horizontal overflow.
+- Touch-friendly controls.
+
+---
+
+# 21. INTERACTIONS
+
+Implement functional frontend interactions:
+
+- React Router navigation.
+- Sidebar navigation.
+- Login and registration validation.
+- Password visibility toggle.
+- Search and filtering.
+- Modal dialogs.
+- Dropdown menus.
+- Toast notifications.
+- Tabs.
+- Pagination.
+- Charts.
+- Reward redemption simulation.
+- Product code redemption simulation.
+- Theme consistency.
+- Mobile navigation.
+
+Use local React state and dummy data.
+
+---
+
+# 22. PROJECT STRUCTURE
+
+Organize the frontend professionally.
+
+Suggested structure:
+
+src/
+  assets/
+  components/
+    common/
+    landing/
+    customer/
+    admin/
+    charts/
+    ui/
+  layouts/
+    PublicLayout.jsx
+    CustomerLayout.jsx
+    AdminLayout.jsx
+  pages/
+    public/
+    auth/
+    customer/
+    admin/
+  data/
+    dummyCustomers.js
+    dummyProducts.js
+    dummyRewards.js
+    dummyTransactions.js
+    dummyAnalytics.js
+  hooks/
+  utils/
+  App.jsx
+  main.jsx
+  index.css
+
+Keep components reusable and maintainable.
+
+---
+
+# 23. STRICT AGENT OWNERSHIP RULES
+
+You are Agent 1.
+
+You own ONLY the frontend.
+
+You must:
+
+1. Inspect the existing repository before making changes.
+2. Preserve existing project configuration wherever possible.
+3. Never overwrite backend files.
+4. Never edit backend folders.
+5. Never modify database schemas.
+6. Never create API endpoints.
+7. Never implement server-side authentication.
+8. Never connect to MongoDB or any database.
+9. Never modify Agent 2's files.
+10. Never install backend dependencies.
+
+If the repository already contains a frontend, continue from its existing structure instead of unnecessarily recreating it.
+
+If a required frontend folder does not exist, create it.
+
+If the repository is empty, initialize the React + Tailwind frontend.
+
+---
+
+# 24. QUALITY REQUIREMENTS
+
+- Professional production-quality UI.
+- Consistent spacing and typography.
+- Reusable React components.
+- Clean folder structure.
+- No broken routes.
+- No console errors.
+- No placeholder blank pages.
+- No fake backend integrations.
+- No unnecessary dependencies.
+- Consistent Neo-Brutalist styling.
+- All important buttons should perform meaningful frontend actions.
+
+Do not compromise the design quality.
+
+Do not replace the requested design with a generic dashboard template.
+
+---
+
+# 25. EXECUTION INSTRUCTIONS
+
+Follow this order:
+
+STEP 1:
+Inspect the existing repository and identify the frontend structure.
+
+STEP 2:
+Prepare the design system, typography, colors, reusable components, and layouts.
+
+STEP 3:
+Build the complete public landing page.
+
+STEP 4:
+Build authentication pages.
+
+STEP 5:
+Build all customer dashboard pages.
+
+STEP 6:
+Build all admin dashboard pages.
+
+STEP 7:
+Implement frontend interactions and dummy data.
+
+STEP 8:
+Implement responsive layouts.
+
+STEP 9:
+Run the frontend build and fix all errors.
+
+STEP 10:
+Test all routes and major interactions.
+
+Do not stop after creating the landing page.
+
+Complete all the frontend pages listed in this prompt.
+
+---
+
+# 26. FINAL REPORT
+
+After completing the frontend, provide:
+
+1. Pages created.
+2. Components created.
+3. Routes implemented.
+4. Dependencies installed.
+5. Dummy interactions implemented.
+6. Responsive testing results.
+7. Build status.
+8. Files created or modified.
+9. Any remaining frontend limitations.
+10. Confirmation that no backend files were modified.
+
+FINAL RULE:
+
+YOUR RESPONSIBILITY IS THE COMPLETE CUSTOMER LOYALTY REWARDS SYSTEM FRONTEND ONLY.
+
+Agent 2 will independently handle backend development.
+
+Keep frontend and backend ownership strictly separated.
