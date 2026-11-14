@@ -1,0 +1,41 @@
+# ASSUMPTIONS.md — Customer Loyalty Rewards System
+
+This document details all business and engineering assumptions made during the design and development of the **LOYALTYBOX** Customer Loyalty Rewards Platform.
+
+---
+
+## 1. Product Nature & Physical Packaging
+- **Assumption:** The factory produces boxed physical industrial equipment and spare parts (such as bearings, hydraulic seals, CNC drill bits, armature wire, and pneumatics) sold through wholesalers, distributors, and retail hardware stores.
+- **Why chosen:** Industrial and mechanical spare parts have high aftermarket counterfeit risk and indirect distribution channels where manufacturers rarely have direct relationships with workshops and mechanics.
+- **Physical Code Placement:** Every physical product box contains a single-use alphanumeric code printed on a scratch-off security label located on the inside flap of the box lid. Customers cannot scan the code without opening the box, ensuring code security prior to retail sale.
+
+---
+
+## 2. Customer Proof of Purchase & Authenticity
+- **Assumption:** Revealing and entering the inner box code constitutes cryptographic proof of purchase.
+- **Why chosen:** Traditional invoice scanning requires manual OCR or manual receipt audits that mechanics find tedious. Entering an inner-box tamper-evident code provides zero-friction instant verification.
+- **Wholesale Exception:** High-volume wholesale buyers redeeming more than 10 codes in under 10 minutes can be flagged for optional invoice proof verification in the Fraud Monitoring Center.
+
+---
+
+## 3. Fraud Prevention & Code Replay Defense
+- **Assumption:** Codes are single-use, 12-character alphanumeric tokens (e.g. `BOX-GOLD-8899`) that permanently transition to `Redeemed` state on first validation.
+- **Mitigations Implemented:**
+  1. **Single-Use Enforcement:** Once redeemed, any subsequent attempt triggers an `ALREADY_REDEEMED` notification showing the previous redemption timestamp.
+  2. **Expiration Enforcement:** Codes carry an expiration timestamp (default: 12 months from batch production). Expired attempts display an `EXPIRED` message.
+  3. **Brute-Force Rate Limiting:** Consecutive invalid submissions trigger an IP cooldown and log an alert in the Admin Fraud Monitoring Center.
+  4. **Suspicious Batch Detection:** Cloned or flagged codes display a `SUSPICIOUS` alert advising the buyer to contact factory security.
+
+---
+
+## 4. Points & Reward Economics
+- **Assumption:** 1 point equals roughly ₹1 in customer redemption value.
+- **Points Awarded:** Scaled based on product value (e.g. 50 pts for ₹920 Hydraulic Seal pack, 100 pts for ₹1,850 Bearing Box, 200 pts for ₹4,950 Motor Armature).
+- **Points Expiry:** Earned loyalty points remain valid for 12 months.
+- **Rewards Catalog:** Offers instant digital discount coupons (₹50, ₹100), free factory replacement spares (150 pts), workshop tool bags (300 pts), and factory VIP gift crates (500 pts).
+
+---
+
+## 5. Architectural Separation (Agent 1 vs Agent 2)
+- **Assumption:** Agent 1 owns the complete frontend user experience, UI components, Neo-Brutalist design tokens, route navigation, and realistic simulated client-side state with `localStorage` persistence.
+- **Why chosen:** Ensures strict modular separation so Agent 2 can independently implement backend microservices, databases (MongoDB/PostgreSQL), or HSM cryptographic signing without merge conflicts or code overwrites.
