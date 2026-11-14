@@ -58,6 +58,41 @@ This document records key AI interactions, decisions, tool executions, and speci
 
 ---
 
-### Interaction 7: Automated Linting & Build Verification
+### Interaction 7: Automated Linting & Build Verification (Frontend)
 - **Goal:** Verify that zero compilation errors, missing dependencies, or unhandled exceptions exist across the codebase.
 - **Outcome:** Ran `oxlint` and `vite build`. Resolved all unused imports. The final production bundle compiles cleanly in 1.35 seconds.
+
+---
+
+### Interaction 8: Agent 2 Backend Architecture & Boundary Definition
+- **Goal:** Initialize isolated Node.js/Express backend strictly inside `backend/` without modifying any of Agent 1's frontend files.
+- **Prompt Summary:** Establish 10 Mongoose schemas, REST controllers, middleware, and cryptographic security utilities adhering to Section 4 and Section 23 of `promt`.
+- **Outcome:** Zero frontend files touched; clean separation of frontend SPA and backend API server.
+
+---
+
+### Interaction 9: ES Module Jest Execution Configuration (AI Error Case 3)
+- **The AI Mistake:** Jest threw an error when attempting to run tests on ES modules (`SyntaxError: Cannot use import statement outside a module`).
+- **How Noticed:** Executing `npm test` failed initially because Node.js requires VM experimental flags to run ES module imports natively in Jest without Babel.
+- **How Fixed:** 
+  1. Updated `backend/package.json` test script to: `cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --detectOpenHandles`.
+  2. Set `"transform": {}` in Jest configuration.
+  3. Re-ran test suite, enabling all 19 Supertest integration tests to execute natively in ES Modules.
+
+---
+
+### Interaction 10: Zero-Plaintext Code Cryptographic Storage
+- **Goal:** Guarantee that physical product box codes are never stored in plaintext in MongoDB, preventing code theft in the event of database dumps.
+- **Outcome:** Engineered HMAC-SHA256 keyed hashing where `codeHash` is stored, and plaintext codes are emitted strictly once in the response of `POST /api/codes/generate` for factory label printing.
+
+---
+
+### Interaction 11: Race Condition & Atomic Redemption Defense
+- **Goal:** Ensure two simultaneous requests cannot redeem the exact same box code twice or result in duplicate loyalty points.
+- **Outcome:** Implemented atomic `findOneAndUpdate({ _id: foundCode._id, status: 'unused' }, ...)` and atomic `$inc` wallet balance updates. Verified via automated test suite.
+
+---
+
+### Interaction 12: Backend Integration Testing & Documentation
+- **Goal:** Execute full automated test suite and author comprehensive documentation.
+- **Outcome:** 19/19 tests passing across 4 test suites. Authored `API_DOCUMENTATION.md`, `DATABASE_SCHEMA.md`, `SECURITY.md`, and `INTEGRATION_GUIDE.md` in `backend/docs/`.

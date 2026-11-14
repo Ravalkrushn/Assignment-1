@@ -8,9 +8,36 @@ This document records the end-to-end testing strategy, automated build verificat
 
 | Test Case | Command Executed | Expected Result | Actual Result | Status |
 |---|---|---|---|---|
-| Package Dependencies | `npm install` | Clean dependency resolution without conflicts | All packages installed | **PASS** |
-| Production Build | `npm run build` | Zero syntax errors, bundles generated in `dist/` | Build completed in 1.35s | **PASS** |
-| Code Quality / Lint | `npm run lint` | Zero fatal lint errors | 0 errors | **PASS** |
+| Frontend Dependencies | `npm install` (in `frontend/`) | Clean dependency resolution without conflicts | All packages installed | **PASS** |
+| Frontend Production Build | `npm run build` (in `frontend/`) | Zero syntax errors, bundles generated in `dist/` | Build completed in 1.35s | **PASS** |
+| Frontend Code Quality / Lint | `npm run lint` (in `frontend/`) | Zero fatal lint errors | 0 errors | **PASS** |
+| Backend Dependencies | `npm install` (in `backend/`) | Clean resolution of Express, Mongoose, Jest | All packages installed | **PASS** |
+| Backend Automated Integration Tests | `npm test` (in `backend/`) | 19 integration tests passing across 4 suites | 19 passed, 4 test suites | **PASS** |
+
+---
+
+## 1.1 Backend Automated Integration Test Suite Breakdown
+
+| Suite File | Test Scenario | Verified Assertions | Status |
+|---|---|---|---|
+| `auth.test.js` | Customer registration | Returns 201, issues JWT tokens, auto-credits 100 welcome bonus points | **PASS** |
+| `auth.test.js` | Duplicate email protection | Rejects duplicate email registration with 409 Conflict | **PASS** |
+| `auth.test.js` | Password validation | Confirms password confirmation matching, min 6 characters | **PASS** |
+| `auth.test.js` | Customer login | Compares bcrypt hash, generates access/refresh tokens | **PASS** |
+| `auth.test.js` | Password security check | Rejects invalid password attempt with 401 Unauthorized | **PASS** |
+| `auth.test.js` | Token verification | Rejects protected route without token (401), grants access with valid token | **PASS** |
+| `products.test.js`| Product creation | Admin creates new physical SKU with points per box | **PASS** |
+| `products.test.js`| SKU uniqueness | Rejects duplicate SKU with 409 Conflict | **PASS** |
+| `products.test.js`| Role authorization | Blocks customer from creating or deleting products (403 Forbidden) | **PASS** |
+| `products.test.js`| Product listing | Public endpoint filters active products | **PASS** |
+| `codes.test.js` | Batch code generation | Generates 10 unique codes, stores HMAC-SHA256 hash (never plaintext) | **PASS** |
+| `codes.test.js` | Valid code redemption | Verifies HMAC signature, credits points, updates wallet atomically | **PASS** |
+| `codes.test.js` | Duplicate code protection | Rejects already-redeemed code with 400 Bad Request, logs duplicate attempt | **PASS** |
+| `codes.test.js` | Expired code protection | Rejects promotional code beyond expiration date | **PASS** |
+| `codes.test.js` | Invalid code defense | Rejects non-existent code, logs heuristic fraud event | **PASS** |
+| `rewards.test.js` | Reward claim | Deducts points, decrements inventory atomically, issues claim code | **PASS** |
+| `rewards.test.js` | Insufficient points check| Rejects redemption if wallet balance is below required points | **PASS** |
+| `rewards.test.js` | Out-of-stock check | Rejects redemption if reward inventory is zero | **PASS** |
 
 ---
 

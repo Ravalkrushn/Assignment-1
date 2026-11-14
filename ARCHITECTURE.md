@@ -2,14 +2,22 @@
 
 ## 1. Architectural Overview & Stack Selection
 
-The frontend of **LOYALTYBOX** is engineered as a high-performance Single Page Application (SPA) adhering to strict **Neo-Brutalist** UI aesthetics:
+The **LOYALTYBOX** system is engineered as an enterprise-grade, multi-tier platform cleanly decoupled between Frontend (Agent 1) and Backend (Agent 2):
 
+### Frontend Stack (Agent 1)
 - **React 19 + Vite 8**: Ultra-fast hot module replacement, predictable component tree rendering, and lightweight modern production bundles.
 - **Tailwind CSS v4 + `@tailwindcss/vite`**: Zero-overhead utility-first stylesheet engine using modern `@theme` design tokens and strict Neo-Brutalist borders (`2px solid #000`), hard shadows (`4px 4px 0px 0px #000`), and tactile physical push buttons.
 - **React Router DOM v7**: Declarative client-side nested routing separating Public, Customer Portal, and Factory Owner Admin layouts.
 - **Recharts**: Responsive SVG charting library rendering area curves, growth bars, and redemption yield analytics.
 - **React Hot Toast**: Unobtrusive, customized Neo-Brutalist notification toasts for real-time interaction feedback.
 - **Canvas-Confetti**: High-delight micro-interaction upon successful code redemption and reward claiming.
+
+### Backend Stack (Agent 2)
+- **Node.js (ES Modules) & Express.js**: RESTful API server with modular routing, centralized error handling, and structured response contracts.
+- **MongoDB & Mongoose**: Document database storing 10 distinct collections with optimized compound and unique indexes.
+- **HMAC-SHA256 Cryptographic Engine**: Keyed code hashing ensuring zero plaintext code storage in the database.
+- **Security & Protection**: Helmet HTTP headers, CORS whitelisting, express-rate-limit throttling, bcrypt password hashing, and JWT token rotation.
+- **Testing**: Jest, Supertest, and MongoMemoryServer for hermetic automated integration tests.
 
 ---
 

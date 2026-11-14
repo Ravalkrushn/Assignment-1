@@ -18,6 +18,7 @@ The platform includes two dedicated portals built with a tactile **Neo-Brutalist
 
 ## 🛠️ Tech Stack
 
+### Frontend (Agent 1)
 - **Framework:** React 19 + Vite 8
 - **Styling & Design System:** Tailwind CSS v4 + `@tailwindcss/vite`
 - **Design Aesthetic:** Strict Neo-Brutalist direction (`#ffe17c`, `#171e19`, `#b7c6c2`, 2px solid borders, hard shadows, physical button push effects)
@@ -29,6 +30,14 @@ The platform includes two dedicated portals built with a tactile **Neo-Brutalist
 - **Celebration Effects:** Canvas-Confetti
 - **State & Persistence:** React Context synchronized with browser `localStorage`
 
+### Backend (Agent 2)
+- **Runtime & Server:** Node.js (ES Modules) + Express.js
+- **Database & ODM:** MongoDB Atlas / Local MongoDB via Mongoose
+- **Authentication:** JWT (Access Token 15m & Rotating Refresh Tokens 7d)
+- **Cryptography:** Node.js `crypto` with HMAC-SHA256 keyed hash for tamper-evident scratch codes (zero plaintext code storage)
+- **Security & Defenses:** Helmet, CORS, express-rate-limit, bcrypt password hashing
+- **Testing Suite:** Jest + Supertest + MongoMemoryServer (19 integration tests passing)
+
 ---
 
 ## 🚀 Quick Setup & Run Instructions
@@ -37,29 +46,28 @@ The platform includes two dedicated portals built with a tactile **Neo-Brutalist
 - Node.js version `18.x` or higher (tested on Node `v22.18.0`)
 - npm version `9.x` or higher
 
-### Steps to Run
-
+### 1. Frontend Setup (Client SPA)
 ```bash
-# 1. Clone the repository
-git clone <your-repository-url>
-cd diwali-assignment-1
-
-# 2. Navigate to the frontend directory
 cd frontend
-
-# 3. Install dependencies
 npm install
-
-# 4. Start the local development server
 npm run dev
+# Running on http://localhost:5173
 ```
 
-Open your browser at **`http://localhost:5173`** to access the live application.
-
-To generate an optimized production build:
+### 2. Backend Setup (RESTful API Server)
 ```bash
-npm run build
-npm run preview
+cd backend
+npm install
+
+# Optional: Seed initial admin user and catalog data
+npm run seed:demo
+
+# Run development server
+npm run dev
+# Server running on http://localhost:5000 (Health check: http://localhost:5000/api/health)
+
+# Run automated integration tests (19/19 tests)
+npm test
 ```
 
 ---

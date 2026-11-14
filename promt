@@ -1,765 +1,724 @@
-# AGENT 1 — FRONTEND DEVELOPMENT MASTER PROMPT
-## Customer Loyalty Rewards System
+# AGENT 2 — BACKEND DEVELOPMENT MASTER PROMPT
+## Project: LOYALTYBOX – Customer Loyalty Rewards System
 
 ### 1. YOUR ROLE
 
-You are Agent 1, a Senior Frontend Developer and UI/UX Engineer.
+You are Agent 2, a Senior Backend Developer and Database Architect.
 
-Your responsibility is to build the complete frontend UI for a professional Customer Loyalty Rewards System.
+Your responsibility is to develop the complete production-oriented backend for the existing LOYALTYBOX Customer Loyalty Rewards System.
 
-**STRICT RULE: FRONTEND ONLY.**
+Agent 1 has already completed the entire frontend.
 
-You must develop the complete frontend using:
+Your responsibility is ONLY:
 
-- React.js
-- Tailwind CSS
-- JavaScript
-- React Router DOM
-- Lucide React Icons
-- Recharts (for dashboard analytics)
-- React Hot Toast (for notifications)
-
-Do not implement backend functionality.
-
-Do not create APIs, database connections, authentication servers, or backend logic.
-
-Use realistic dummy data and frontend-only interactions.
-
----
-
-# 2. PROJECT OVERVIEW
-
-Build a modern Customer Loyalty Rewards Platform for a factory that manufactures physical products sold in boxes.
-
-The platform allows customers to:
-
-1. Register and log in.
-2. Enter unique product codes.
-3. Earn loyalty points.
-4. View their points balance.
-5. Explore available rewards.
-6. Redeem rewards using points.
-7. View redemption history.
-8. Manage their profiles.
-
-The factory owner has a separate Admin Dashboard to:
-
-1. Monitor business performance.
-2. Manage customers.
-3. Manage products.
-4. Generate product reward codes (UI only).
-5. Manage reward programs.
-6. Monitor code redemption.
-7. Monitor suspicious activities.
-8. View analytics and reports.
-
-The application must have two separate experiences:
-
-- Customer Portal
-- Admin Portal
-
----
-
-# 3. DESIGN SYSTEM — STRICTLY FOLLOW
-
-Implement the provided Neo-Brutalist design direction throughout the application.
-
-### Color Palette
-
-Primary Yellow: #ffe17c
-
-Deep Charcoal: #171e19
-
-Sage Accent: #b7c6c2
-
-White: #ffffff
-
-Black: #000000
-
-Additional neutral colors may be used for secondary information, disabled states, and error indicators.
-
-### Typography
-
-Headings:
-Cabinet Grotesk — weights 400–800.
-
-Body:
-Satoshi — Medium 500.
-
-Use bold geometric typography, strong hierarchy, and high readability.
-
-Import both fonts using Google Fonts if available.
-
-### Borders
-
-- All interactive elements must have 2px solid black borders.
-- Cards must use 2px borders.
-- Sections should use strong visual separation.
-- Avoid unnecessary decorative effects.
-
-### Hard Shadows
-
-Standard:
-box-shadow: 4px 4px 0px 0px #000000;
-
-Large:
-box-shadow: 8px 8px 0px 0px #000000;
-
-Dashboard containers:
-box-shadow: 12px 12px 0px 0px #000000;
-
-IMPORTANT:
-- Never use blurred shadows.
-- Never use gradients.
-- Maintain a consistent Neo-Brutalist aesthetic.
-
-### Button Interactions
-
-Buttons should behave like physical push buttons.
-
-Hover:
-transform: translate(4px, 4px);
-
-Active:
-transform: translate(4px, 4px);
-
-Remove the hard shadow when pressed.
-
-Use smooth transitions.
-
-### Border Radius
-
-- Buttons: Maximum 12px.
-- Dashboard cards: 8px–16px.
-- Marketing cards: Can use larger asymmetric corners.
-- Avoid excessive rounded UI.
-
----
-
-# 4. LANDING PAGE
-
-Route: /
-
-Create a premium SaaS-style landing page introducing the Customer Loyalty Rewards Platform.
-
-### Navigation
-
-- Fixed navigation.
-- Height: 80px.
-- Yellow background.
-- Black bottom border (2px).
-
-Left:
-Brand logo with a black square and yellow lightning/reward icon.
-
-Brand name:
-LOYALTYBOX
-
-Center navigation:
-
-- Home
-- How It Works
-- Features
-- Rewards
-- About
-
-Right:
-
-- Login
-- Get Started
-
-### Hero Section
-
-Background: #ffe17c.
-
-Add a subtle radial dot pattern.
-
-Two-column layout.
-
-LEFT:
-
-Badge:
-"SMART CUSTOMER REWARDS PLATFORM"
-
-Main heading:
-
-"Every Box.
-Every Purchase.
-Every Reward."
-
-Highlight the word "Reward" using outlined typography.
-
-Description:
-
-"Turn every product purchase into a rewarding experience. Scan unique product codes, collect points, and unlock exciting rewards."
-
-Buttons:
-
-- Start Earning Rewards
-- Explore How It Works
-
-RIGHT:
-
-Create a realistic browser mockup showing a customer loyalty dashboard.
-
-Include:
-
-- Available points: 1,250
-- Total products redeemed: 25
-- Available rewards: 8
-- Recent activity
-- Points earning chart
-- Reward progress card
-
-Use white, sage, and charcoal dashboard panels.
-
-### Social Proof Marquee
-
-Dark charcoal background.
-
-Continuous horizontal marquee displaying:
-
-- SMART REWARDS
-- CUSTOMER LOYALTY
-- SECURE REDEMPTION
-- EXCLUSIVE BENEFITS
-- REWARD YOURSELF
-
-Use sage typography.
-
-### Problem vs Solution
-
-White background.
-
-Two-column card layout.
-
-PROBLEM CARD:
-
-- Customers have no reason to stay loyal.
-- No transparent reward tracking.
-- Traditional loyalty programs are complicated.
-- Difficult to monitor customer engagement.
-
-SOLUTION CARD:
-
-- Earn points on every purchase.
-- Secure unique product codes.
-- Instant reward tracking.
-- Easy reward redemption.
-
-### Feature Grid
-
-Yellow background.
-
-Three-column responsive grid.
-
-Create six feature cards:
-
-1. Unique Product Codes
-2. Instant Points
-3. Exciting Rewards
-4. Secure Redemption
-5. Customer Dashboard
-6. Business Analytics
-
-Each card should contain an icon, title, description, and hover interaction.
-
-### How It Works
-
-Dark charcoal background.
-
-Three-step horizontal process:
-
-01 — Buy a Product
-
-Purchase a product box from an authorized retailer.
-
-02 — Enter Your Code
-
-Enter the unique code printed inside the product packaging.
-
-03 — Earn & Redeem
-
-Collect points and exchange them for exciting rewards.
-
-Use large numbered circles connected by a horizontal line.
-
-### User Personas
-
-Three cards:
-
-CUSTOMER:
-Buy products, collect points, and redeem rewards.
-
-FACTORY OWNER:
-Manage products, customers, reward programs, and business performance.
-
-ADMINISTRATOR:
-Monitor codes, security, and suspicious redemption attempts.
-
-### Testimonials
-
-Sage background.
-
-Create three testimonial cards with sample fictional customer feedback.
-
-Do not represent fictional testimonials as verified real reviews.
-
-### Final CTA
-
-Yellow background.
-
-Heading:
-
-"Your Next Purchase Deserves a Reward."
-
-CTA:
-"Join the Rewards Program"
-
-### Footer
-
-Dark charcoal background.
-
-Four columns:
-
-- Brand information
-- Platform
-- Customer Support
-- Legal
-
-Include social media icon buttons.
-
----
-
-# 5. CUSTOMER AUTHENTICATION UI
-
-Routes:
-
-/login
-/register
-/forgot-password
-
-### Login Page
-
-Create a premium split-screen design.
-
-Left:
-Yellow branded promotional panel.
-
-Right:
-White login form.
-
-Fields:
-
-- Email
-- Password
-- Remember Me
-
-Buttons:
-
-- Login
-- Continue
-
-Additional:
-- Forgot Password
-- Create Account
-
-### Registration Page
-
-Fields:
-
-- Full Name
-- Email Address
-- Mobile Number
-- Password
-- Confirm Password
-- Accept Terms & Conditions
-
-Add password visibility toggle and frontend validation.
-
-### Forgot Password
-
-Fields:
-
-- Registered Email
-- Send Reset Link
-
-Use frontend-only simulated interactions.
-
----
-
-# 6. CUSTOMER DASHBOARD
-
-Route: /customer/dashboard
-
-Create a premium customer dashboard.
-
-### Sidebar
-
-- Overview
-- Redeem Product Code
-- My Points
-- Rewards
-- Redemption History
-- My Profile
-- Logout
-
-### Top Navbar
-
-- Welcome message
-- Notification icon
-- Customer avatar
-- Profile dropdown
-
-### Dashboard Overview
-
-Welcome message:
-
-"Welcome back, Rahul!"
-
-Stats cards:
-
-- Available Points: 1,250
-- Total Points Earned: 2,500
-- Redeemed Rewards: 5
-- Products Scanned: 25
-
-### Points Overview
-
-Create a Recharts visualization showing points earned over the last six months.
-
-### Recent Activity
-
-Show:
-
-- Product code redeemed
-- Points earned
-- Reward redeemed
-- Date and status
-
-### Reward Progress
-
-Display progress toward the next reward.
-
-Example:
-
-"You need 250 more points to unlock your Premium Gift."
-
----
-
-# 7. PRODUCT CODE REDEMPTION
-
-Route: /customer/redeem-code
-
-Create an attractive redemption interface.
-
-Main heading:
-
-"Turn Your Purchase Into Points."
-
-Input:
-
-Enter your unique product code.
-
-Example:
-ABC-8X92-KL
-
-Button:
-"Verify & Redeem"
-
-Include:
-
-- Product box illustration.
-- Instructions on finding the code.
-- Security information.
-- Recent redemption history.
-
-Simulate the following frontend states:
-
-1. Valid code.
-2. Invalid code.
-3. Already redeemed code.
-4. Expired code.
-5. Loading state.
-
-Display appropriate success and error notifications.
-
-IMPORTANT:
-All code verification must be simulated using dummy data.
-
-Never claim real server-side verification.
-
----
-
-# 8. MY POINTS
-
-Route: /customer/points
-
-Include:
-
-- Total available points.
-- Total earned points.
-- Total redeemed points.
-- Points transaction history.
-- Earning activity.
-- Points expiration information (sample data).
-
-Create a clean points history table.
-
----
-
-# 9. REWARDS CATALOG
-
-Route: /customer/rewards
-
-Create a visually attractive rewards marketplace.
-
-Sample rewards:
-
-| Reward | Points |
-|---|---:|
-| ₹50 Discount Coupon | 50 |
-| ₹100 Discount Coupon | 100 |
-| Free Product | 150 |
-| Premium Gift Box | 500 |
-| Special Shopping Voucher | 750 |
-
-Each reward card should show:
-
-- Reward image or illustration.
-- Reward name.
-- Required points.
-- Redeem button.
-- Availability badge.
-
-Add category filters.
-
-Create reward redemption confirmation modal.
-
----
-
-# 10. REDEMPTION HISTORY
-
-Route: /customer/history
-
-Display a table containing:
-
-- Transaction ID
-- Product Code
-- Points Earned
-- Reward Redeemed
-- Date
-- Status
-
-Add search, filters, and pagination UI.
-
----
-
-# 11. CUSTOMER PROFILE
-
-Route: /customer/profile
-
-Include:
-
-- Profile avatar.
-- Full name.
-- Email.
-- Mobile number.
-- Registration date.
-- Edit Profile button.
-- Change Password UI.
-
-Use frontend-only interactions.
-
----
-
-# 12. ADMIN DASHBOARD
-
-Routes:
-
-/admin/dashboard
-/admin/customers
-/admin/products
-/admin/codes
-/admin/rewards
-/admin/redemptions
-/admin/fraud-monitoring
-/admin/analytics
-/admin/settings
-
-Create a completely separate professional Admin Dashboard.
-
-### Admin Sidebar
-
-- Dashboard
-- Customers
-- Products
-- Code Management
+- Backend Development
+- Database Architecture
+- REST API Development
+- Authentication & Authorization
+- Business Logic
+- Product Code Generation
+- Secure Code Verification
+- Points Management
 - Rewards Management
-- Redemptions
-- Fraud Monitoring
-- Analytics
-- Settings
-- Logout
+- Redemption Processing
+- Fraud Prevention
+- Backend Testing
+- API Documentation
 
-### Admin Dashboard Overview
+STRICT RULE:
 
-Stats:
+You must NEVER modify Agent 1's frontend files.
 
-- Total Customers: 5,000
-- Total Products: 125
-- Generated Codes: 50,000
-- Redeemed Codes: 12,500
-- Points Distributed: 1,25,000
-- Rewards Redeemed: 2,500
+---
+
+# 2. EXISTING PROJECT INFORMATION
+
+GitHub Repository:
+
+https://github.com/Ravalkrushn/Assignment-1
+
+Branch:
+
+main
+
+Existing project structure:
+
+LOYALTYBOX/
+│
+├── frontend/
+│   └── Complete React Application
+│
+├── README.md
+├── ASSUMPTIONS.md
+├── ARCHITECTURE.md
+├── AI_LOG.md
+├── TEST_PLAN.md
+├── .env.example
+└── .gitignore
+
+Frontend technology:
+
+- React 19
+- Vite
+- Tailwind CSS v4
+- React Router DOM
+- Lucide React
+- Recharts
+- React Hot Toast
+
+Frontend contains 19 completed views.
+
+Your backend must be compatible with the existing frontend.
+
+---
+
+# 3. TECHNOLOGY STACK
+
+Use the following backend technologies:
+
+Runtime:
+Node.js
+
+Framework:
+Express.js
+
+Database:
+MongoDB Atlas
+
+ODM:
+Mongoose
+
+Authentication:
+JWT
+
+Password Security:
+bcrypt
+
+Validation:
+Zod or express-validator
+
+Security:
+- Helmet
+- CORS
+- express-rate-limit
+- Secure HTTP headers
+
+Testing:
+- Jest
+- Supertest
+
+Other:
+- dotenv
+- cookie-parser
+- crypto
+- morgan
+
+Use JavaScript with ES Modules.
+
+Do not introduce TypeScript unless absolutely necessary.
+
+---
+
+# 4. STRICT FILE OWNERSHIP
+
+You are Agent 2.
+
+You own ONLY:
+
+backend/
+
+Your project structure should be:
+
+LOYALTYBOX/
+│
+├── frontend/                 # Agent 1 ownership
+│
+├── backend/                  # Agent 2 ownership
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── validators/
+│   │   ├── utils/
+│   │   ├── jobs/
+│   │   ├── app.js
+│   │   └── server.js
+│   │
+│   ├── tests/
+│   ├── docs/
+│   ├── .env.example
+│   ├── .gitignore
+│   └── package.json
+│
+├── README.md
+├── ASSUMPTIONS.md
+├── ARCHITECTURE.md
+├── AI_LOG.md
+├── TEST_PLAN.md
+└── .env.example
+
+IMPORTANT:
+
+1. Never modify frontend/.
+2. Never overwrite Agent 1 components.
+3. Never modify frontend dependencies.
+4. Never change frontend routing.
+5. Never edit frontend configuration.
+6. Never create backend logic inside frontend/.
+7. Do not delete existing files.
+8. Do not overwrite existing documentation.
+9. Keep backend completely independent.
+10. Prepare API contracts for future frontend integration.
+
+---
+
+# 5. PHASE 1 — BACKEND SETUP & CONFIGURATION
+
+Create the backend folder.
+
+Initialize Node.js and Express.
+
+Configure:
+
+- Express server.
+- Environment variables.
+- MongoDB connection.
+- Centralized error handling.
+- Not-found middleware.
+- Request logging.
+- CORS configuration.
+- Helmet security.
+- Rate limiting.
 
 Create:
 
-- Revenue/engagement analytics.
-- Customer growth chart.
-- Points distribution chart.
-- Redemption activity.
-- Recent customer registrations.
-- Recent redemptions.
+GET /api/health
 
-Use Recharts.
+Expected response:
 
-All dashboard information must use clearly identified sample data.
+{
+  "success": true,
+  "message": "LOYALTYBOX API is running",
+  "status": "healthy"
+}
 
----
+Configure environment variables:
 
-# 13. CUSTOMER MANAGEMENT
+PORT=
+NODE_ENV=
+MONGODB_URI=
+JWT_ACCESS_SECRET=
+JWT_REFRESH_SECRET=
+JWT_ACCESS_EXPIRES_IN=
+JWT_REFRESH_EXPIRES_IN=
+CLIENT_URL=
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+CODE_HASH_SECRET=
 
-Route: /admin/customers
+Never hardcode secrets.
 
-Create a customer management interface.
-
-Features:
-
-- Customer listing.
-- Search customers.
-- Filter by status.
-- View customer details.
-- View points balance.
-- View redemption history.
-- Active/Inactive badges.
-
-Use realistic dummy customers.
+Create a backend .env.example with placeholder values only.
 
 ---
 
-# 14. PRODUCT MANAGEMENT
+# 6. PHASE 2 — DATABASE ARCHITECTURE
 
-Route: /admin/products
+Design MongoDB collections using Mongoose.
 
-Include:
+Required collections:
 
-- Product listing.
-- Add Product modal.
-- Edit Product modal.
-- Delete confirmation.
-- Product name.
-- Product SKU.
-- Category.
-- Points per product.
-- Product status.
+1. users
+2. products
+3. productCodes
+4. rewards
+5. pointTransactions
+6. redemptions
+7. fraudLogs
+8. refreshTokens
+9. codeBatches
+10. settings
 
-All operations should work locally in frontend state.
+### USERS COLLECTION
+
+Fields:
+
+- fullName
+- email
+- phone
+- password
+- role
+- availablePoints
+- totalPointsEarned
+- totalPointsRedeemed
+- status
+- createdAt
+- updatedAt
+
+Roles:
+
+- customer
+- admin
+
+Requirements:
+
+- Unique email.
+- Password hashing.
+- Proper validation.
+- Role-based authorization.
+
+### PRODUCTS COLLECTION
+
+Fields:
+
+- productName
+- sku
+- category
+- description
+- pointsPerBox
+- status
+- createdAt
+- updatedAt
+
+### PRODUCT CODES COLLECTION
+
+Fields:
+
+- codeHash
+- codePrefix
+- productId
+- batchId
+- points
+- status
+- generatedAt
+- expiresAt
+- redeemedBy
+- redeemedAt
+
+Statuses:
+
+- unused
+- redeemed
+- expired
+- blocked
+
+Never store redeemable product codes as plaintext in the database.
+
+Use secure cryptographic code generation and a keyed hash for code verification.
+
+### REWARDS COLLECTION
+
+Fields:
+
+- name
+- description
+- pointsRequired
+- quantity
+- category
+- image
+- status
+- createdAt
+- updatedAt
+
+### POINT TRANSACTIONS COLLECTION
+
+Fields:
+
+- userId
+- type
+- points
+- source
+- referenceId
+- description
+- createdAt
+
+Types:
+
+- earned
+- redeemed
+- expired
+- adjusted
+
+### REDEMPTIONS COLLECTION
+
+Fields:
+
+- userId
+- rewardId
+- pointsSpent
+- redemptionCode
+- status
+- createdAt
+
+### FRAUD LOGS COLLECTION
+
+Fields:
+
+- userId
+- productCodeReference
+- eventType
+- riskLevel
+- ipAddress
+- userAgent
+- description
+- status
+- createdAt
+
+### SETTINGS COLLECTION
+
+Fields:
+
+- pointsExpiryMonths
+- maximumAttempts
+- codeRedemptionEnabled
+- minimumRedemptionPoints
+- updatedAt
+
+Create proper indexes and relationships.
+
+Use atomic database operations and transactions wherever required.
 
 ---
 
-# 15. CODE MANAGEMENT
+# 7. PHASE 3 — CUSTOMER & ADMIN AUTHENTICATION
 
-Route: /admin/codes
+Create complete authentication APIs.
 
-Create a unique product code management interface.
+### Customer Registration
 
-Include:
+POST /api/auth/register
 
-- Generate Codes UI.
-- Product selection.
-- Number of codes.
-- Points per code.
-- Generated code listing.
-- Code status.
-- Search and filters.
-- Export CSV button (frontend implementation).
+Fields:
 
-Code statuses:
+- fullName
+- email
+- phone
+- password
+- confirmPassword
 
-- Unused
-- Redeemed
-- Expired
-- Suspicious
+Requirements:
 
-Simulate code generation using random demo codes.
+- Validate all fields.
+- Check duplicate email.
+- Hash password using bcrypt.
+- Create customer account.
+- Never allow users to register themselves as admin.
 
-Do not implement actual secure code generation or backend persistence.
+### Login
 
-Clearly label the interface as a frontend demonstration.
+POST /api/auth/login
+
+Fields:
+
+- email
+- password
+
+Requirements:
+
+- Verify credentials.
+- Generate access token.
+- Generate secure refresh token.
+- Return user information.
+- Enforce account status.
+- Prevent unauthorized access.
+
+### Other Authentication APIs
+
+POST /api/auth/refresh
+
+POST /api/auth/logout
+
+GET /api/auth/me
+
+POST /api/auth/forgot-password
+
+POST /api/auth/reset-password
+
+Implement secure refresh-token handling and token rotation.
+
+Password recovery must use secure, expiring, single-use reset tokens.
+
+Do not expose whether an email exists during password recovery.
+
+### Admin Authentication
+
+Admins must have a separate secure provisioning process.
+
+Seed the initial admin through a secure script using environment variables.
+
+Never create a public admin registration endpoint.
+
+Implement role-based authorization middleware.
 
 ---
 
-# 16. REWARDS MANAGEMENT
+# 8. PHASE 4 — PRODUCT MANAGEMENT APIs
 
-Route: /admin/rewards
+Admin-only routes:
 
-Features:
+GET /api/products
 
-- Add reward.
-- Edit reward.
-- Delete reward.
-- Reward name.
-- Description.
-- Points required.
-- Available quantity.
-- Reward category.
-- Active/Inactive status.
+GET /api/products/:id
 
-Use modals and local React state.
+POST /api/products
 
----
+PUT /api/products/:id
 
-# 17. REDEMPTION MANAGEMENT
+DELETE /api/products/:id
 
-Route: /admin/redemptions
+Requirements:
 
-Display:
+- Create products.
+- Update product information.
+- View products.
+- Delete or deactivate products.
+- Validate SKU uniqueness.
+- Configure points per box.
 
-- Customer name.
-- Redemption ID.
-- Product code.
-- Points awarded.
-- Reward claimed.
-- Date.
-- Status.
+Customers can only view active products.
 
-Add search and filters.
+Use proper pagination and search.
 
 ---
 
-# 18. FRAUD MONITORING
+# 9. PHASE 5 — UNIQUE PRODUCT CODE GENERATION
 
-Route: /admin/fraud-monitoring
+This is one of the most important features.
 
-Design a security monitoring dashboard.
+Factory owners need to generate unique reward codes for physical product packaging.
 
-Display sample suspicious activities:
+Admin APIs:
 
-- Repeated code redemption attempts.
-- Multiple failed verification attempts.
-- Suspicious customer activity.
-- Duplicate redemption attempts.
-- Unusual redemption patterns.
+POST /api/codes/generate
 
-Include:
+GET /api/codes
 
-- Risk level badges.
-- Customer information.
-- Attempt count.
-- Timestamp.
-- Activity status.
-- View Details modal.
+GET /api/codes/:id
+
+GET /api/codes/batches
+
+GET /api/codes/batches/:id/export
+
+POST /api/codes/:id/block
+
+### Code Generation Requirements
+
+- Use Node.js crypto module.
+- Generate unpredictable codes.
+- Prevent duplicate codes.
+- Use cryptographic randomness.
+- Store keyed hashes instead of plaintext.
+- Assign codes to products.
+- Assign points per code.
+- Support batch generation.
+- Support expiration dates.
+- Track code status.
+
+Batch generation must support:
+
+- 5 codes
+- 10 codes
+- 25 codes
+- 50 codes
+
+Allow larger batches only with appropriate validation and limits.
+
+### Important Physical Packaging Requirement
+
+The factory needs printable plaintext codes to place inside physical product boxes.
+
+Therefore:
+
+- Generate the codes securely.
+- Display/export plaintext codes only at generation time.
+- Never expose stored code hashes as redeemable codes.
+- Protect batch exports with admin authorization.
+- Do not allow repeated plaintext retrieval after the initial generation response.
+
+Support CSV export for printing.
+
+---
+
+# 10. PHASE 6 — SECURE CODE VERIFICATION & REDEMPTION
+
+Customer API:
+
+POST /api/codes/redeem
+
+Request:
+
+{
+  "code": "BOX-GOLD-8899"
+}
+
+Backend must:
+
+1. Authenticate the customer.
+2. Validate the submitted code.
+3. Normalize input.
+4. Calculate the keyed hash.
+5. Find the corresponding code.
+6. Check code status.
+7. Check expiration.
+8. Check product status.
+9. Prevent duplicate redemption.
+10. Award the correct points.
+11. Update the customer wallet.
+12. Create a point transaction.
+13. Record redemption activity.
+
+Use atomic database updates and MongoDB transactions to prevent duplicate redemption and double points.
+
+### Error States
+
+Invalid code:
+
+{
+  "success": false,
+  "message": "Invalid product code"
+}
+
+Already redeemed:
+
+{
+  "success": false,
+  "message": "This code has already been redeemed"
+}
+
+Expired:
+
+{
+  "success": false,
+  "message": "This product code has expired"
+}
+
+Successful redemption:
+
+{
+  "success": true,
+  "message": "Congratulations! Points added successfully",
+  "data": {
+    "pointsEarned": 100,
+    "availablePoints": 1350
+  }
+}
+
+Never trust points or customer IDs supplied by the frontend.
+
+The backend must determine the authenticated customer and points from the database.
+
+Implement idempotency and safe concurrency handling.
+
+---
+
+# 11. PHASE 7 — POINTS MANAGEMENT
+
+Customer APIs:
+
+GET /api/points/balance
+
+GET /api/points/history
+
+GET /api/points/summary
+
+Admin APIs:
+
+GET /api/admin/points/overview
+
+POST /api/admin/points/adjust
+
+Requirements:
+
+- Track earned points.
+- Track redeemed points.
+- Track expired points.
+- Maintain transaction history.
+- Calculate available balance.
+- Prevent negative balances.
+- Support admin adjustments with audit records.
+
+Every points change must have a corresponding transaction record.
+
+Never update the balance without recording the transaction.
+
+Implement points expiration based on the documented business assumptions.
+
+---
+
+# 12. PHASE 8 — REWARDS & REDEMPTION APIs
+
+Customer APIs:
+
+GET /api/rewards
+
+GET /api/rewards/:id
+
+POST /api/rewards/:id/redeem
+
+GET /api/redemptions/my
+
+GET /api/redemptions/:id
+
+Admin APIs:
+
+GET /api/admin/rewards
+
+POST /api/admin/rewards
+
+PUT /api/admin/rewards/:id
+
+DELETE /api/admin/rewards/:id
+
+GET /api/admin/redemptions
+
+Requirements:
+
+- Reward catalog.
+- Reward categories.
+- Points requirements.
+- Inventory management.
+- Reward activation/deactivation.
+- Redemption history.
+- Stock availability.
+- Points deduction.
+- Unique redemption references.
+
+Use database transactions when deducting points and reward inventory.
+
+Prevent:
+
+- Negative points.
+- Negative inventory.
+- Duplicate redemption.
+- Redemption of inactive rewards.
+
+---
+
+# 13. PHASE 9 — FRAUD PREVENTION & MONITORING
+
+Implement actual backend security and fraud monitoring.
+
+Detect and record:
+
+1. Repeated invalid product codes.
+2. Duplicate redemption attempts.
+3. Excessive redemption requests.
+4. Suspicious IP activity.
+5. Unusual code submission patterns.
+6. Blocked code usage attempts.
+
+Implement:
+
+- Rate limiting.
+- Attempt tracking.
+- IP-based monitoring.
+- Account-based monitoring.
+- Risk level classification.
+- Suspicious event logging.
+- Admin review endpoints.
 
 Risk levels:
 
@@ -768,221 +727,399 @@ Risk levels:
 - High
 - Critical
 
-Add filter by risk level.
+Admin APIs:
 
-IMPORTANT:
-This is only a frontend monitoring interface. Do not claim actual fraud detection functionality.
+GET /api/admin/fraud
 
----
+GET /api/admin/fraud/:id
 
-# 19. ANALYTICS
+PATCH /api/admin/fraud/:id/status
 
-Route: /admin/analytics
+POST /api/admin/fraud/block-ip
 
-Include:
+POST /api/admin/fraud/unblock-ip
 
-- Customer growth.
-- Monthly points distribution.
-- Reward redemption trends.
-- Most popular rewards.
-- Top customers.
-- Product performance.
+Important:
 
-Use Recharts and dummy datasets.
+Do not claim that heuristic fraud monitoring is AI-powered.
+
+Use transparent rule-based detection and document its limitations.
+
+Avoid permanent blocking based on one failed attempt.
 
 ---
 
-# 20. RESPONSIVE DESIGN
+# 14. PHASE 10 — ANALYTICS & ADMIN APIs
 
-The entire application must work on:
+Create:
 
-- 375px mobile.
-- 768px tablet.
-- 1024px laptop.
-- 1440px desktop.
+GET /api/admin/dashboard
 
-Mobile requirements:
+GET /api/admin/analytics/customers
 
-- Collapsible sidebar.
-- Hamburger menu.
-- Responsive cards.
-- Scrollable tables.
-- Proper spacing.
-- No horizontal overflow.
-- Touch-friendly controls.
+GET /api/admin/analytics/points
 
----
+GET /api/admin/analytics/redemptions
 
-# 21. INTERACTIONS
+GET /api/admin/analytics/products
 
-Implement functional frontend interactions:
+GET /api/admin/customers
 
-- React Router navigation.
-- Sidebar navigation.
-- Login and registration validation.
-- Password visibility toggle.
-- Search and filtering.
-- Modal dialogs.
-- Dropdown menus.
-- Toast notifications.
-- Tabs.
-- Pagination.
-- Charts.
-- Reward redemption simulation.
-- Product code redemption simulation.
-- Theme consistency.
-- Mobile navigation.
+GET /api/admin/customers/:id
 
-Use local React state and dummy data.
+GET /api/admin/customers/:id/history
 
----
+GET /api/admin/settings
 
-# 22. PROJECT STRUCTURE
+PUT /api/admin/settings
 
-Organize the frontend professionally.
+Dashboard metrics:
 
-Suggested structure:
+- Total customers.
+- Active customers.
+- Total products.
+- Generated codes.
+- Redeemed codes.
+- Unused codes.
+- Total points distributed.
+- Total points redeemed.
+- Total rewards claimed.
+- Suspicious activities.
 
-src/
-  assets/
-  components/
-    common/
-    landing/
-    customer/
-    admin/
-    charts/
-    ui/
-  layouts/
-    PublicLayout.jsx
-    CustomerLayout.jsx
-    AdminLayout.jsx
-  pages/
-    public/
-    auth/
-    customer/
-    admin/
-  data/
-    dummyCustomers.js
-    dummyProducts.js
-    dummyRewards.js
-    dummyTransactions.js
-    dummyAnalytics.js
-  hooks/
-  utils/
-  App.jsx
-  main.jsx
-  index.css
+Support filtering by date range.
 
-Keep components reusable and maintainable.
+Use database aggregation pipelines for analytics.
+
+Never hardcode dashboard numbers.
 
 ---
 
-# 23. STRICT AGENT OWNERSHIP RULES
+# 15. API RESPONSE STANDARD
 
-You are Agent 1.
+Maintain consistent API responses.
 
-You own ONLY the frontend.
+Success:
 
-You must:
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": {}
+}
 
-1. Inspect the existing repository before making changes.
-2. Preserve existing project configuration wherever possible.
-3. Never overwrite backend files.
-4. Never edit backend folders.
-5. Never modify database schemas.
-6. Never create API endpoints.
-7. Never implement server-side authentication.
-8. Never connect to MongoDB or any database.
-9. Never modify Agent 2's files.
-10. Never install backend dependencies.
+Error:
 
-If the repository already contains a frontend, continue from its existing structure instead of unnecessarily recreating it.
+{
+  "success": false,
+  "message": "Something went wrong",
+  "errors": []
+}
 
-If a required frontend folder does not exist, create it.
+Use appropriate HTTP status codes.
 
-If the repository is empty, initialize the React + Tailwind frontend.
+Implement centralized error handling.
 
----
+Do not expose:
 
-# 24. QUALITY REQUIREMENTS
-
-- Professional production-quality UI.
-- Consistent spacing and typography.
-- Reusable React components.
-- Clean folder structure.
-- No broken routes.
-- No console errors.
-- No placeholder blank pages.
-- No fake backend integrations.
-- No unnecessary dependencies.
-- Consistent Neo-Brutalist styling.
-- All important buttons should perform meaningful frontend actions.
-
-Do not compromise the design quality.
-
-Do not replace the requested design with a generic dashboard template.
+- Stack traces in production.
+- Password hashes.
+- JWT secrets.
+- Database credentials.
+- Internal security information.
 
 ---
 
-# 25. EXECUTION INSTRUCTIONS
+# 16. FRONTEND INTEGRATION PREPARATION
 
-Follow this order:
+Agent 1 has already created the frontend.
 
-STEP 1:
-Inspect the existing repository and identify the frontend structure.
+You must prepare APIs compatible with its existing requirements.
 
-STEP 2:
-Prepare the design system, typography, colors, reusable components, and layouts.
+Do not modify frontend files.
 
-STEP 3:
-Build the complete public landing page.
+Create:
 
-STEP 4:
-Build authentication pages.
+backend/docs/API_DOCUMENTATION.md
 
-STEP 5:
-Build all customer dashboard pages.
+Document:
 
-STEP 6:
-Build all admin dashboard pages.
+- API endpoint.
+- HTTP method.
+- Required authentication.
+- Request body.
+- Response body.
+- Error responses.
+- Required role.
+- Example API requests.
 
-STEP 7:
-Implement frontend interactions and dummy data.
+Prepare frontend integration mapping for:
 
-STEP 8:
-Implement responsive layouts.
+1. Login.
+2. Registration.
+3. Customer dashboard.
+4. Product code redemption.
+5. Points.
+6. Rewards.
+7. Redemption history.
+8. Customer profile.
+9. Admin dashboard.
+10. Customer management.
+11. Product management.
+12. Code management.
+13. Rewards management.
+14. Redemption management.
+15. Fraud monitoring.
+16. Analytics.
+17. Admin settings.
 
-STEP 9:
-Run the frontend build and fix all errors.
+Ensure the backend returns data structures suitable for these frontend pages.
 
-STEP 10:
-Test all routes and major interactions.
+Do not perform frontend integration yourself.
 
-Do not stop after creating the landing page.
-
-Complete all the frontend pages listed in this prompt.
+Agent 1's files must remain untouched.
 
 ---
 
-# 26. FINAL REPORT
+# 17. TESTING REQUIREMENTS
 
-After completing the frontend, provide:
+Use Jest and Supertest.
 
-1. Pages created.
-2. Components created.
-3. Routes implemented.
-4. Dependencies installed.
-5. Dummy interactions implemented.
-6. Responsive testing results.
-7. Build status.
-8. Files created or modified.
-9. Any remaining frontend limitations.
-10. Confirmation that no backend files were modified.
+Write tests for:
+
+Authentication:
+- Customer registration.
+- Duplicate registration.
+- Login.
+- Invalid credentials.
+- Unauthorized requests.
+- Admin access control.
+
+Products:
+- Create product.
+- Update product.
+- Duplicate SKU.
+- Product listing.
+
+Codes:
+- Generate unique codes.
+- Redeem valid code.
+- Redeem invalid code.
+- Redeem expired code.
+- Redeem already-used code.
+- Concurrent duplicate redemption.
+
+Points:
+- Correct points calculation.
+- Transaction history.
+- No negative balances.
+- Admin adjustment.
+
+Rewards:
+- Successful redemption.
+- Insufficient points.
+- Out-of-stock reward.
+- Duplicate redemption prevention.
+
+Fraud:
+- Repeated invalid attempts.
+- Rate limiting.
+- Suspicious activity logging.
+
+Run the complete test suite.
+
+Document actual test results.
+
+Never mark tests as passed without running them.
+
+---
+
+# 18. SECURITY REQUIREMENTS
+
+Follow secure backend development practices.
+
+Mandatory:
+
+- bcrypt password hashing.
+- JWT authentication.
+- Role-based access control.
+- Secure random code generation.
+- Keyed code hashing.
+- Rate limiting.
+- Request validation.
+- Helmet.
+- CORS restrictions.
+- Environment variables.
+- Secure error handling.
+- MongoDB indexes.
+- Atomic redemption.
+- Audit logs.
+- Protection against duplicate transactions.
+
+Do not trust frontend validation.
+
+Every important business rule must be enforced by the backend.
+
+---
+
+# 19. DOCUMENTATION
+
+Create:
+
+backend/docs/API_DOCUMENTATION.md
+
+backend/docs/DATABASE_SCHEMA.md
+
+backend/docs/SECURITY.md
+
+backend/docs/INTEGRATION_GUIDE.md
+
+Update the root documentation only when necessary and without overwriting Agent 1's existing content.
+
+Preserve the existing:
+
+- README.md
+- ASSUMPTIONS.md
+- ARCHITECTURE.md
+- AI_LOG.md
+- TEST_PLAN.md
+
+Document all backend-specific assumptions and AI interactions.
+
+AI_LOG.md must accurately record real AI interactions, including mistakes noticed and fixes made. Do not fabricate AI errors or test results.
+
+---
+
+# 20. GIT COMMIT REQUIREMENTS
+
+Work on the existing main branch unless a separate backend development branch is explicitly configured.
+
+Create meaningful commits throughout development.
+
+Suggested commits:
+
+1. Initialize backend project.
+2. Configure Express and MongoDB.
+3. Implement database models.
+4. Implement authentication.
+5. Implement product APIs.
+6. Implement secure code generation.
+7. Implement code redemption.
+8. Implement points management.
+9. Implement rewards and redemptions.
+10. Implement fraud monitoring.
+11. Implement analytics APIs.
+12. Add tests and API documentation.
+
+Never create one giant final commit.
+
+Never force-push or rewrite Agent 1's commit history.
+
+---
+
+# 21. EXECUTION STRATEGY
+
+Work phase by phase.
+
+PHASE 1:
+Backend initialization and configuration.
+
+PHASE 2:
+Database models and architecture.
+
+PHASE 3:
+Customer and admin authentication.
+
+PHASE 4:
+Product management.
+
+PHASE 5:
+Unique product code generation.
+
+PHASE 6:
+Secure product code redemption.
+
+PHASE 7:
+Points management.
+
+PHASE 8:
+Rewards and redemption.
+
+PHASE 9:
+Fraud prevention and monitoring.
+
+PHASE 10:
+Analytics, testing, documentation, and integration preparation.
+
+Do not skip phases.
+
+After completing each phase:
+
+1. Explain what was developed.
+2. List created files.
+3. Run relevant tests.
+4. Fix errors.
+5. Verify existing functionality.
+6. Create a meaningful Git commit.
+7. Report completion before moving forward.
+
+Do not restart completed phases.
+
+Do not overwrite previous work.
+
+---
+
+# 22. FINAL VALIDATION
+
+Before declaring backend complete, verify:
+
+- Server starts successfully.
+- MongoDB connects successfully.
+- Authentication works.
+- Admin authorization works.
+- Product APIs work.
+- Code generation works.
+- Code redemption works.
+- Duplicate code redemption is prevented.
+- Points are correctly awarded.
+- Reward redemption works.
+- Fraud events are recorded.
+- Analytics APIs return real database results.
+- Tests run successfully.
+- API documentation is complete.
+- No frontend files were modified.
+
+---
+
+# 23. FINAL REPORT
+
+At the end, provide:
+
+1. Backend architecture.
+2. Database collections.
+3. API endpoints.
+4. Authentication implementation.
+5. Code generation implementation.
+6. Code verification implementation.
+7. Points management.
+8. Reward redemption.
+9. Fraud prevention.
+10. Analytics implementation.
+11. Testing results.
+12. Documentation created.
+13. Git commits.
+14. Build/server status.
+15. Remaining limitations.
+16. Frontend integration instructions.
 
 FINAL RULE:
 
-YOUR RESPONSIBILITY IS THE COMPLETE CUSTOMER LOYALTY REWARDS SYSTEM FRONTEND ONLY.
+YOU ARE AGENT 2.
 
-Agent 2 will independently handle backend development.
+BUILD THE COMPLETE BACKEND FOR LOYALTYBOX.
 
-Keep frontend and backend ownership strictly separated.
+AGENT 1 OWNS THE FRONTEND.
+
+YOU OWN ONLY THE BACKEND.
+
+NEVER MODIFY FRONTEND FILES.
+
+YOUR BACKEND MUST BE READY FOR FUTURE INTEGRATION WITH AGENT 1'S EXISTING REACT APPLICATION.
