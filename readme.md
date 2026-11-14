@@ -30,13 +30,15 @@ The platform includes two dedicated portals built with a tactile **Neo-Brutalist
 - **Celebration Effects:** Canvas-Confetti
 - **State & Persistence:** React Context synchronized with browser `localStorage`
 
-### Backend (Agent 2)
+### Backend & Integration (Agent 2 & Agent 3)
 - **Runtime & Server:** Node.js (ES Modules) + Express.js
 - **Database & ODM:** MongoDB Atlas / Local MongoDB via Mongoose
 - **Authentication:** JWT (Access Token 15m & Rotating Refresh Tokens 7d)
 - **Cryptography:** Node.js `crypto` with HMAC-SHA256 keyed hash for tamper-evident scratch codes (zero plaintext code storage)
 - **Security & Defenses:** Helmet, CORS, express-rate-limit, bcrypt password hashing
-- **Testing Suite:** Jest + Supertest + MongoMemoryServer (19 integration tests passing)
+- **Integration Layer:** Reusable API service layer (`frontend/src/services/api.js`) with Bearer token injection and graceful fallback
+- **Testing Suite:** Jest + Supertest + MongoMemoryServer (21/21 unit & end-to-end integration tests passing)
+- **Deployment Prep:** Vercel SPA config (`vercel.json`), Render blueprint (`render.yaml`), Multi-Stage Dockerfile
 
 ---
 
@@ -120,14 +122,19 @@ For instant testing on `/customer/redeem-code`, use the clickable test chips or 
 
 ## 📁 Repository Documentation Deliverables
 
+- **[INTEGRATION_RESULTS.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/frontend/docs/INTEGRATION_RESULTS.md):** Complete Agent 3 report on connected views, mapped REST APIs, auth flows, and end-to-end test verification.
+- **[API_DOCUMENTATION.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/backend/docs/API_DOCUMENTATION.md):** Complete Agent 2 backend REST API contracts with request/response schemas.
+- **[DATABASE_SCHEMA.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/backend/docs/DATABASE_SCHEMA.md):** Mongoose database schemas, relationships, indexing, and data models.
+- **[SECURITY.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/backend/docs/SECURITY.md):** Cryptographic code storage, JWT rotation, rate limiting, and fraud prevention architecture.
 - **[ASSUMPTIONS.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/ASSUMPTIONS.md):** Business assumptions, packaging choices, proof-of-purchase mechanics, and fraud defense rationale.
 - **[ARCHITECTURE.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/ARCHITECTURE.md):** Complete component diagram, data entity relationships (ERD), and Neo-Brutalist design tokens.
-- **[AI_LOG.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/AI_LOG.md):** Detailed record of prompts, tool interactions, and two specific AI error cases (Lucide brand icon export mismatch and Tailwind v4 Vite setup) with solutions.
+- **[AI_LOG.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/AI_LOG.md):** Detailed record of prompts, tool interactions, error cases, and resolution logs across all agents.
 - **[TEST_PLAN.md](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/TEST_PLAN.md):** Automated build verification results and manual scenario test walkthroughs.
-- **[.env.example](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/.env.example):** Environment configuration placeholder values.
+- **[.env.example](file:///c:/Users/raval/Desktop/rndtechnosoft/diwali-assignment-1/.env.example):** Root and service environment configuration placeholder values.
 
 ---
 
-## ⚖️ Agent Ownership Guarantee
-- **Agent 1 (Frontend Developer & UI/UX Engineer):** Completely responsible for the frontend SPA, client-side interactions, and design system.
-- **No Backend Files Modified:** No database connections, server-side routes, or backend APIs were altered. Agent 2 can independently implement the backend services without friction.
+## ⚖️ Full-Stack Multi-Agent Collaboration
+- **Agent 1 (Frontend Developer & UI/UX):** 19 responsive Neo-Brutalist views, charts, and customer/admin experiences.
+- **Agent 2 (Backend & Database Engineer):** Express REST API, MongoDB schemas, cryptographic security, and automated test suites.
+- **Agent 3 (Integration & Deployment Specialist):** Connected frontend API client, live database state synchronization, end-to-end integration test suite, Vercel/Render deployment configurations, and comprehensive integration documentation.

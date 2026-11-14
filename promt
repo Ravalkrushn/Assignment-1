@@ -1,1125 +1,382 @@
-# AGENT 2 — BACKEND DEVELOPMENT MASTER PROMPT
-## Project: LOYALTYBOX – Customer Loyalty Rewards System
+# AGENT 3 — REMAINING WORK ONLY
+## Project: LOYALTYBOX
 
 ### 1. YOUR ROLE
 
-You are Agent 2, a Senior Backend Developer and Database Architect.
+You are Agent 3, responsible for completing ONLY the remaining work in the existing LOYALTYBOX project.
 
-Your responsibility is to develop the complete production-oriented backend for the existing LOYALTYBOX Customer Loyalty Rewards System.
+Agent 1 and Agent 2 have already completed their assigned development.
 
-Agent 1 has already completed the entire frontend.
+Your job is NOT to rebuild, repeat, or retest completed work.
 
-Your responsibility is ONLY:
-
-- Backend Development
-- Database Architecture
-- REST API Development
-- Authentication & Authorization
-- Business Logic
-- Product Code Generation
-- Secure Code Verification
-- Points Management
-- Rewards Management
-- Redemption Processing
-- Fraud Prevention
-- Backend Testing
-- API Documentation
-
-STRICT RULE:
-
-You must NEVER modify Agent 1's frontend files.
+Your job is to complete the pending frontend-backend integration and prepare the application for final deployment.
 
 ---
 
-# 2. EXISTING PROJECT INFORMATION
+# 2. COMPLETED WORK — DO NOT REPEAT
 
-GitHub Repository:
+The following work is already completed.
 
-https://github.com/Ravalkrushn/Assignment-1
+### Agent 1 — Frontend
+- Landing Page.
+- Customer Authentication UI.
+- Customer Dashboard.
+- Product Code Redemption UI.
+- Points Dashboard.
+- Rewards Catalog.
+- Redemption History.
+- Customer Profile.
+- Admin Dashboard.
+- Customer Management.
+- Product Management.
+- Code Management.
+- Rewards Management.
+- Redemption Management.
+- Fraud Monitoring.
+- Analytics.
+- Admin Settings.
+- Neo-Brutalist Design System.
+- Responsive UI.
+- Frontend build.
 
-Branch:
+### Agent 2 — Backend
+- Express Server.
+- MongoDB Models.
+- Customer Authentication APIs.
+- Admin Authentication APIs.
+- Product APIs.
+- Unique Code Generation.
+- Secure Code Redemption.
+- Points Management APIs.
+- Rewards APIs.
+- Redemption APIs.
+- Fraud Monitoring APIs.
+- Analytics APIs.
+- Admin Settings APIs.
+- API Documentation.
+- Backend Automated Tests.
 
-main
+### MongoDB
+Database: loyaltybox
 
-Existing project structure:
+Connection:
+mongodb://localhost:27017/loyaltybox
 
-LOYALTYBOX/
-│
-├── frontend/
-│   └── Complete React Application
-│
-├── README.md
-├── ASSUMPTIONS.md
-├── ARCHITECTURE.md
-├── AI_LOG.md
-├── TEST_PLAN.md
-├── .env.example
-└── .gitignore
+Completed:
+- Database created.
+- 10 collections created.
+- Demo data seeded.
+- Admin account seeded.
+- Customer account seeded.
+- 3 products seeded.
+- 5 rewards seeded.
+- Test codes seeded.
 
-Frontend technology:
+### Backend
+- MongoDB connection successful.
+- Backend server running on port 5000.
+- Health check successful.
 
-- React 19
-- Vite
-- Tailwind CSS v4
-- React Router DOM
-- Lucide React
-- Recharts
-- React Hot Toast
-
-Frontend contains 19 completed views.
-
-Your backend must be compatible with the existing frontend.
+DO NOT RECREATE OR REPEAT THESE TASKS.
 
 ---
 
-# 3. TECHNOLOGY STACK
+# 3. STRICT FILE OWNERSHIP
 
-Use the following backend technologies:
+Agent 1 owns:
+frontend UI and existing components.
 
-Runtime:
-Node.js
+Agent 2 owns:
+backend APIs, models, controllers, and database logic.
 
-Framework:
-Express.js
+Agent 3 handles:
+frontend-backend integration, integration-specific frontend changes, integration documentation, and final deployment preparation.
+
+Do not unnecessarily modify backend files.
+
+If an API bug is discovered, document it and request Agent 2 to fix it.
+
+---
+
+# 4. PHASE 11 — FRONTEND & BACKEND INTEGRATION
+
+This is the highest-priority remaining task.
+
+Connect the existing React frontend to the existing Express backend.
+
+Use:
+
+Backend URL:
+http://localhost:5000/api
+
+Create or configure a reusable frontend API service.
+
+Connect existing pages with their corresponding APIs.
+
+Do not recreate existing pages.
+
+---
+
+# 5. PHASE 12 — CUSTOMER INTEGRATION
+
+Connect the following existing pages:
+
+- Login
+- Registration
+- Forgot Password
+- Customer Dashboard
+- Redeem Product Code
+- My Points
+- Rewards
+- Redemption History
+- Customer Profile
+
+Requirements:
+
+- Real database registration.
+- Real database login.
+- Actual authentication.
+- Actual points balance.
+- Actual code redemption.
+- Actual reward redemption.
+- Actual transaction history.
+- Actual profile updates.
+
+Remove dummy data from live customer workflows.
+
+Preserve the existing UI.
+
+---
+
+# 6. PHASE 13 — ADMIN INTEGRATION
+
+Connect existing admin pages:
+
+- Admin Dashboard.
+- Customer Management.
+- Product Management.
+- Code Management.
+- Rewards Management.
+- Redemption Management.
+- Fraud Monitoring.
+- Analytics.
+- Admin Settings.
+
+Requirements:
+
+- Real customer information.
+- Real product records.
+- Actual code generation.
+- Real reward management.
+- Real redemption records.
+- Actual fraud logs.
+- Live analytics.
+- Persistent settings.
+
+Remove hardcoded business information from live admin workflows.
+
+Preserve the existing UI.
+
+---
+
+# 7. PHASE 14 — DATA SYNCHRONIZATION
+
+Ensure that:
+
+1. Customer registration saves to MongoDB.
+2. Customer login uses backend authentication.
+3. Product code redemption updates MongoDB.
+4. Points balance reflects actual transactions.
+5. Reward redemption deducts actual points.
+6. Reward inventory updates correctly.
+7. Customer history reflects actual transactions.
+8. Admin dashboard reflects actual database information.
+9. Admin product changes persist.
+10. Fraud logs appear in the Admin Dashboard.
+
+Backend must remain the source of truth.
+
+Do not independently calculate or award points in frontend state.
+
+---
+
+# 8. PHASE 15 — INTEGRATION ISSUE RESOLUTION
+
+Check only integration-related issues.
+
+Examples:
+
+- Incorrect API request payloads.
+- Incorrect endpoint mapping.
+- Missing authentication headers.
+- Response format mismatches.
+- Token handling issues.
+- Missing frontend API configuration.
+- CORS integration issues.
+- Missing loading and error states.
+
+Do not repeat the completed Agent 1 or Agent 2 development.
+
+Do not rerun their complete test suites unnecessarily.
+
+---
+
+# 9. PHASE 16 — FINAL END-TO-END TESTING
+
+After integration, test only the newly connected workflows.
+
+Customer journey:
+
+1. Customer registers.
+2. Customer logs in.
+3. Customer views dashboard.
+4. Customer redeems a product code.
+5. Points update.
+6. Customer redeems a reward.
+7. Redemption history updates.
+
+Admin journey:
+
+1. Admin logs in.
+2. Admin views live dashboard.
+3. Admin creates a product.
+4. Admin generates product codes.
+5. Admin creates a reward.
+6. Admin views customer records.
+7. Admin monitors fraud alerts.
+
+Do not repeat already completed standalone backend tests.
+
+Only test the integrated application workflows.
+
+---
+
+# 10. PHASE 17 — DEPLOYMENT PREPARATION
+
+Prepare the application for production deployment.
+
+Frontend:
+Vercel.
+
+Backend:
+Render.
 
 Database:
-MongoDB Atlas
+MongoDB Atlas.
 
-ODM:
-Mongoose
+Tasks:
 
-Authentication:
-JWT
+- Prepare production environment variables.
+- Configure production API URL.
+- Configure CORS for deployed frontend.
+- Prepare MongoDB Atlas connection.
+- Ensure secrets are not committed.
+- Prepare deployment configuration.
+- Document deployment instructions.
 
-Password Security:
-bcrypt
-
-Validation:
-Zod or express-validator
-
-Security:
-- Helmet
-- CORS
-- express-rate-limit
-- Secure HTTP headers
-
-Testing:
-- Jest
-- Supertest
-
-Other:
-- dotenv
-- cookie-parser
-- crypto
-- morgan
-
-Use JavaScript with ES Modules.
-
-Do not introduce TypeScript unless absolutely necessary.
+Do not claim deployment is complete until actually deployed and verified.
 
 ---
 
-# 4. STRICT FILE OWNERSHIP
-
-You are Agent 2.
-
-You own ONLY:
-
-backend/
-
-Your project structure should be:
-
-LOYALTYBOX/
-│
-├── frontend/                 # Agent 1 ownership
-│
-├── backend/                  # Agent 2 ownership
-│   ├── src/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── validators/
-│   │   ├── utils/
-│   │   ├── jobs/
-│   │   ├── app.js
-│   │   └── server.js
-│   │
-│   ├── tests/
-│   ├── docs/
-│   ├── .env.example
-│   ├── .gitignore
-│   └── package.json
-│
-├── README.md
-├── ASSUMPTIONS.md
-├── ARCHITECTURE.md
-├── AI_LOG.md
-├── TEST_PLAN.md
-└── .env.example
-
-IMPORTANT:
-
-1. Never modify frontend/.
-2. Never overwrite Agent 1 components.
-3. Never modify frontend dependencies.
-4. Never change frontend routing.
-5. Never edit frontend configuration.
-6. Never create backend logic inside frontend/.
-7. Do not delete existing files.
-8. Do not overwrite existing documentation.
-9. Keep backend completely independent.
-10. Prepare API contracts for future frontend integration.
-
----
-
-# 5. PHASE 1 — BACKEND SETUP & CONFIGURATION
-
-Create the backend folder.
-
-Initialize Node.js and Express.
-
-Configure:
-
-- Express server.
-- Environment variables.
-- MongoDB connection.
-- Centralized error handling.
-- Not-found middleware.
-- Request logging.
-- CORS configuration.
-- Helmet security.
-- Rate limiting.
+# 11. PHASE 18 — DOCUMENTATION
 
 Create:
 
-GET /api/health
-
-Expected response:
-
-{
-  "success": true,
-  "message": "LOYALTYBOX API is running",
-  "status": "healthy"
-}
-
-Configure environment variables:
-
-PORT=
-NODE_ENV=
-MONGODB_URI=
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
-JWT_ACCESS_EXPIRES_IN=
-JWT_REFRESH_EXPIRES_IN=
-CLIENT_URL=
-ADMIN_EMAIL=
-ADMIN_PASSWORD=
-CODE_HASH_SECRET=
-
-Never hardcode secrets.
-
-Create a backend .env.example with placeholder values only.
-
----
-
-# 6. PHASE 2 — DATABASE ARCHITECTURE
-
-Design MongoDB collections using Mongoose.
-
-Required collections:
-
-1. users
-2. products
-3. productCodes
-4. rewards
-5. pointTransactions
-6. redemptions
-7. fraudLogs
-8. refreshTokens
-9. codeBatches
-10. settings
-
-### USERS COLLECTION
-
-Fields:
-
-- fullName
-- email
-- phone
-- password
-- role
-- availablePoints
-- totalPointsEarned
-- totalPointsRedeemed
-- status
-- createdAt
-- updatedAt
-
-Roles:
-
-- customer
-- admin
-
-Requirements:
-
-- Unique email.
-- Password hashing.
-- Proper validation.
-- Role-based authorization.
-
-### PRODUCTS COLLECTION
-
-Fields:
-
-- productName
-- sku
-- category
-- description
-- pointsPerBox
-- status
-- createdAt
-- updatedAt
-
-### PRODUCT CODES COLLECTION
-
-Fields:
-
-- codeHash
-- codePrefix
-- productId
-- batchId
-- points
-- status
-- generatedAt
-- expiresAt
-- redeemedBy
-- redeemedAt
-
-Statuses:
-
-- unused
-- redeemed
-- expired
-- blocked
-
-Never store redeemable product codes as plaintext in the database.
-
-Use secure cryptographic code generation and a keyed hash for code verification.
-
-### REWARDS COLLECTION
-
-Fields:
-
-- name
-- description
-- pointsRequired
-- quantity
-- category
-- image
-- status
-- createdAt
-- updatedAt
-
-### POINT TRANSACTIONS COLLECTION
-
-Fields:
-
-- userId
-- type
-- points
-- source
-- referenceId
-- description
-- createdAt
-
-Types:
-
-- earned
-- redeemed
-- expired
-- adjusted
-
-### REDEMPTIONS COLLECTION
-
-Fields:
-
-- userId
-- rewardId
-- pointsSpent
-- redemptionCode
-- status
-- createdAt
-
-### FRAUD LOGS COLLECTION
-
-Fields:
-
-- userId
-- productCodeReference
-- eventType
-- riskLevel
-- ipAddress
-- userAgent
-- description
-- status
-- createdAt
-
-### SETTINGS COLLECTION
-
-Fields:
-
-- pointsExpiryMonths
-- maximumAttempts
-- codeRedemptionEnabled
-- minimumRedemptionPoints
-- updatedAt
-
-Create proper indexes and relationships.
-
-Use atomic database operations and transactions wherever required.
-
----
-
-# 7. PHASE 3 — CUSTOMER & ADMIN AUTHENTICATION
-
-Create complete authentication APIs.
-
-### Customer Registration
-
-POST /api/auth/register
-
-Fields:
-
-- fullName
-- email
-- phone
-- password
-- confirmPassword
-
-Requirements:
-
-- Validate all fields.
-- Check duplicate email.
-- Hash password using bcrypt.
-- Create customer account.
-- Never allow users to register themselves as admin.
-
-### Login
-
-POST /api/auth/login
-
-Fields:
-
-- email
-- password
-
-Requirements:
-
-- Verify credentials.
-- Generate access token.
-- Generate secure refresh token.
-- Return user information.
-- Enforce account status.
-- Prevent unauthorized access.
-
-### Other Authentication APIs
-
-POST /api/auth/refresh
-
-POST /api/auth/logout
-
-GET /api/auth/me
-
-POST /api/auth/forgot-password
-
-POST /api/auth/reset-password
-
-Implement secure refresh-token handling and token rotation.
-
-Password recovery must use secure, expiring, single-use reset tokens.
-
-Do not expose whether an email exists during password recovery.
-
-### Admin Authentication
-
-Admins must have a separate secure provisioning process.
-
-Seed the initial admin through a secure script using environment variables.
-
-Never create a public admin registration endpoint.
-
-Implement role-based authorization middleware.
-
----
-
-# 8. PHASE 4 — PRODUCT MANAGEMENT APIs
-
-Admin-only routes:
-
-GET /api/products
-
-GET /api/products/:id
-
-POST /api/products
-
-PUT /api/products/:id
-
-DELETE /api/products/:id
-
-Requirements:
-
-- Create products.
-- Update product information.
-- View products.
-- Delete or deactivate products.
-- Validate SKU uniqueness.
-- Configure points per box.
-
-Customers can only view active products.
-
-Use proper pagination and search.
-
----
-
-# 9. PHASE 5 — UNIQUE PRODUCT CODE GENERATION
-
-This is one of the most important features.
-
-Factory owners need to generate unique reward codes for physical product packaging.
-
-Admin APIs:
-
-POST /api/codes/generate
-
-GET /api/codes
-
-GET /api/codes/:id
-
-GET /api/codes/batches
-
-GET /api/codes/batches/:id/export
-
-POST /api/codes/:id/block
-
-### Code Generation Requirements
-
-- Use Node.js crypto module.
-- Generate unpredictable codes.
-- Prevent duplicate codes.
-- Use cryptographic randomness.
-- Store keyed hashes instead of plaintext.
-- Assign codes to products.
-- Assign points per code.
-- Support batch generation.
-- Support expiration dates.
-- Track code status.
-
-Batch generation must support:
-
-- 5 codes
-- 10 codes
-- 25 codes
-- 50 codes
-
-Allow larger batches only with appropriate validation and limits.
-
-### Important Physical Packaging Requirement
-
-The factory needs printable plaintext codes to place inside physical product boxes.
-
-Therefore:
-
-- Generate the codes securely.
-- Display/export plaintext codes only at generation time.
-- Never expose stored code hashes as redeemable codes.
-- Protect batch exports with admin authorization.
-- Do not allow repeated plaintext retrieval after the initial generation response.
-
-Support CSV export for printing.
-
----
-
-# 10. PHASE 6 — SECURE CODE VERIFICATION & REDEMPTION
-
-Customer API:
-
-POST /api/codes/redeem
-
-Request:
-
-{
-  "code": "BOX-GOLD-8899"
-}
-
-Backend must:
-
-1. Authenticate the customer.
-2. Validate the submitted code.
-3. Normalize input.
-4. Calculate the keyed hash.
-5. Find the corresponding code.
-6. Check code status.
-7. Check expiration.
-8. Check product status.
-9. Prevent duplicate redemption.
-10. Award the correct points.
-11. Update the customer wallet.
-12. Create a point transaction.
-13. Record redemption activity.
-
-Use atomic database updates and MongoDB transactions to prevent duplicate redemption and double points.
-
-### Error States
-
-Invalid code:
-
-{
-  "success": false,
-  "message": "Invalid product code"
-}
-
-Already redeemed:
-
-{
-  "success": false,
-  "message": "This code has already been redeemed"
-}
-
-Expired:
-
-{
-  "success": false,
-  "message": "This product code has expired"
-}
-
-Successful redemption:
-
-{
-  "success": true,
-  "message": "Congratulations! Points added successfully",
-  "data": {
-    "pointsEarned": 100,
-    "availablePoints": 1350
-  }
-}
-
-Never trust points or customer IDs supplied by the frontend.
-
-The backend must determine the authenticated customer and points from the database.
-
-Implement idempotency and safe concurrency handling.
-
----
-
-# 11. PHASE 7 — POINTS MANAGEMENT
-
-Customer APIs:
-
-GET /api/points/balance
-
-GET /api/points/history
-
-GET /api/points/summary
-
-Admin APIs:
-
-GET /api/admin/points/overview
-
-POST /api/admin/points/adjust
-
-Requirements:
-
-- Track earned points.
-- Track redeemed points.
-- Track expired points.
-- Maintain transaction history.
-- Calculate available balance.
-- Prevent negative balances.
-- Support admin adjustments with audit records.
-
-Every points change must have a corresponding transaction record.
-
-Never update the balance without recording the transaction.
-
-Implement points expiration based on the documented business assumptions.
-
----
-
-# 12. PHASE 8 — REWARDS & REDEMPTION APIs
-
-Customer APIs:
-
-GET /api/rewards
-
-GET /api/rewards/:id
-
-POST /api/rewards/:id/redeem
-
-GET /api/redemptions/my
-
-GET /api/redemptions/:id
-
-Admin APIs:
-
-GET /api/admin/rewards
-
-POST /api/admin/rewards
-
-PUT /api/admin/rewards/:id
-
-DELETE /api/admin/rewards/:id
-
-GET /api/admin/redemptions
-
-Requirements:
-
-- Reward catalog.
-- Reward categories.
-- Points requirements.
-- Inventory management.
-- Reward activation/deactivation.
-- Redemption history.
-- Stock availability.
-- Points deduction.
-- Unique redemption references.
-
-Use database transactions when deducting points and reward inventory.
-
-Prevent:
-
-- Negative points.
-- Negative inventory.
-- Duplicate redemption.
-- Redemption of inactive rewards.
-
----
-
-# 13. PHASE 9 — FRAUD PREVENTION & MONITORING
-
-Implement actual backend security and fraud monitoring.
-
-Detect and record:
-
-1. Repeated invalid product codes.
-2. Duplicate redemption attempts.
-3. Excessive redemption requests.
-4. Suspicious IP activity.
-5. Unusual code submission patterns.
-6. Blocked code usage attempts.
-
-Implement:
-
-- Rate limiting.
-- Attempt tracking.
-- IP-based monitoring.
-- Account-based monitoring.
-- Risk level classification.
-- Suspicious event logging.
-- Admin review endpoints.
-
-Risk levels:
-
-- Low
-- Medium
-- High
-- Critical
-
-Admin APIs:
-
-GET /api/admin/fraud
-
-GET /api/admin/fraud/:id
-
-PATCH /api/admin/fraud/:id/status
-
-POST /api/admin/fraud/block-ip
-
-POST /api/admin/fraud/unblock-ip
-
-Important:
-
-Do not claim that heuristic fraud monitoring is AI-powered.
-
-Use transparent rule-based detection and document its limitations.
-
-Avoid permanent blocking based on one failed attempt.
-
----
-
-# 14. PHASE 10 — ANALYTICS & ADMIN APIs
-
-Create:
-
-GET /api/admin/dashboard
-
-GET /api/admin/analytics/customers
-
-GET /api/admin/analytics/points
-
-GET /api/admin/analytics/redemptions
-
-GET /api/admin/analytics/products
-
-GET /api/admin/customers
-
-GET /api/admin/customers/:id
-
-GET /api/admin/customers/:id/history
-
-GET /api/admin/settings
-
-PUT /api/admin/settings
-
-Dashboard metrics:
-
-- Total customers.
-- Active customers.
-- Total products.
-- Generated codes.
-- Redeemed codes.
-- Unused codes.
-- Total points distributed.
-- Total points redeemed.
-- Total rewards claimed.
-- Suspicious activities.
-
-Support filtering by date range.
-
-Use database aggregation pipelines for analytics.
-
-Never hardcode dashboard numbers.
-
----
-
-# 15. API RESPONSE STANDARD
-
-Maintain consistent API responses.
-
-Success:
-
-{
-  "success": true,
-  "message": "Operation successful",
-  "data": {}
-}
-
-Error:
-
-{
-  "success": false,
-  "message": "Something went wrong",
-  "errors": []
-}
-
-Use appropriate HTTP status codes.
-
-Implement centralized error handling.
-
-Do not expose:
-
-- Stack traces in production.
-- Password hashes.
-- JWT secrets.
-- Database credentials.
-- Internal security information.
-
----
-
-# 16. FRONTEND INTEGRATION PREPARATION
-
-Agent 1 has already created the frontend.
-
-You must prepare APIs compatible with its existing requirements.
-
-Do not modify frontend files.
-
-Create:
-
-backend/docs/API_DOCUMENTATION.md
+frontend/docs/INTEGRATION_RESULTS.md
 
 Document:
 
-- API endpoint.
-- HTTP method.
-- Required authentication.
-- Request body.
-- Response body.
-- Error responses.
-- Required role.
-- Example API requests.
+- Connected frontend pages.
+- Connected backend APIs.
+- Authentication integration.
+- Data synchronization.
+- Remaining limitations.
+- Deployment preparation.
 
-Prepare frontend integration mapping for:
+Update existing README only where necessary.
 
-1. Login.
-2. Registration.
-3. Customer dashboard.
-4. Product code redemption.
-5. Points.
-6. Rewards.
-7. Redemption history.
-8. Customer profile.
-9. Admin dashboard.
-10. Customer management.
-11. Product management.
-12. Code management.
-13. Rewards management.
-14. Redemption management.
-15. Fraud monitoring.
-16. Analytics.
-17. Admin settings.
-
-Ensure the backend returns data structures suitable for these frontend pages.
-
-Do not perform frontend integration yourself.
-
-Agent 1's files must remain untouched.
+Preserve all existing documentation.
 
 ---
 
-# 17. TESTING REQUIREMENTS
+# 12. GIT REQUIREMENTS
 
-Use Jest and Supertest.
+Preserve the existing Git history.
 
-Write tests for:
+Do not force-push.
 
-Authentication:
-- Customer registration.
-- Duplicate registration.
-- Login.
-- Invalid credentials.
-- Unauthorized requests.
-- Admin access control.
+Do not rewrite previous commits.
 
-Products:
-- Create product.
-- Update product.
-- Duplicate SKU.
-- Product listing.
-
-Codes:
-- Generate unique codes.
-- Redeem valid code.
-- Redeem invalid code.
-- Redeem expired code.
-- Redeem already-used code.
-- Concurrent duplicate redemption.
-
-Points:
-- Correct points calculation.
-- Transaction history.
-- No negative balances.
-- Admin adjustment.
-
-Rewards:
-- Successful redemption.
-- Insufficient points.
-- Out-of-stock reward.
-- Duplicate redemption prevention.
-
-Fraud:
-- Repeated invalid attempts.
-- Rate limiting.
-- Suspicious activity logging.
-
-Run the complete test suite.
-
-Document actual test results.
-
-Never mark tests as passed without running them.
+Create meaningful commits only for newly completed integration work.
 
 ---
 
-# 18. SECURITY REQUIREMENTS
+# 13. EXECUTION ORDER
 
-Follow secure backend development practices.
+Follow this exact order:
 
-Mandatory:
+PHASE 11:
+Frontend + Backend Integration.
 
-- bcrypt password hashing.
-- JWT authentication.
-- Role-based access control.
-- Secure random code generation.
-- Keyed code hashing.
-- Rate limiting.
-- Request validation.
-- Helmet.
-- CORS restrictions.
-- Environment variables.
-- Secure error handling.
-- MongoDB indexes.
-- Atomic redemption.
-- Audit logs.
-- Protection against duplicate transactions.
+PHASE 12:
+Customer Integration.
 
-Do not trust frontend validation.
+PHASE 13:
+Admin Integration.
 
-Every important business rule must be enforced by the backend.
+PHASE 14:
+Data Synchronization.
 
----
+PHASE 15:
+Integration Issue Resolution.
 
-# 19. DOCUMENTATION
+PHASE 16:
+End-to-End Testing.
 
-Create:
+PHASE 17:
+Deployment Preparation.
 
-backend/docs/API_DOCUMENTATION.md
+PHASE 18:
+Documentation.
 
-backend/docs/DATABASE_SCHEMA.md
+After each phase:
 
-backend/docs/SECURITY.md
-
-backend/docs/INTEGRATION_GUIDE.md
-
-Update the root documentation only when necessary and without overwriting Agent 1's existing content.
-
-Preserve the existing:
-
-- README.md
-- ASSUMPTIONS.md
-- ARCHITECTURE.md
-- AI_LOG.md
-- TEST_PLAN.md
-
-Document all backend-specific assumptions and AI interactions.
-
-AI_LOG.md must accurately record real AI interactions, including mistakes noticed and fixes made. Do not fabricate AI errors or test results.
-
----
-
-# 20. GIT COMMIT REQUIREMENTS
-
-Work on the existing main branch unless a separate backend development branch is explicitly configured.
-
-Create meaningful commits throughout development.
-
-Suggested commits:
-
-1. Initialize backend project.
-2. Configure Express and MongoDB.
-3. Implement database models.
-4. Implement authentication.
-5. Implement product APIs.
-6. Implement secure code generation.
-7. Implement code redemption.
-8. Implement points management.
-9. Implement rewards and redemptions.
-10. Implement fraud monitoring.
-11. Implement analytics APIs.
-12. Add tests and API documentation.
-
-Never create one giant final commit.
-
-Never force-push or rewrite Agent 1's commit history.
-
----
-
-# 21. EXECUTION STRATEGY
-
-Work phase by phase.
-
-PHASE 1:
-Backend initialization and configuration.
-
-PHASE 2:
-Database models and architecture.
-
-PHASE 3:
-Customer and admin authentication.
-
-PHASE 4:
-Product management.
-
-PHASE 5:
-Unique product code generation.
-
-PHASE 6:
-Secure product code redemption.
-
-PHASE 7:
-Points management.
-
-PHASE 8:
-Rewards and redemption.
-
-PHASE 9:
-Fraud prevention and monitoring.
-
-PHASE 10:
-Analytics, testing, documentation, and integration preparation.
-
-Do not skip phases.
-
-After completing each phase:
-
-1. Explain what was developed.
-2. List created files.
-3. Run relevant tests.
-4. Fix errors.
-5. Verify existing functionality.
-6. Create a meaningful Git commit.
-7. Report completion before moving forward.
+- Explain what was completed.
+- List modified files.
+- Report pending issues.
+- Create a meaningful commit.
 
 Do not restart completed phases.
 
-Do not overwrite previous work.
+Do not rebuild completed modules.
 
 ---
 
-# 22. FINAL VALIDATION
+# 14. FINAL REPORT
 
-Before declaring backend complete, verify:
+Provide:
 
-- Server starts successfully.
-- MongoDB connects successfully.
-- Authentication works.
-- Admin authorization works.
-- Product APIs work.
-- Code generation works.
-- Code redemption works.
-- Duplicate code redemption is prevented.
-- Points are correctly awarded.
-- Reward redemption works.
-- Fraud events are recorded.
-- Analytics APIs return real database results.
-- Tests run successfully.
-- API documentation is complete.
-- No frontend files were modified.
+1. Connected frontend pages.
+2. Connected backend APIs.
+3. Customer integration status.
+4. Admin integration status.
+5. Data synchronization status.
+6. Integration testing results.
+7. Deployment readiness.
+8. Modified files.
+9. Git commits.
+10. Remaining work.
 
----
-
-# 23. FINAL REPORT
-
-At the end, provide:
-
-1. Backend architecture.
-2. Database collections.
-3. API endpoints.
-4. Authentication implementation.
-5. Code generation implementation.
-6. Code verification implementation.
-7. Points management.
-8. Reward redemption.
-9. Fraud prevention.
-10. Analytics implementation.
-11. Testing results.
-12. Documentation created.
-13. Git commits.
-14. Build/server status.
-15. Remaining limitations.
-16. Frontend integration instructions.
+Clearly distinguish completed and pending work.
 
 FINAL RULE:
 
-YOU ARE AGENT 2.
+ONLY COMPLETE THE REMAINING WORK.
 
-BUILD THE COMPLETE BACKEND FOR LOYALTYBOX.
+DO NOT REBUILD EXISTING FEATURES.
 
-AGENT 1 OWNS THE FRONTEND.
+DO NOT REPEAT COMPLETED DEVELOPMENT.
 
-YOU OWN ONLY THE BACKEND.
+DO NOT CHANGE THE EXISTING NEO-BRUTALIST UI.
 
-NEVER MODIFY FRONTEND FILES.
-
-YOUR BACKEND MUST BE READY FOR FUTURE INTEGRATION WITH AGENT 1'S EXISTING REACT APPLICATION.
+YOUR MAIN OBJECTIVE IS TO CONNECT THE EXISTING FRONTEND AND BACKEND AND PREPARE LOYALTYBOX FOR FINAL DEPLOYMENT.
