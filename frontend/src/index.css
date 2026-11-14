@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-yellow: #ffe17c;
+  --color-deep-charcoal: #171e19;
+  --color-sage: #b7c6c2;
+  --font-heading: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #171e19;
+  background-color: #fbfaf5;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Neo-Brutalist Utility Classes */
+.neo-border {
+  border: 2px solid #000000;
+}
+
+.neo-border-thick {
+  border: 3px solid #000000;
+}
+
+.neo-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.neo-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.neo-shadow-lg {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
+
+.neo-shadow-xl {
+  box-shadow: 12px 12px 0px 0px #000000;
+}
+
+.neo-shadow-hover {
+  transition: all 0.15s ease-in-out;
+}
+
+.neo-shadow-hover:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.neo-shadow-hover:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px 0px #000000;
+}
+
+/* Interactive push button */
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.neo-btn:hover:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.neo-btn:active:not(:disabled) {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px 0px #000000;
+}
+
+.neo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Card */
+.neo-card {
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px 0px #000000;
+  background-color: #ffffff;
+}
+
+.neo-card-lg {
+  border: 2px solid #000000;
+  box-shadow: 8px 8px 0px 0px #000000;
+  background-color: #ffffff;
+}
+
+/* Neo Input */
+.neo-input {
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #000000;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+}
+
+.neo-input:focus {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px #000000;
+}
+
+/* Outlined typography effect */
+.text-outline {
+  -webkit-text-stroke: 2px #000000;
+  color: transparent;
+}
+
+.text-outline-white {
+  -webkit-text-stroke: 2px #000000;
+  color: #ffffff;
+}
+
+/* Dot pattern background */
+.bg-dots {
+  background-image: radial-gradient(#171e19 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.bg-dots-sage {
+  background-image: radial-gradient(#8f9f9b 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Marquee continuous animation */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
