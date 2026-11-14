@@ -38,18 +38,22 @@ export default function CodeManagementPage() {
   const totalPages = Math.ceil(filteredCodes.length / itemsPerPage) || 1;
   const paginatedCodes = filteredCodes.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const handleGenerate = (e) => {
+  const handleGenerate = async (e) => {
     e.preventDefault();
-    const result = generateCodes({
-      productId: selectedProductId,
-      count: Number(codesCount),
-      customPoints: customPoints ? Number(customPoints) : null
-    });
+    try {
+      const result = await generateCodes({
+        productId: selectedProductId,
+        count: Number(codesCount),
+        customPoints: customPoints ? Number(customPoints) : null
+      });
 
-    toast.success(`Generated ${result.count} new codes under ${result.batchId}!`, {
-      style: { border: '2px solid black', borderRadius: '8px', fontWeight: 'bold' }
-    });
-    setIsGenerateModalOpen(false);
+      toast.success(`Generated ${result.count} new codes under ${result.batchId}!`, {
+        style: { border: '2px solid black', borderRadius: '8px', fontWeight: 'bold' }
+      });
+      setIsGenerateModalOpen(false);
+    } catch {
+      toast.error('Failed to generate codes.');
+    }
   };
 
   const handleExportCSV = () => {

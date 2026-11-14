@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldAlert, 
   Search, 
@@ -9,6 +9,7 @@ import {
   Info
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
@@ -18,12 +19,33 @@ export default function FraudMonitoringPage() {
   const [riskFilter, setRiskFilter] = useState('ALL');
   const [selectedAlert, setSelectedAlert] = useState(null);
 
+  useEffect(() => {
+    api.fraud.getLogs()
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.logs) && res.data.logs.length > 0) {
+          const liveLogs = res.data.logs.map(l => ({
+            id: l._id || l.id,
+            timestamp: l.createdAt ? new Date(l.createdAt).toISOString().replace('T', ' ').substring(0, 16) : '2026-11-14 21:00',
+            customerName: l.customerName || (l.userId?.fullName || 'Anonymous / Unknown'),
+            ipAddress: l.ipAddress || '127.0.0.1',
+            location: l.location || 'Pune, India',
+            type: l.eventType || 'Suspicious Code Activity',
+            riskLevel: l.riskLevel || 'Medium',
+            details: l.description || 'Abnormal code scanning behavior detected',
+            status: l.status || 'Pending Review'
+          }));
+          setFraudAlerts(liveLogs);
+        }
+      })
+      .catch(() => {});
+  }, [setFraudAlerts]);
+
   const filteredAlerts = fraudAlerts.filter(a => {
     const matchesSearch = 
-      a.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      a.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      a.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      a.location.toLowerCase().includes(searchTerm.toLowerCase());
+      (a.id || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (a.customerName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (a.type || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (a.location || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     if (riskFilter === 'ALL') return matchesSearch;
     return matchesSearch && a.riskLevel.toUpperCase() === riskFilter.toUpperCase();
@@ -44,7 +66,10 @@ export default function FraudMonitoringPage() {
     }
   };
 
-  const handleResolveAlert = (id) => {
+  const handleResolveAlert = async (id) => {
+    try {
+      await api.fraud.updateStatus(id, 'Resolved');
+    } catch {}
     setFraudAlerts(prev => prev.map(a => 
       a.id === id ? { ...a, status: 'Resolved & Cleared' } : a
     ));
@@ -52,7 +77,13 @@ export default function FraudMonitoringPage() {
     setSelectedAlert(null);
   };
 
-  const handleBlockOrigin = (id) => {
+  const handleBlockOrigin = async (id) => {
+    try {
+      await api.fraud.updateStatus(id, 'Blacklisted');
+      if (selectedAlert?.ipAddress) {
+        await api.fraud.blockIp(selectedAlert.ipAddress, 'Admin manual blacklist');
+      }
+    } catch {}
     setFraudAlerts(prev => prev.map(a => 
       a.id === id ? { ...a, status: 'Permanently Blacklisted' } : a
     ));

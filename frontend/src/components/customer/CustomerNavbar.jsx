@@ -4,7 +4,7 @@ import { Menu, Bell, Coins, ChevronDown, User, LogOut } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function CustomerNavbar({ onToggleSidebar }) {
-  const { currentUser } = useApp();
+  const { currentUser, logoutUser } = useApp();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -130,7 +130,10 @@ export default function CustomerNavbar({ onToggleSidebar }) {
                 </Link>
                 <Link
                   to="/login"
-                  onClick={() => setShowProfileMenu(false)}
+                  onClick={() => {
+                    logoutUser();
+                    setShowProfileMenu(false);
+                  }}
                   className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   <LogOut className="w-4 h-4" /> Sign Out

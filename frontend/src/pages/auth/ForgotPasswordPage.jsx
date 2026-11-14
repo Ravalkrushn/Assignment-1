@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { api } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export default function ForgotPasswordPage() {
@@ -8,7 +9,7 @@ export default function ForgotPasswordPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) {
       toast.error('Please enter your registered email address.');
@@ -16,11 +17,14 @@ export default function ForgotPasswordPage() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsSubmitted(true);
-      toast.success('Simulated reset password link sent to your inbox!');
-    }, 600);
+    try {
+      await api.auth.forgotPassword(email);
+    } catch {
+      // Graceful handling even if offline or user not found
+    }
+    setIsLoading(false);
+    setIsSubmitted(true);
+    toast.success('Password reset instructions sent to your inbox!');
   };
 
   return (

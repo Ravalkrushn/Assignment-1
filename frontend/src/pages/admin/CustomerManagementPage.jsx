@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Users, 
   Search, 
@@ -6,14 +6,40 @@ import {
   Download
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
 export default function CustomerManagementPage() {
-  const { customers, transactions } = useApp();
+  const { customers: contextCustomers, transactions } = useApp();
+  const [customers, setCustomers] = useState(contextCustomers);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+  useEffect(() => {
+    api.analytics.getDirectory({ limit: 100 })
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.customers) && res.data.customers.length > 0) {
+          setCustomers(res.data.customers.map(c => ({
+            id: c._id || c.id,
+            name: c.fullName || c.name,
+            email: c.email,
+            phone: c.phone,
+            businessName: c.businessName || 'Workshop',
+            city: c.city || '-',
+            state: c.state || '-',
+            tier: c.tier || 'Bronze',
+            pointsBalance: c.availablePoints !== undefined ? c.availablePoints : 0,
+            totalPointsEarned: c.totalPointsEarned || 0,
+            boxesRedeemed: c.boxesRedeemed || 0,
+            status: c.status ? (c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()) : 'Active',
+            joinedDate: c.createdAt ? new Date(c.createdAt).toISOString().substring(0, 10) : '2026-11-14'
+          })));
+        }
+      })
+      .catch(() => {});
+  }, [contextCustomers]);
 
   const filteredCustomers = customers.filter(c => {
     const matchesSearch = 

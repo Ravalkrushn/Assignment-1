@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useApp } from '../../context/AppContext';
 import { 
   LayoutDashboard, 
   Users, 
@@ -16,11 +17,10 @@ import {
   ChevronRight,
   Factory
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
 
 export default function AdminSidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
-  const { fraudAlerts } = useApp();
+  const { fraudAlerts, logoutUser } = useApp();
 
   // Count critical or high fraud alerts for badge
   const pendingAlerts = fraudAlerts.filter(a => a.riskLevel === 'Critical' || a.riskLevel === 'High').length;
@@ -130,7 +130,10 @@ export default function AdminSidebar({ isOpen, setIsOpen }) {
           </Link>
 
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => {
+              logoutUser();
+              navigate('/login');
+            }}
             className="flex items-center justify-center gap-2 w-full py-2 bg-[#243028] text-white border-2 border-black neo-shadow-sm rounded-lg text-sm hover:bg-neutral-800"
           >
             <LogOut className="w-4 h-4" />

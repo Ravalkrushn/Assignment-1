@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   CheckSquare, 
   Search, 
@@ -7,14 +7,38 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export default function RedemptionManagementPage() {
-  const { transactions } = useApp();
+  const { transactions: contextTransactions } = useApp();
+  const [transactions, setTransactions] = useState(contextTransactions);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterFlow, setFilterFlow] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+
+  useEffect(() => {
+    api.redemptions.getAdmin({ limit: 100 })
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.redemptions) && res.data.redemptions.length > 0) {
+          const liveList = res.data.redemptions.map(r => ({
+            id: r.redemptionCode || r._id,
+            customerName: r.customerName || (r.userId?.fullName || 'Customer'),
+            type: 'REWARD_CLAIM',
+            productCode: '-',
+            productName: '-',
+            rewardName: r.rewardName || 'Reward',
+            points: r.pointsSpent || 0,
+            flow: 'SPENT',
+            date: r.createdAt ? new Date(r.createdAt).toISOString().replace('T', ' ').substring(0, 16) : '',
+            status: r.status ? (r.status.charAt(0).toUpperCase() + r.status.slice(1)) : 'Completed'
+          }));
+          setTransactions([...liveList, ...contextTransactions]);
+        }
+      })
+      .catch(() => {});
+  }, [contextTransactions]);
 
   const filtered = transactions.filter(t => {
     const matchesSearch = 

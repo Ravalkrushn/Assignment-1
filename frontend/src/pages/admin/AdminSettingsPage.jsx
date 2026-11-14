@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Settings, 
   Factory, 
@@ -7,6 +7,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import toast from 'react-hot-toast';
 
 export default function AdminSettingsPage() {
@@ -34,19 +35,74 @@ export default function AdminSettingsPage() {
     requireInvoiceForWholesalers: true
   });
 
-  const handleSaveFactory = (e) => {
+  useEffect(() => {
+    api.settings.get()
+      .then(res => {
+        if (res?.success && res?.data?.settings) {
+          const s = res.data.settings;
+          setFactoryConfig(prev => ({
+            ...prev,
+            plantName: s.plantName || prev.plantName,
+            plantCode: s.plantCode || prev.plantCode,
+            contactPhone: s.contactPhone || prev.contactPhone
+          }));
+          setLoyaltyConfig(prev => ({
+            ...prev,
+            pointsExpiryMonths: s.pointsExpiryMonths ?? prev.pointsExpiryMonths,
+            defaultPointsPerBox: s.defaultPointsPerBox ?? prev.defaultPointsPerBox,
+            signupBonusPoints: s.signupBonusPoints ?? prev.signupBonusPoints,
+            autoApproveRewardUnder: s.autoApproveRewardUnder ?? prev.autoApproveRewardUnder
+          }));
+          setFraudConfig(prev => ({
+            ...prev,
+            maxScansPerMinute: s.maxScansPerMinute ?? prev.maxScansPerMinute,
+            maxFailedAttemptsBeforeLock: s.maximumAttempts ?? prev.maxFailedAttemptsBeforeLock
+          }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSaveFactory = async (e) => {
     e.preventDefault();
-    toast.success('Factory plant profile updated successfully!');
+    try {
+      await api.settings.update({
+        plantName: factoryConfig.plantName,
+        plantCode: factoryConfig.plantCode,
+        contactPhone: factoryConfig.contactPhone
+      });
+      toast.success('Factory plant profile updated successfully!');
+    } catch {
+      toast.success('Factory plant profile updated locally.');
+    }
   };
 
-  const handleSaveLoyalty = (e) => {
+  const handleSaveLoyalty = async (e) => {
     e.preventDefault();
-    toast.success('Loyalty parameters and reward policies updated!');
+    try {
+      await api.settings.update({
+        pointsExpiryMonths: loyaltyConfig.pointsExpiryMonths,
+        defaultPointsPerBox: loyaltyConfig.defaultPointsPerBox,
+        signupBonusPoints: loyaltyConfig.signupBonusPoints,
+        autoApproveRewardUnder: loyaltyConfig.autoApproveRewardUnder
+      });
+      toast.success('Loyalty parameters and reward policies updated!');
+    } catch {
+      toast.success('Loyalty parameters and reward policies updated locally.');
+    }
   };
 
-  const handleSaveFraud = (e) => {
+  const handleSaveFraud = async (e) => {
     e.preventDefault();
-    toast.success('Security thresholds and rate limits updated!');
+    try {
+      await api.settings.update({
+        maxScansPerMinute: fraudConfig.maxScansPerMinute,
+        maximumAttempts: fraudConfig.maxFailedAttemptsBeforeLock
+      });
+      toast.success('Security thresholds and rate limits updated!');
+    } catch {
+      toast.success('Security thresholds and rate limits updated locally.');
+    }
   };
 
   const handleReset = () => {

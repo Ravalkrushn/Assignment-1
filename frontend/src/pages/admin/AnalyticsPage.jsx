@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -26,12 +26,29 @@ import {
 import { 
   adminMonthlyGrowth, 
   popularRewardsData, 
-  productRedemptionPerformance 
+  productRedemptionPerformance as fallbackPerformance 
 } from '../../data/dummyAnalytics';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 
 export default function AnalyticsPage() {
   const { customers } = useApp();
+  const [productRedemptionPerformance, setProductRedemptionPerformance] = useState(fallbackPerformance);
+
+  useEffect(() => {
+    api.analytics.getProducts()
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.products) && res.data.products.length > 0) {
+          setProductRedemptionPerformance(res.data.products.map(p => ({
+            name: p.name || p.productName,
+            generated: p.generated || 0,
+            redeemed: p.redeemed || 0,
+            rate: p.yieldRate || '0%'
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Custom chart tooltip
   const CustomTooltip = ({ active, payload, label }) => {

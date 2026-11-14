@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Users, 
@@ -22,28 +22,40 @@ import {
   CartesianGrid 
 } from 'recharts';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import { adminMonthlyGrowth, popularRewardsData } from '../../data/dummyAnalytics';
 
 export default function AdminDashboard() {
   const { customers, products, codes, rewards, transactions, fraudAlerts } = useApp();
+  const [liveStats, setLiveStats] = useState(null);
 
-  const totalCodesCount = 50000;
-  const redeemedCodesCount = 12500;
-  const pointsDistributed = 125000;
-  const totalRewardsRedeemed = 2500;
+  useEffect(() => {
+    api.analytics.getDashboard()
+      .then(res => {
+        if (res?.success && res?.data?.stats) {
+          setLiveStats(res.data.stats);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const totalCodesCount = liveStats ? liveStats.totalCodesGenerated : 50000;
+  const redeemedCodesCount = liveStats ? liveStats.totalCodesRedeemed : 12500;
+  const pointsDistributed = liveStats ? liveStats.totalPointsDistributed : 125000;
+  const totalRewardsRedeemed = liveStats ? liveStats.totalRewardsClaimed : 2500;
 
   const adminStats = [
     {
       label: "Total Customers",
-      value: "5,000",
-      subtext: "+14% this month",
+      value: liveStats ? liveStats.totalCustomers.toLocaleString() : (customers?.length?.toLocaleString() || "5,000"),
+      subtext: liveStats ? `${liveStats.activeCustomers} active accounts` : "+14% this month",
       icon: Users,
       bg: "#ffe17c"
     },
     {
       label: "Total Products",
-      value: "125 SKUs",
-      subtext: `${products.length} active in demo catalog`,
+      value: `${liveStats ? liveStats.totalProducts : products.length} SKUs`,
+      subtext: `${products.length} active in catalog`,
       icon: Package,
       bg: "#ffffff"
     },
@@ -57,7 +69,7 @@ export default function AdminDashboard() {
     {
       label: "Redeemed Codes",
       value: redeemedCodesCount.toLocaleString(),
-      subtext: "25% redemption conversion",
+      subtext: liveStats?.redemptionRate ? `${liveStats.redemptionRate} redemption rate` : "25% redemption conversion",
       icon: CheckSquare,
       bg: "#b7c6c2"
     },

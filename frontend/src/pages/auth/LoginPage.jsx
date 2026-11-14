@@ -11,49 +11,61 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { setCurrentUser } = useApp();
+  const { loginUser } = useApp();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    if (e) e.preventDefault();
     if (!email || !password) {
       toast.error('Please enter both email and password.');
       return;
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await loginUser(email, password);
       setIsLoading(false);
-      // Check if admin demo credentials
-      if (email.toLowerCase().includes('admin') || email.toLowerCase().includes('owner') || email.toLowerCase().includes('factory')) {
-        toast.success('Welcome to Factory Admin Portal!');
+      const user = res?.user;
+      if (user?.role === 'admin') {
+        toast.success(`Welcome to Factory Admin Portal, ${user.name}!`);
         navigate('/admin/dashboard');
       } else {
-        toast.success(`Welcome back, ${email.split('@')[0]}!`);
+        toast.success(`Welcome back, ${user?.name || 'Customer'}!`);
         navigate('/customer/dashboard');
       }
-    }, 600);
+    } catch (err) {
+      setIsLoading(false);
+      toast.error(err.message || 'Login failed. Please verify credentials.');
+    }
   };
 
-  const handleDemoCustomerLogin = () => {
+  const handleDemoCustomerLogin = async () => {
     setEmail('rahul.sharma@workshop.in');
-    setPassword('demopass123');
+    setPassword('password123');
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await loginUser('rahul.sharma@workshop.in', 'password123');
       setIsLoading(false);
       toast.success('Logged in as Rahul Sharma (Verified Customer)');
       navigate('/customer/dashboard');
-    }, 400);
+    } catch (err) {
+      setIsLoading(false);
+      toast.error(err.message || 'Customer login failed.');
+    }
   };
 
-  const handleDemoAdminLogin = () => {
+  const handleDemoAdminLogin = async () => {
     setEmail('admin@factory.io');
-    setPassword('adminpass123');
+    setPassword('AdminSecurePassword123!');
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await loginUser('admin@factory.io', 'AdminSecurePassword123!');
       setIsLoading(false);
       toast.success('Logged in as Harish Patel (Factory Owner)');
       navigate('/admin/dashboard');
-    }, 400);
+    } catch (err) {
+      setIsLoading(false);
+      toast.error(err.message || 'Admin login failed.');
+    }
   };
 
   return (

@@ -51,16 +51,16 @@ export default function RewardsPage() {
     setRedeemModalReward(reward);
   };
 
-  const handleConfirmRedeem = () => {
+  const handleConfirmRedeem = async () => {
     if (!redeemModalReward) return;
     setIsClaiming(true);
 
-    setTimeout(() => {
-      const res = claimReward(redeemModalReward.id);
+    try {
+      const res = await claimReward(redeemModalReward.id || redeemModalReward._id);
       setIsClaiming(false);
       setRedeemModalReward(null);
 
-      if (res.success) {
+      if (res?.success) {
         confetti({
           particleCount: 120,
           spread: 80,
@@ -70,9 +70,13 @@ export default function RewardsPage() {
           style: { border: '2px solid black', borderRadius: '8px', fontWeight: 'bold' }
         });
       } else {
-        toast.error(res.message);
+        toast.error(res?.message || 'Failed to claim reward.');
       }
-    }, 500);
+    } catch (err) {
+      setIsClaiming(false);
+      setRedeemModalReward(null);
+      toast.error(err.message || 'Reward redemption failed.');
+    }
   };
 
   return (

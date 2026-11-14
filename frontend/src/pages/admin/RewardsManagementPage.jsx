@@ -71,28 +71,36 @@ export default function RewardsManagementPage() {
     });
   };
 
-  const handleSaveReward = (e) => {
+  const handleSaveReward = async (e) => {
     e.preventDefault();
     if (!formData.name) {
       toast.error('Please enter reward name.');
       return;
     }
 
-    if (editingReward) {
-      updateReward(editingReward.id, formData);
-      toast.success(`Updated "${formData.name}" successfully!`);
-      setEditingReward(null);
-    } else {
-      addReward(formData);
-      toast.success(`Added new reward "${formData.name}"!`);
-      setIsAddModalOpen(false);
+    try {
+      if (editingReward) {
+        await updateReward(editingReward.id || editingReward._id, formData);
+        toast.success(`Updated "${formData.name}" successfully!`);
+        setEditingReward(null);
+      } else {
+        await addReward(formData);
+        toast.success(`Added new reward "${formData.name}"!`);
+        setIsAddModalOpen(false);
+      }
+    } catch {
+      toast.error('Failed to save reward.');
     }
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deletingRewardId) return;
-    deleteReward(deletingRewardId);
-    toast.success('Reward deleted from active catalog.');
+    try {
+      await deleteReward(deletingRewardId);
+      toast.success('Reward deleted from active catalog.');
+    } catch {
+      toast.error('Failed to delete reward.');
+    }
     setDeletingRewardId(null);
   };
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles, ArrowRight, Eye, EyeOff, Lock, Mail, User, Phone, CheckCircle } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
+  const { registerUser } = useApp();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -24,7 +26,7 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (!formData.fullName || !formData.email || !formData.phone || !formData.password) {
@@ -48,11 +50,21 @@ export default function RegisterPage() {
     }
 
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await registerUser({
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword
+      });
       setIsLoading(false);
-      toast.success('Registration successful! Welcome to LOYALTYBOX.');
+      toast.success('Registration successful! 100 Welcome Bonus points credited.');
       navigate('/customer/dashboard');
-    }, 600);
+    } catch (err) {
+      setIsLoading(false);
+      toast.error(err.message || 'Registration failed. Please try again.');
+    }
   };
 
   return (

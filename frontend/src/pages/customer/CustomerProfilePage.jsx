@@ -31,9 +31,9 @@ export default function CustomerProfilePage() {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleProfileSubmit = (e) => {
+  const handleProfileSubmit = async (e) => {
     e.preventDefault();
-    updateProfile(formData);
+    await updateProfile(formData);
     setIsEditing(false);
     toast.success('Customer profile details updated successfully!');
   };

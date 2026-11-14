@@ -68,28 +68,36 @@ export default function ProductManagementPage() {
     });
   };
 
-  const handleSaveProduct = (e) => {
+  const handleSaveProduct = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.sku) {
       toast.error('Please enter product name and SKU.');
       return;
     }
 
-    if (editingProduct) {
-      updateProduct(editingProduct.id, formData);
-      toast.success(`Updated "${formData.name}" successfully!`);
-      setEditingProduct(null);
-    } else {
-      addProduct(formData);
-      toast.success(`Added new product "${formData.name}"!`);
-      setIsAddModalOpen(false);
+    try {
+      if (editingProduct) {
+        await updateProduct(editingProduct.id, formData);
+        toast.success(`Updated "${formData.name}" successfully!`);
+        setEditingProduct(null);
+      } else {
+        await addProduct(formData);
+        toast.success(`Added new product "${formData.name}"!`);
+        setIsAddModalOpen(false);
+      }
+    } catch {
+      toast.error('Failed to save product.');
     }
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (!deletingProductId) return;
-    deleteProduct(deletingProductId);
-    toast.success('Product deleted from catalog.');
+    try {
+      await deleteProduct(deletingProductId);
+      toast.success('Product deleted from catalog.');
+    } catch {
+      toast.error('Failed to delete product.');
+    }
     setDeletingProductId(null);
   };
 
