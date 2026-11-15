@@ -1,6 +1,22 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+const required = [
+  'MONGODB_URI',
+  'JWT_ACCESS_SECRET',
+  'JWT_REFRESH_SECRET',
+  'CODE_HASH_SECRET',
+  'CLIENT_URL'
+];
+
+if (process.env.NODE_ENV === 'production') {
+  for (const key of required) {
+    if (!process.env[key]) {
+      throw new Error(`Missing required environment variable: ${key}`);
+    }
+  }
+}
+
 export const env = {
   PORT: process.env.PORT || 5000,
   NODE_ENV: process.env.NODE_ENV || 'development',
@@ -13,7 +29,7 @@ export const env = {
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@factory.io',
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'AdminSecurePassword123!',
   CODE_HASH_SECRET: process.env.CODE_HASH_SECRET || 'dev_hmac_secret_for_scratch_codes_loyaltybox_2026',
-  RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
-  RATE_LIMIT_MAX_REQUESTS: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100', 10),
-  MAX_REDEMPTION_ATTEMPTS: parseInt(process.env.MAX_REDEMPTION_ATTEMPTS || '5', 10)
+  RATE_LIMIT_WINDOW_MS: Number(process.env.RATE_LIMIT_WINDOW_MS || 900000),
+  RATE_LIMIT_MAX_REQUESTS: Number(process.env.RATE_LIMIT_MAX_REQUESTS || 100),
+  MAX_REDEMPTION_ATTEMPTS: Number(process.env.MAX_REDEMPTION_ATTEMPTS || 5)
 };
