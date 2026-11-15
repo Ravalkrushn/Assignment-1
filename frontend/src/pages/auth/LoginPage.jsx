@@ -95,6 +95,27 @@ export default function LoginPage() {
                 Log in to check points balance, redeem genuine factory codes, and claim tools, cash coupons, or exclusive gifts.
               </p>
             </div>
+
+            {/* Factory Verification Visual Card */}
+            <div className="relative border-2 border-black rounded-xl overflow-hidden neo-shadow-sm bg-black group">
+              <img 
+                src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80" 
+                alt="Factory box digital verification" 
+                loading="lazy"
+                className="w-full h-24 object-cover opacity-85 group-hover:opacity-95 transition-opacity"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex items-end p-2.5">
+                <div className="flex items-center gap-1.5 text-white">
+                  <ShieldCheck className="w-4 h-4 text-[#ffe17c] shrink-0" />
+                  <span className="text-[11px] font-black tracking-tight leading-tight">
+                    100% Genuine Factory Box Verification
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Quick 1-Click Evaluation Logins */}

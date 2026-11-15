@@ -70,7 +70,8 @@ export default function LandingPage() {
       description: "Purchases factory products in boxes, scans inner scratch codes, collects reward points, and claims attractive rewards and discounts.",
       link: "/customer/dashboard",
       linkText: "Explore Customer Portal",
-      accent: "#ffffff"
+      accent: "#ffffff",
+      image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=500&auto=format&fit=crop&q=80"
     },
     {
       role: "FACTORY OWNER",
@@ -79,7 +80,8 @@ export default function LandingPage() {
       description: "Manages product lines, generates secured code batches, creates reward tiers, monitors unit sales velocity, and drives brand loyalty.",
       link: "/admin/dashboard",
       linkText: "Open Factory Admin",
-      accent: "#ffe17c"
+      accent: "#ffe17c",
+      image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80"
     },
     {
       role: "ADMINISTRATOR",
@@ -88,7 +90,8 @@ export default function LandingPage() {
       description: "Monitors code redemption logs, detects abnormal scan velocity, reviews flagged IPs, and safeguards against warranty abuse.",
       link: "/admin/fraud-monitoring",
       linkText: "View Security Center",
-      accent: "#b7c6c2"
+      accent: "#b7c6c2",
+      image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=500&auto=format&fit=crop&q=80"
     }
   ];
 
@@ -97,19 +100,22 @@ export default function LandingPage() {
       quote: "Scanning the box codes from our monthly bearing supply has earned our workshop over ₹12,000 in tool upgrades. Super simple and zero hassle.",
       author: "Manoj Kumar",
       designation: "Head Machinist, Precision Auto Works",
-      location: "Pune, MH"
+      location: "Pune, MH",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80"
     },
     {
       quote: "Before this system, our factory had no direct connection to the workshops buying our boxed seals. Today we have 5,000+ active loyal mechanics.",
       author: "Harish Patel",
       designation: "Managing Director, Apex Components",
-      location: "Chakan Industrial Zone"
+      location: "Chakan Industrial Zone",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80"
     },
     {
       quote: "The instant code verification gives me confidence that I am receiving 100% authentic genuine factory parts, not cheap counterfeits.",
       author: "Vikramjit Singh",
       designation: "Heavy Equipment Contractor",
-      location: "Ludhiana, PB"
+      location: "Ludhiana, PB",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
     }
   ];
 
@@ -297,6 +303,19 @@ export default function LandingPage() {
                 </div>
               </div>
 
+              {/* Problem Photo Illustration */}
+              <div className="h-44 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm relative">
+                <img
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=700&auto=format&fit=crop&q=80"
+                  alt="Industrial warehouse distribution blindspot with non-traceable boxes"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-2.5 left-2.5 px-2.5 py-1 bg-black text-white text-[10px] font-black uppercase rounded border border-black">
+                  Untracked Supply Chain
+                </span>
+              </div>
+
               <ul className="space-y-4 font-body">
                 <li className="flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-red-200 border border-black text-red-800 text-xs font-black flex items-center justify-center flex-shrink-0 mt-0.5">✕</span>
@@ -335,6 +354,19 @@ export default function LandingPage() {
                   <h3 className="font-heading font-black text-2xl text-black">The LOYALTYBOX Solution</h3>
                   <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Direct Manufacturer-to-User Rewards</p>
                 </div>
+              </div>
+
+              {/* Solution Photo Illustration */}
+              <div className="h-44 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm relative">
+                <img
+                  src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=700&auto=format&fit=crop&q=80"
+                  alt="Authentic precision factory components with digital loyalty rewards verification"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-2.5 left-2.5 px-2.5 py-1 bg-[#ffe17c] text-black text-[10px] font-black uppercase rounded border border-black neo-shadow-sm">
+                  100% Genuine & Digitally Tracked
+                </span>
               </div>
 
               <ul className="space-y-4 font-body">
@@ -431,54 +463,84 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             
             {/* Step 1 */}
-            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#ffe17c] text-black font-heading font-black text-2xl flex items-center justify-center border-2 border-black neo-shadow-sm">
-                01
+            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="h-36 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&auto=format&fit=crop&q=80"
+                    alt="Authentic factory product packaging purchased at authorized distributor"
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-12 h-12 mx-auto rounded-full bg-[#ffe17c] text-black font-heading font-black text-xl flex items-center justify-center border-2 border-black neo-shadow-sm">
+                  01
+                </div>
+                <h3 className="font-heading font-extrabold text-xl text-white">
+                  Buy a Product Box
+                </h3>
+                <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
+                  Purchase an authentic factory product box from any authorized distributor, wholesaler, or hardware outlet.
+                </p>
               </div>
-              <h3 className="font-heading font-extrabold text-xl text-white">
-                Buy a Product Box
-              </h3>
-              <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
-                Purchase an authentic factory product box from any authorized distributor, wholesaler, or hardware outlet.
-              </p>
               <div className="pt-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-black/40 text-[#ffe17c] rounded border border-black/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-black text-[#ffe17c] rounded border border-black/40">
                   Step 1 • Retail Purchase
                 </span>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-white text-black font-heading font-black text-2xl flex items-center justify-center border-2 border-black neo-shadow-sm">
-                02
+            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="h-36 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=500&auto=format&fit=crop&q=80"
+                    alt="Technician revealing tamper-evident scratch code on inner lid flap"
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-12 h-12 mx-auto rounded-full bg-white text-black font-heading font-black text-xl flex items-center justify-center border-2 border-black neo-shadow-sm">
+                  02
+                </div>
+                <h3 className="font-heading font-extrabold text-xl text-white">
+                  Enter Inner-Box Code
+                </h3>
+                <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
+                  Scratch or reveal the unique alphanumeric code printed on the security sticker inside the product box packaging.
+                </p>
               </div>
-              <h3 className="font-heading font-extrabold text-xl text-white">
-                Enter Inner-Box Code
-              </h3>
-              <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
-                Scratch or reveal the unique alphanumeric code printed on the security sticker inside the product box packaging.
-              </p>
               <div className="pt-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-black/40 text-[#ffe17c] rounded border border-black/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-black text-[#ffe17c] rounded border border-black/40">
                   Step 2 • Single-Use Code
                 </span>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-[#b7c6c2] text-black font-heading font-black text-2xl flex items-center justify-center border-2 border-black neo-shadow-sm">
-                03
+            <div className="relative p-6 bg-[#243028] border-2 border-black rounded-2xl neo-shadow-lg text-center space-y-4 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="h-36 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500&auto=format&fit=crop&q=80"
+                    alt="Professional workshop tool kit claimed with loyalty points"
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="w-12 h-12 mx-auto rounded-full bg-[#b7c6c2] text-black font-heading font-black text-xl flex items-center justify-center border-2 border-black neo-shadow-sm">
+                  03
+                </div>
+                <h3 className="font-heading font-extrabold text-xl text-white">
+                  Earn & Redeem
+                </h3>
+                <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
+                  Receive instant loyalty points into your balance. Exchange points for cash discounts, toolkits, or factory merchandise.
+                </p>
               </div>
-              <h3 className="font-heading font-extrabold text-xl text-white">
-                Earn & Redeem
-              </h3>
-              <p className="text-xs sm:text-sm text-[#b7c6c2] leading-relaxed">
-                Receive instant loyalty points into your balance. Exchange points for cash discounts, toolkits, or factory merchandise.
-              </p>
               <div className="pt-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-black/40 text-[#ffe17c] rounded border border-black/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-black text-[#ffe17c] rounded border border-black/40">
                   Step 3 • Instant Rewards
                 </span>
               </div>
@@ -525,9 +587,21 @@ export default function LandingPage() {
                   style={{ backgroundColor: p.accent }}
                 >
                   <div className="space-y-4">
+                    {/* Persona Photo Visual */}
+                    {p.image && (
+                      <div className="h-36 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm">
+                        <img
+                          src={p.image}
+                          alt={`${p.role} - ${p.tag}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between">
-                      <div className="w-12 h-12 bg-black text-[#ffe17c] rounded-xl flex items-center justify-center border-2 border-black neo-shadow-sm">
-                        <Icon className="w-6 h-6" />
+                      <div className="w-10 h-10 bg-black text-[#ffe17c] rounded-xl flex items-center justify-center border-2 border-black neo-shadow-sm">
+                        <Icon className="w-5 h-5" />
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-black text-white rounded">
                         {p.tag}
@@ -590,10 +664,20 @@ export default function LandingPage() {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t-2 border-black/10">
-                  <p className="font-heading font-bold text-sm text-black">{t.author}</p>
-                  <p className="text-xs text-neutral-600">{t.designation}</p>
-                  <p className="text-[10px] font-bold text-neutral-400 mt-0.5">{t.location}</p>
+                <div className="pt-4 border-t-2 border-black/10 flex items-center gap-3">
+                  {t.avatar && (
+                    <img
+                      src={t.avatar}
+                      alt={t.author}
+                      loading="lazy"
+                      className="w-11 h-11 rounded-full border-2 border-black object-cover neo-shadow-sm flex-shrink-0"
+                    />
+                  )}
+                  <div>
+                    <p className="font-heading font-bold text-sm text-black">{t.author}</p>
+                    <p className="text-xs text-neutral-600">{t.designation}</p>
+                    <p className="text-[10px] font-bold text-neutral-400 mt-0.5">{t.location}</p>
+                  </div>
                 </div>
               </div>
             ))}

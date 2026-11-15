@@ -8,7 +8,8 @@ export const initialRewards = [
     status: "Active",
     description: "Instant ₹50 coupon applicable on any retail partner product box purchase.",
     iconName: "Ticket",
-    tag: "Instant Credit"
+    tag: "Instant Credit",
+    image: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-002",
@@ -19,7 +20,8 @@ export const initialRewards = [
     status: "Active",
     description: "Flat ₹100 rebate voucher valid across all verified factory dealer outlets.",
     iconName: "Tag",
-    tag: "Most Popular"
+    tag: "Most Popular",
+    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-003",
@@ -30,7 +32,8 @@ export const initialRewards = [
     status: "Active",
     description: "Direct doorstep delivery of one complete boxed Hydraulic Valve Seal Pack.",
     iconName: "Package",
-    tag: "Factory Direct"
+    tag: "Factory Direct",
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-004",
@@ -41,7 +44,8 @@ export const initialRewards = [
     status: "Active",
     description: "Anti-fog polycarbonate goggles, high-visibility vest, and ANSI-certified cut-resistant gloves.",
     iconName: "ShieldCheck",
-    tag: "Protection"
+    tag: "Protection",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-005",
@@ -52,7 +56,8 @@ export const initialRewards = [
     status: "Active",
     description: "1680D ballistic nylon reinforced tool carrier with rigid water-resistant molded base.",
     iconName: "Briefcase",
-    tag: "Best Value"
+    tag: "Best Value",
+    image: "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-006",
@@ -63,7 +68,8 @@ export const initialRewards = [
     status: "Active",
     description: "Curated luxury gift crate with insulated thermal flask, laser-engraved multi-tool, and premium sweets.",
     iconName: "Gift",
-    tag: "VIP Exclusive"
+    tag: "VIP Exclusive",
+    image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-007",
@@ -74,7 +80,8 @@ export const initialRewards = [
     status: "Active",
     description: "Digital e-voucher redeemable at Amazon, Flipkart, or authorized machine tool hubs.",
     iconName: "CreditCard",
-    tag: "Digital Instant"
+    tag: "Digital Instant",
+    image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?w=500&auto=format&fit=crop&q=80"
   },
   {
     id: "REW-008",
@@ -85,6 +92,7 @@ export const initialRewards = [
     status: "Active",
     description: "Direct technician helpline, quarterly calibration checkup, and priority warranty turnaround.",
     iconName: "Wrench",
-    tag: "Enterprise"
+    tag: "Enterprise",
+    image: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=500&auto=format&fit=crop&q=80"
   }
 ];

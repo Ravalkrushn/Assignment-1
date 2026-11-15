@@ -133,22 +133,32 @@ export default function CustomerDashboard() {
 
       {/* Active Marketing Campaigns Banner */}
       {activeCampaigns.length > 0 && (
-        <div className="p-5 bg-[#171e19] text-white border-2 border-black rounded-2xl neo-shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-500 text-white font-black text-[10px] uppercase rounded border border-black">
-              <Flame className="w-3 h-3 fill-current" />
-              Limited-Time Loyalty Booster Active
+        <div className="p-5 bg-[#171e19] text-white border-2 border-black rounded-2xl neo-shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-5 relative overflow-hidden">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-2 border-[#ffe17c] overflow-hidden neo-shadow-sm flex-shrink-0 bg-black">
+              <img
+                src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=240&auto=format&fit=crop&q=80"
+                alt="Loyalty Campaign Booster"
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <h3 className="font-heading font-black text-lg text-[#ffe17c]">
-              {activeCampaigns[0].title}
-            </h3>
-            <p className="text-xs text-[#b7c6c2]">
-              {activeCampaigns[0].bannerText || activeCampaigns[0].description || 'Redeem any eligible product box now to earn bonus points and boost your reward points!'}
-            </p>
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-500 text-white font-black text-[10px] uppercase rounded border border-black">
+                <Flame className="w-3 h-3 fill-current" />
+                Limited-Time Loyalty Booster Active
+              </div>
+              <h3 className="font-heading font-black text-lg text-[#ffe17c]">
+                {activeCampaigns[0].title}
+              </h3>
+              <p className="text-xs text-[#b7c6c2]">
+                {activeCampaigns[0].bannerText || activeCampaigns[0].description || 'Redeem any eligible product box now to earn bonus points and boost your reward points!'}
+              </p>
+            </div>
           </div>
           <Link
             to="/customer/redeem-code"
-            className="px-4 py-2 bg-[#ffe17c] text-black font-black text-xs uppercase rounded-xl border-2 border-black neo-btn flex-shrink-0 text-center"
+            className="px-4 py-2.5 bg-[#ffe17c] text-black font-black text-xs uppercase rounded-xl border-2 border-black neo-btn flex-shrink-0 text-center"
           >
             Scan & Earn Boost &rarr;
           </Link>
@@ -252,6 +262,15 @@ export default function CustomerDashboard() {
                 Next Milestone
               </span>
               <Gift className="w-5 h-5 text-black" />
+            </div>
+
+            <div className="h-28 w-full rounded-xl border-2 border-black overflow-hidden neo-shadow-sm">
+              <img
+                src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80"
+                alt="Premium Factory Gift Box reward target"
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div>

@@ -216,17 +216,22 @@ export default function RedeemCodePage() {
               <Box className="w-5 h-5 text-[#ffe17c]" />
             </div>
 
-            {/* Stylized Neo-Brutalist Box Graphic */}
-            <div className="p-6 bg-[#243028] border-2 border-black rounded-xl text-center space-y-3">
-              <div className="w-24 h-24 mx-auto bg-[#ffe17c] border-2 border-black neo-shadow-sm rounded-xl flex flex-col items-center justify-center p-2">
-                <Box className="w-10 h-10 text-black mb-1" />
-                <div className="px-1.5 py-0.5 bg-black text-[#ffe17c] text-[8px] font-mono font-black rounded">
-                  INNER FLAP
-                </div>
+            {/* Box Packaging Photo & Callout */}
+            <div className="relative rounded-xl border-2 border-black overflow-hidden neo-shadow-sm h-44">
+              <img
+                src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&auto=format&fit=crop&q=80"
+                alt="Factory genuine box packaging with tamper-evident inner scratch code"
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-3.5">
+                <span className="inline-block px-2 py-0.5 bg-[#ffe17c] text-black text-[9px] font-black uppercase rounded border border-black self-start neo-shadow-sm">
+                  Inner Lid Scratch Label
+                </span>
+                <p className="text-[11px] text-white font-bold mt-1">
+                  Look for the silver scratch seal or printed alphanumeric code on the inside flap.
+                </p>
               </div>
-              <p className="text-xs text-[#b7c6c2] font-semibold">
-                Look for the silver scratch label or printed QR barcode on the inside lid.
-              </p>
             </div>
 
             <div className="space-y-3 text-xs text-[#b7c6c2]">

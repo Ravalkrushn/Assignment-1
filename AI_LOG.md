@@ -178,3 +178,38 @@ Executed the five comprehensive master feature enhancements mandated in `promt` 
 ### Automated Test Verification
 - All 7 tests in `backend/tests/enhancements.test.js` pass with 100% green status in 10.8s.
 - `npm --prefix frontend run build` compiles Vite production bundles cleanly in 2.1s with 0 errors.
+
+---
+
+## 5. UI/UX High-Quality Royalty-Free Imagery Enhancements Log
+
+### Overview
+In response to the visual enhancement requirements, added high-quality, royalty-free industrial and reward imagery (sourced from Unsplash with optimized CDN caching parameters: `w=...&auto=format&fit=crop&q=80`) across key customer-facing surfaces while strictly preserving the Neo-Brutalist styling (`border-2 border-black`, `#ffe17c`, `#171e19`, `#b7c6c2`, `neo-shadow-sm`, hard drop-shadows). Admin data tables, audit logs, and forms remain clean and unencumbered by decorative clutter.
+
+### Key Visual Enhancements Implemented
+1. **Catalog & Rewards (`frontend/src/data/dummyRewards.js` & `frontend/src/pages/customer/RewardsPage.jsx`):**
+   - Populated realistic, curated Unsplash imagery for all 8 catalog rewards (Hydraulic Valve Seal Kit, Impact Wrench, Workshop Tool Bag, Digital Multimeter, Industrial Safety Gear, Festive Bonus Box, Spares Discount Coupon, Equipment Support Pass).
+   - Created `RewardCardImage` sub-component with `h-36`, `aspect-video`, `object-cover`, `loading="lazy"`, `border-2 border-black`, and graceful fallback to Lucide category icons on image load errors.
+   - Added visual reward photo preview inside the Redemption Confirmation Modal.
+2. **Landing Page (`frontend/src/pages/public/LandingPage.jsx`):**
+   - **Problem vs. Solution:** Added side-by-side industrial comparison imagery:
+     - *Problem:* Real industrial warehouse distribution blindspot photo.
+     - *Solution:* High-precision factory parts manufacturing with genuine digital tracking photo.
+   - **How It Works (3 Steps):** Added step-specific visual representations:
+     - *Step 1:* Factory product carton packaging.
+     - *Step 2:* Inner-box scratch code reveal.
+     - *Step 3:* Instant rewards & mechanic toolkit redemption.
+   - **Personas & Testimonials:** Added authentic mechanic workshop portraits and user avatar photos with fallback initials.
+3. **Customer Dashboard (`frontend/src/pages/customer/CustomerDashboard.jsx`):**
+   - Added celebration thumbnail to the Active Campaign Booster Banner.
+   - Added milestone preview image (`h-28`, Neo-Brutalist frame) to the "Next Milestone: Premium Factory Gift Box" progress card.
+4. **Redeem Code Page (`frontend/src/pages/customer/RedeemCodePage.jsx`):**
+   - Replaced SVG placeholder in the "Box Packaging Guide" with an authentic high-resolution factory boxed goods photo and an inner-lid scratch label callout overlay.
+5. **Auth Pages (`frontend/src/pages/auth/LoginPage.jsx` & `frontend/src/pages/auth/RegisterPage.jsx`):**
+   - Added genuine factory verification card (`photo-1581092160607-ee22621dd758`) to `LoginPage.jsx`.
+   - Added industrial workshop network card (`photo-1504307651254-35680f356dfd`) to `RegisterPage.jsx`.
+
+### Verification & Performance
+- `npm --prefix frontend run build`: Succeeded in 1.91s with 0 errors.
+- `npm --prefix backend test`: Full suite passed with 0 regressions.
+- Fast loading ensured via lazy loading and Unsplash CDN auto-compression.

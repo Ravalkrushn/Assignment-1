@@ -10,12 +10,48 @@ import {
   Briefcase, 
   CreditCard, 
   Wrench,
-  Filter
+  Filter,
+  CheckCircle2
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
+
+// Reward image with fallback
+function RewardCardImage({ src, alt, category, icon: Icon }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (!src || hasError) {
+    return (
+      <div className="h-36 w-full bg-[#f8f7f2] border-2 border-black rounded-xl flex items-center justify-center neo-shadow-sm p-4 text-center">
+        <div className="space-y-1">
+          <div className="w-12 h-12 bg-black text-[#ffe17c] mx-auto rounded-xl flex items-center justify-center border border-black">
+            <Icon className="w-6 h-6" />
+          </div>
+          <span className="text-[10px] font-bold text-neutral-500 block uppercase">
+            {category}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-36 w-full bg-neutral-100 border-2 border-black rounded-xl overflow-hidden neo-shadow-sm relative group">
+      <img
+        src={src}
+        alt={alt || "Loyalty reward item"}
+        loading="lazy"
+        onError={() => setHasError(true)}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+      <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-black/80 backdrop-blur-xs text-white text-[9px] font-bold uppercase rounded border border-black">
+        {category}
+      </div>
+    </div>
+  );
+}
 
 export default function RewardsPage() {
   const { rewards, currentUser, claimReward } = useApp();
@@ -159,17 +195,13 @@ export default function RewardsPage() {
                   </div>
                 </div>
 
-                {/* Reward Visual Box */}
-                <div className="h-32 w-full bg-[#f8f7f2] border-2 border-black rounded-xl flex items-center justify-center neo-shadow-sm p-4 text-center">
-                  <div className="space-y-1">
-                    <div className="w-12 h-12 bg-black text-[#ffe17c] mx-auto rounded-xl flex items-center justify-center border border-black">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[10px] font-bold text-neutral-500 block uppercase">
-                      {reward.category}
-                    </span>
-                  </div>
-                </div>
+                {/* Reward Visual Image */}
+                <RewardCardImage
+                  src={reward.image}
+                  alt={reward.name}
+                  category={reward.category}
+                  icon={Icon}
+                />
 
                 {/* Title & Description */}
                 <div>
@@ -225,6 +257,15 @@ export default function RewardsPage() {
       >
         {redeemModalReward && (
           <div className="space-y-5">
+            {redeemModalReward.image && (
+              <div className="h-32 w-full bg-neutral-100 border-2 border-black rounded-xl overflow-hidden neo-shadow-sm">
+                <img
+                  src={redeemModalReward.image}
+                  alt={redeemModalReward.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <div className="p-4 bg-[#fbfaf5] border-2 border-black rounded-xl space-y-2 text-center">
               <span className="text-[10px] font-black uppercase bg-[#ffe17c] px-2 py-0.5 border border-black rounded">
                 {redeemModalReward.category}

@@ -106,6 +106,27 @@ export default function RegisterPage() {
                 <CheckCircle className="w-4 h-4 text-emerald-700" /> Cash rebate coupons on factory spares
               </div>
             </div>
+
+            {/* Workshop Network Visual Card */}
+            <div className="relative border-2 border-black rounded-xl overflow-hidden neo-shadow-sm bg-black group">
+              <img 
+                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&auto=format&fit=crop&q=80" 
+                alt="Industrial workshop technicians and factory spares" 
+                loading="lazy"
+                className="w-full h-24 object-cover opacity-85 group-hover:opacity-95 transition-opacity"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex items-end p-2.5">
+                <div className="flex items-center gap-1.5 text-white">
+                  <Sparkles className="w-4 h-4 text-[#ffe17c] shrink-0" />
+                  <span className="text-[11px] font-black tracking-tight leading-tight">
+                    Trusted by 1,400+ Verified Workshops
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="pt-6 border-t-2 border-black/20">
