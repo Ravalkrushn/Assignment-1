@@ -4,11 +4,22 @@ import {
   Plus, 
   Search, 
   Edit3, 
-  Trash2 
+  Trash2,
+  Image as ImageIcon,
+  X
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
+
+const REWARD_IMAGE_PRESETS = [
+  { label: '₹50 Coupon', url: '/rewards/coupon-50.jpg' },
+  { label: '₹100 Rebate', url: '/rewards/coupon-100.jpg' },
+  { label: 'Hydraulic Spares', url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=80' },
+  { label: 'Safety Gear', url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&auto=format&fit=crop&q=80' },
+  { label: 'Tool Bag', url: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500&auto=format&fit=crop&q=80' },
+  { label: 'Gift Box', url: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80' }
+];
 
 export default function RewardsManagementPage() {
   const { rewards, addReward, updateReward, deleteReward } = useApp();
@@ -25,7 +36,8 @@ export default function RewardsManagementPage() {
     status: 'Active',
     description: '',
     tag: 'Popular',
-    iconName: 'Gift'
+    iconName: 'Gift',
+    image: ''
   });
 
   const categories = [
@@ -52,7 +64,8 @@ export default function RewardsManagementPage() {
       status: 'Active',
       description: '',
       tag: 'New Addition',
-      iconName: 'Gift'
+      iconName: 'Gift',
+      image: '/rewards/coupon-50.jpg'
     });
     setIsAddModalOpen(true);
   };
@@ -67,7 +80,8 @@ export default function RewardsManagementPage() {
       status: r.status,
       description: r.description || '',
       tag: r.tag || '',
-      iconName: r.iconName || 'Gift'
+      iconName: r.iconName || 'Gift',
+      image: r.image || ''
     });
   };
 
@@ -169,8 +183,24 @@ export default function RewardsManagementPage() {
                 <tr key={r.id} className="hover:bg-[#fbfaf5] transition-colors">
                   <td className="py-3.5 px-4 font-mono font-bold text-black">{r.id}</td>
                   <td className="py-3.5 px-4">
-                    <p className="font-bold text-black">{r.name}</p>
-                    <p className="text-[11px] text-neutral-500 truncate max-w-xs">{r.description}</p>
+                    <div className="flex items-center gap-3">
+                      {r.image ? (
+                        <img 
+                          src={r.image} 
+                          alt={r.name} 
+                          className="w-10 h-10 object-cover rounded-lg border border-black shrink-0" 
+                          onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-[#ffe17c] rounded-lg border border-black flex items-center justify-center shrink-0">
+                          <Gift className="w-5 h-5 text-black" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-bold text-black">{r.name}</p>
+                        <p className="text-[11px] text-neutral-500 truncate max-w-xs">{r.description}</p>
+                      </div>
+                    </div>
                   </td>
                   <td className="py-3.5 px-4">
                     <span className="px-2 py-0.5 bg-[#f4f4f0] border border-black rounded text-[11px] font-bold">
@@ -312,6 +342,77 @@ export default function RewardsManagementPage() {
               placeholder="Terms, redemption instructions, or delivery guidelines..."
               className="w-full px-3 py-2 text-xs bg-white neo-input rounded-xl text-black font-medium"
             />
+          </div>
+
+          {/* Reward Image Selection & Preview */}
+          <div className="space-y-2 p-3.5 bg-[#fbfaf5] border-2 border-black rounded-xl">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-black uppercase tracking-wider text-black flex items-center gap-1.5">
+                <ImageIcon className="w-3.5 h-3.5" />
+                Reward Image (Photo or Graphic)
+              </label>
+              {formData.image && (
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, image: '' })}
+                  className="text-[10px] font-bold text-red-600 hover:underline flex items-center gap-0.5"
+                >
+                  <X className="w-3 h-3" /> Clear Image
+                </button>
+              )}
+            </div>
+
+            <input
+              type="text"
+              value={formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              placeholder="Enter Image URL (e.g. https://... or /rewards/coupon-50.jpg)"
+              className="w-full px-3 py-2 text-xs bg-white neo-input rounded-xl text-black font-medium"
+            />
+
+            {/* Quick Pick Presets */}
+            <div className="space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-neutral-500 block">
+                ⚡ Quick Pick Presets:
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {REWARD_IMAGE_PRESETS.map((preset) => (
+                  <button
+                    key={preset.label}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, image: preset.url })}
+                    className={`px-2 py-1 text-[11px] rounded-lg border border-black font-bold transition-all ${
+                      formData.image === preset.url
+                        ? 'bg-black text-[#ffe17c]'
+                        : 'bg-white text-black hover:bg-[#ffe17c]'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Live Image Preview */}
+            {formData.image ? (
+              <div className="relative mt-2 border-2 border-black rounded-xl overflow-hidden h-28 bg-neutral-100 flex items-center justify-center">
+                <img
+                  src={formData.image}
+                  alt="Reward preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+                <span className="absolute bottom-1 right-2 px-1.5 py-0.5 bg-black/75 text-white text-[9px] font-black uppercase rounded">
+                  Live Preview
+                </span>
+              </div>
+            ) : (
+              <p className="text-[10px] text-neutral-500 font-medium italic">
+                No image specified. Default category icon/photo will be used.
+              </p>
+            )}
           </div>
 
           <div className="flex gap-3 pt-2">

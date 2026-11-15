@@ -643,7 +643,8 @@ export const AppProvider = ({ children }) => {
         pointsRequired: Number(rew.pointsRequired),
         quantity: Number(rew.availableQuantity || rew.quantity || 100),
         description: rew.description || '',
-        tag: rew.tag || ''
+        tag: rew.tag || '',
+        image: rew.image || ''
       });
       if (res?.success && res?.data?.reward) {
         const r = res.data.reward;
@@ -657,7 +658,8 @@ export const AppProvider = ({ children }) => {
           status: 'Active',
           description: r.description,
           iconName: rew.iconName || 'Gift',
-          tag: r.tag
+          tag: r.tag,
+          image: r.image || rew.image || ''
         };
         setRewards(prev => [newRew, ...prev]);
         return;
