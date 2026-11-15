@@ -37,6 +37,12 @@ const fraudLogSchema = new mongoose.Schema(
       enum: ['Low', 'Medium', 'High', 'Critical'],
       default: 'Medium'
     },
+    riskScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 45
+    },
     attemptsCount: {
       type: Number,
       default: 1
@@ -67,9 +73,17 @@ const fraudLogSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending Review', 'Investigating', 'Resolved', 'Blacklisted'],
+      enum: ['Pending Review', 'Under Review', 'Investigating', 'Resolved', 'False Positive', 'Blacklisted'],
       default: 'Pending Review'
-    }
+    },
+    investigationNotes: [
+      {
+        note: { type: String, required: true },
+        adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        adminName: { type: String, default: 'Factory Admin' },
+        createdAt: { type: Date, default: Date.now }
+      }
+    ]
   },
   {
     timestamps: true

@@ -1,4 +1,5 @@
 import { Setting } from '../models/Setting.js';
+import { logAdminActivity } from '../utils/auditLogger.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getSettings = async (req, res, next) => {
@@ -47,6 +48,16 @@ export const updateSettings = async (req, res, next) => {
     if (autoApproveRewardUnder !== undefined) settings.autoApproveRewardUnder = autoApproveRewardUnder;
 
     await settings.save();
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'SETTINGS_UPDATE',
+      module: 'Settings',
+      targetId: settings._id,
+      description: 'Updated factory system configuration parameters',
+      metadata: { plantName: settings.plantName, plantCode: settings.plantCode },
+      req
+    });
 
     return apiResponse.success(res, 'System configuration updated successfully.', { settings });
   } catch (error) {

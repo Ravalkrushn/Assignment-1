@@ -3,6 +3,7 @@ import { User } from '../models/User.js';
 import { Redemption } from '../models/Redemption.js';
 import { PointTransaction } from '../models/PointTransaction.js';
 import { cryptoUtils } from '../utils/cryptoUtils.js';
+import { logAdminActivity } from '../utils/auditLogger.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getRewards = async (req, res, next) => {
@@ -97,7 +98,13 @@ export const claimReward = async (req, res, next) => {
     // Generate unique claim coupon token
     const claimCode = `CLAIM-${cryptoUtils.generateRandomToken(4).toUpperCase()}`;
 
-    // Record redemption
+    const isDigital = reward.category === 'Coupons' || reward.category === 'Gift Cards';
+    const initialStatus = isDigital ? 'Delivered' : 'Pending';
+    const now = new Date();
+    const expectedDelivery = isDigital ? now : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const deliveryAddress = req.body?.deliveryAddress || `${user.businessName || user.fullName}, ${user.city || 'Workshop Unit'}, ${user.state || 'India'}`;
+
+    // Record redemption with fulfillment metadata
     const redemption = await Redemption.create({
       userId: user._id,
       customerName: user.fullName,
@@ -106,7 +113,18 @@ export const claimReward = async (req, res, next) => {
       rewardName: reward.name,
       pointsSpent: reward.pointsRequired,
       redemptionCode: claimCode,
-      status: reward.category === 'Coupons' || reward.category === 'Gift Cards' ? 'delivered' : 'dispatched'
+      status: initialStatus,
+      deliveryAddress,
+      expectedDeliveryDate: expectedDelivery,
+      trackingNumber: isDigital ? `VOUCH-${claimCode.slice(-4)}` : '',
+      timeline: [
+        {
+          status: initialStatus,
+          timestamp: now,
+          note: isDigital ? 'Digital claim voucher issued instantly.' : 'Redemption order placed, pending factory dispatch approval.',
+          updatedBy: 'System'
+        }
+      ]
     });
 
     // Record point transaction
@@ -152,6 +170,16 @@ export const createReward = async (req, res, next) => {
       status: status || 'active'
     });
 
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'CREATE_REWARD',
+      module: 'Rewards',
+      targetId: reward._id,
+      description: `Created new catalog reward "${reward.name}" (${reward.pointsRequired} pts)`,
+      metadata: { pointsRequired: reward.pointsRequired, quantity: reward.quantity },
+      req
+    });
+
     return apiResponse.success(res, 'Reward created successfully.', { reward }, 201);
   } catch (error) {
     next(error);
@@ -164,6 +192,17 @@ export const updateReward = async (req, res, next) => {
     if (!reward) {
       return apiResponse.error(res, 'Reward not found.', [], 404);
     }
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'UPDATE_REWARD',
+      module: 'Rewards',
+      targetId: reward._id,
+      description: `Updated reward "${reward.name}"`,
+      metadata: { pointsRequired: reward.pointsRequired, quantity: reward.quantity, status: reward.status },
+      req
+    });
+
     return apiResponse.success(res, 'Reward updated successfully.', { reward });
   } catch (error) {
     next(error);
@@ -176,6 +215,17 @@ export const deleteReward = async (req, res, next) => {
     if (!reward) {
       return apiResponse.error(res, 'Reward not found.', [], 404);
     }
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'DELETE_REWARD',
+      module: 'Rewards',
+      targetId: reward._id,
+      description: `Deactivated reward "${reward.name}"`,
+      metadata: {},
+      req
+    });
+
     return apiResponse.success(res, 'Reward marked inactive.');
   } catch (error) {
     next(error);

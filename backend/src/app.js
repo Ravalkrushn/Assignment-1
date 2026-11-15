@@ -19,6 +19,9 @@ import redemptionRoutes from './routes/redemptionRoutes.js';
 import fraudRoutes from './routes/fraudRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
+import auditRoutes from './routes/auditRoutes.js';
+import campaignRoutes from './routes/campaignRoutes.js';
+import supportRoutes from './routes/supportRoutes.js';
 import { getCustomersDirectory, getCustomerDetails, getCustomerHistory } from './controllers/analyticsController.js';
 import { protect } from './middleware/authMiddleware.js';
 import { restrictTo } from './middleware/roleMiddleware.js';
@@ -59,11 +62,14 @@ app.use('/api/codes', codeRoutes);
 app.use('/api/points', pointsRoutes);
 app.use('/api/rewards', rewardRoutes);
 app.use('/api/redemptions', redemptionRoutes);
+app.use('/api/campaigns', campaignRoutes);
+app.use('/api/support', supportRoutes);
 
 // Admin dedicated sub-routes
 app.use('/api/admin/fraud', fraudRoutes);
 app.use('/api/admin/analytics', analyticsRoutes);
 app.use('/api/admin/settings', settingsRoutes);
+app.use('/api/admin/audit-logs', auditRoutes);
 
 // Admin Customer CRM direct endpoints
 app.get('/api/admin/customers', protect, restrictTo('admin'), getCustomersDirectory);

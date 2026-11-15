@@ -11,7 +11,8 @@ import {
   Sparkles,
   ExternalLink,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  HelpCircle
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -25,6 +26,7 @@ export default function CustomerSidebar({ isOpen, setIsOpen }) {
     { label: 'My Points', to: '/customer/points', icon: Coins },
     { label: 'Rewards Catalog', to: '/customer/rewards', icon: Gift },
     { label: 'Redemption History', to: '/customer/history', icon: History },
+    { label: 'Support & Disputes', to: '/customer/support', icon: HelpCircle },
     { label: 'My Profile', to: '/customer/profile', icon: UserCircle },
   ];
 

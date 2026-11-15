@@ -180,27 +180,58 @@ Customer endpoint to verify and redeem an inner-box security code.
 
 ---
 
-## 5. Rewards & Redemption APIs
+## 5. Rewards & Fulfillment APIs
 ### `GET /api/rewards`
 Returns all active reward items, points pricing, and available stock.
 
 ### `POST /api/rewards/:id/redeem`
-Claims a reward item. Deducts points atomically, decrements inventory, and issues a claim coupon code.
+Claims a reward item. Deducts points atomically, decrements inventory, and issues a claim order with shipping metadata and event timeline.
 - **Auth:** Customer Bearer Token
+- **Request Body (Physical Rewards):**
+```json
+{
+  "deliveryAddress": "12 Workshop Road, Pune, Maharashtra 411001"
+}
+```
 - **Response `201 Created`:**
 ```json
 {
   "success": true,
-  "message": "Congratulations! You claimed \"₹100 Discount Coupon\".",
+  "message": "Congratulations! You claimed \"Heavy Duty Tool Kit\".",
   "data": {
     "redemption": {
+      "id": "67362a...",
       "redemptionCode": "CLAIM-7F9B",
-      "rewardName": "₹100 Discount Coupon",
-      "pointsSpent": 100,
-      "status": "delivered"
+      "rewardName": "Heavy Duty Tool Kit",
+      "pointsSpent": 400,
+      "status": "Pending",
+      "timeline": [
+        {
+          "status": "Pending",
+          "timestamp": "2026-11-15T09:00:00.000Z",
+          "note": "Redemption order placed, pending factory dispatch approval."
+        }
+      ]
     },
-    "availablePoints": 1150
+    "availablePoints": 750
   }
+}
+```
+
+### `GET /api/redemptions/my`
+Returns authenticated customer's order history with tracking carrier, expected delivery, and full fulfillment timeline.
+
+### `PATCH /api/redemptions/:id/fulfillment`
+Updates fulfillment pipeline status. Enforces valid status transitions (`Pending` &rarr; `Approved` &rarr; `Processing` &rarr; `Shipped` &rarr; `Delivered`), records courier details, and atomically refunds points upon `Rejected`.
+- **Auth:** Admin Bearer Token
+- **Request Body:**
+```json
+{
+  "status": "Shipped",
+  "carrier": "BlueDart Express",
+  "trackingNumber": "BD-99882233",
+  "expectedDeliveryDate": "2026-12-01",
+  "adminNotes": "Dispatched via air cargo priority hub"
 }
 ```
 
@@ -213,14 +244,138 @@ Claims a reward item. Deducts points atomically, decrements inventory, and issue
 
 ---
 
-## 7. Fraud Monitoring APIs
-- `GET /api/admin/fraud`: Threat incidents filtered by risk level (`Critical`, `High`, `Medium`, `Low`).
-- `PATCH /api/admin/fraud/:id/status`: Update incident status (`Pending Review`, `Investigating`, `Resolved`, `Blacklisted`).
+## 7. Fraud Monitoring & Investigation APIs
+- `GET /api/admin/fraud`: Threat incidents with deterministic `riskScore` (0–100), heuristic pattern, and customer details.
+- `PATCH /api/admin/fraud/:id/status`: Update incident status (`Pending Review`, `Under Review`, `Resolved`, `False Positive`, `Blacklisted`).
+- `POST /api/admin/fraud/:id/notes`: Add forensic investigation note to incident log:
+```json
+{
+  "note": "Cross-referenced MAC address with distributor retail delivery manifest"
+}
+```
+- `POST /api/admin/fraud/block-customer`: Locks customer account (`status: 'suspended'`), revoking code scanning and session tokens:
+```json
+{
+  "userId": "67362a...",
+  "reason": "Repeated automated code guessing abuse detected"
+}
+```
+- `POST /api/admin/fraud/unblock-customer`: Restores customer access (`status: 'active'`).
 - `POST /api/admin/fraud/block-ip`: Blacklist origin IP from code scanning.
 
 ---
 
-## 8. Analytics & Admin Dashboard APIs
+## 8. Campaign & Promotional Engine APIs
+### `POST /api/campaigns`
+Creates a marketing multiplier or bonus promotion.
+- **Auth:** Admin Bearer Token
+- **Request Body:**
+```json
+{
+  "title": "Diwali Double Points Bonanza",
+  "description": "2x points and 50 bonus points on all filter products",
+  "campaignType": "Double Points",
+  "multiplier": 2,
+  "bonusPoints": 50,
+  "eligibleProducts": ["67362b..."],
+  "startDate": "2026-11-01T00:00:00.000Z",
+  "endDate": "2026-11-20T23:59:59.000Z",
+  "bannerText": "🌟 DIWALI 2X POINTS ACTIVE ON ALL FILTER BOXES!"
+}
+```
+
+### `GET /api/campaigns`
+Returns all campaigns for admin; returns active campaigns for customers.
+
+### `PUT /api/campaigns/:id`
+Updates campaign settings, status (`Active`, `Paused`, `Ended`), or dates.
+
+### `DELETE /api/campaigns/:id`
+Permanently removes campaign.
+
+---
+
+## 9. Customer Support & Dispute Management APIs
+### `POST /api/support`
+Creates a new support or dispute ticket.
+- **Auth:** Customer Bearer Token
+- **Request Body:**
+```json
+{
+  "category": "Code Scan Issue",
+  "priority": "High",
+  "subject": "Foil scratched off on box code",
+  "description": "Purchased heavy bearings box, serial digits partially illegible.",
+  "relatedProductCode": "BOX-SCRATCH-01"
+}
+```
+
+### `GET /api/support/my`
+Retrieves all support tickets opened by the logged-in customer.
+
+### `GET /api/support/:id`
+Retrieves ticket details and message thread. Customers receive customer-safe messages with private internal staff notes stripped. Admins receive the complete thread including internal notes.
+
+### `POST /api/support/:id/reply`
+Appends a message or private internal note to a ticket thread.
+- **Request Body (Admin Internal Note):**
+```json
+{
+  "message": "Contacted regional distributor warehouse for dispatch confirmation",
+  "isInternalNote": true
+}
+```
+- **Request Body (Public Customer Reply):**
+```json
+{
+  "message": "We have credited 100 points for your damaged box code.",
+  "isInternalNote": false
+}
+```
+
+### `GET /api/support`
+Admin endpoint to triage all tickets across the platform with category, priority, and status filters.
+
+### `PATCH /api/support/:id/status`
+Updates ticket status (`Open`, `In Progress`, `Waiting for Customer`, `Resolved`, `Closed`).
+
+---
+
+## 10. Admin Audit Trail APIs
+### `GET /api/admin/audit-logs`
+Provides queryable, paginated audit logging of all sensitive administrative actions (Product mutations, Reward updates, Code batch generation, Fulfillment changes, Fraud actions, and Settings changes).
+- **Auth:** Admin Bearer Token only (Customers receive `403 Forbidden`)
+- **Query Parameters:** `page`, `limit`, `module`, `actionType`, `search`
+- **Response `200 OK`:**
+```json
+{
+  "success": true,
+  "data": {
+    "logs": [
+      {
+        "id": "67362c...",
+        "adminName": "Chief Administrator",
+        "adminEmail": "admin@loyaltybox.com",
+        "actionType": "CREATE_PRODUCT",
+        "module": "Products",
+        "description": "Created new product \"Precision Bearings\" (SKU: SKU-BRG-100)",
+        "ipAddress": "127.0.0.1",
+        "createdAt": "2026-11-15T09:20:00.000Z"
+      }
+    ],
+    "pagination": {
+      "total": 42,
+      "page": 1,
+      "pages": 3,
+      "limit": 20
+    }
+  }
+}
+```
+
+---
+
+## 11. Analytics & Admin Dashboard APIs
 - `GET /api/admin/analytics/dashboard`: Master KPI summary.
 - `GET /api/admin/analytics/customers`: Monthly customer acquisition velocity.
 - `GET /api/admin/analytics/points`: Points liability issued vs spent.

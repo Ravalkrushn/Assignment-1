@@ -21,6 +21,7 @@ import MyPointsPage from './pages/customer/MyPointsPage';
 import RewardsPage from './pages/customer/RewardsPage';
 import RedemptionHistoryPage from './pages/customer/RedemptionHistoryPage';
 import CustomerProfilePage from './pages/customer/CustomerProfilePage';
+import CustomerSupportPage from './pages/customer/CustomerSupportPage';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -29,7 +30,11 @@ import ProductManagementPage from './pages/admin/ProductManagementPage';
 import CodeManagementPage from './pages/admin/CodeManagementPage';
 import RewardsManagementPage from './pages/admin/RewardsManagementPage';
 import RedemptionManagementPage from './pages/admin/RedemptionManagementPage';
+import RewardFulfillmentPage from './pages/admin/RewardFulfillmentPage';
+import CampaignManagementPage from './pages/admin/CampaignManagementPage';
 import FraudMonitoringPage from './pages/admin/FraudMonitoringPage';
+import AdminSupportPage from './pages/admin/AdminSupportPage';
+import AdminAuditTrailPage from './pages/admin/AdminAuditTrailPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
 
@@ -86,6 +91,7 @@ export default function App() {
             <Route path="points" element={<MyPointsPage />} />
             <Route path="rewards" element={<RewardsPage />} />
             <Route path="history" element={<RedemptionHistoryPage />} />
+            <Route path="support" element={<CustomerSupportPage />} />
             <Route path="profile" element={<CustomerProfilePage />} />
           </Route>
 
@@ -97,8 +103,12 @@ export default function App() {
             <Route path="products" element={<ProductManagementPage />} />
             <Route path="codes" element={<CodeManagementPage />} />
             <Route path="rewards" element={<RewardsManagementPage />} />
+            <Route path="fulfillment" element={<RewardFulfillmentPage />} />
+            <Route path="campaigns" element={<CampaignManagementPage />} />
             <Route path="redemptions" element={<RedemptionManagementPage />} />
             <Route path="fraud-monitoring" element={<FraudMonitoringPage />} />
+            <Route path="support" element={<AdminSupportPage />} />
+            <Route path="audit-trail" element={<AdminAuditTrailPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
           </Route>

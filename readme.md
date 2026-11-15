@@ -87,23 +87,28 @@ npm test
 ### 👤 Customer Experience Portal
 | Route | Description |
 |---|---|
-| `/customer/dashboard` | Main customer hub with 4 stat counters, 6-month points history chart, reward milestone progress bar, and recent activity |
-| `/customer/redeem-code` | Inner-box code redemption engine simulating all 5 verification states (Valid, Invalid, Already Redeemed, Expired, Loading) with confetti |
+| `/customer/dashboard` | Main customer hub with 4 stat counters, active campaign promotional banner, 6-month points history chart, and recent activity |
+| `/customer/redeem-code` | Inner-box code redemption engine with automatic campaign multiplier (+2x / bonus points), 5-state simulated verification, and confetti celebration |
 | `/customer/points` | Points ledger with 12-month expiration policy notice and filterable transactions (All / Earned / Spent) |
-| `/customer/rewards` | Rewards marketplace with category filters, points cost chips, stock badges, and interactive redemption modal |
-| `/customer/history` | Full audit log of code redemptions and claimed gifts with search, filters, pagination, and CSV export |
+| `/customer/rewards` | Rewards marketplace with category filters, points cost chips, stock badges, delivery address input, and interactive redemption modal |
+| `/customer/history` | Full audit log of code redemptions and claimed gifts with real-time fulfillment tracking modal, courier tracking numbers, and order timeline |
+| `/customer/support` | Customer support & dispute ticketing center with thread conversations, status badges, and related box code referencing |
 | `/customer/profile` | Workshop contact details, inline editing with local storage persistence, and password reset form |
 
 ### 🏭 Factory Owner Admin Portal
 | Route | Description |
 |---|---|
-| `/admin/dashboard` | Executive KPI control center (5,000 customers, 125 SKUs, 50k codes, 12.5k redemptions, 125k points), growth charts, and live feed |
-| `/admin/customers` | Customer directory with search, active/inactive filters, detail modal, points balances, and CSV export |
+| `/admin/dashboard` | Executive KPI control center, growth charts, active campaign highlights, and live transaction feed |
+| `/admin/customers` | Customer directory with search, active/suspended status, detail modal, points balances, and CSV export |
 | `/admin/products` | Factory product line manager with Add/Edit/Delete modals and points-per-box allocation |
 | `/admin/codes` | Batch code generator with customizable points, batch IDs, status badges (Unused, Redeemed, Expired, Suspicious), and CSV export |
 | `/admin/rewards` | Catalog reward manager with inventory control, points pricing, category assignment, and modals |
+| `/admin/fulfillment` | **Feature 1:** Reward fulfillment pipeline managing orders through Approved, Processing, Shipped (courier & tracking number), Delivered, and Rejection with atomic point refunds |
+| `/admin/campaigns` | **Feature 4:** Promotional campaign manager creating Double Points, Bonus Points, and Festival campaigns with SKU targeting and real-time multiplier crediting |
 | `/admin/redemptions` | Complete audit log of every customer transaction with filterable flows and CSV export |
-| `/admin/fraud-monitoring`| Threat defense dashboard monitoring brute-force scans, duplicate redemption attempts, suspicious IPs, and blacklist actions |
+| `/admin/fraud-monitoring`| **Feature 3:** Advanced fraud investigation dashboard with deterministic risk scores (0–100), forensic investigation notes, and customer account lock/unlock controls |
+| `/admin/support` | **Feature 5:** Customer support dispute resolution center managing tickets, replies, and private internal notes hidden from customers |
+| `/admin/audit-trail` | **Feature 2:** System-wide admin audit trail tracking all administrative creations, edits, deletions, and policy changes |
 | `/admin/analytics` | Business intelligence charts tracking monthly liability, scan velocity, and SKU yield rates |
 | `/admin/settings` | Factory plant settings, loyalty expiration rules, anti-fraud rate limits, and 1-click Demo Reset button |
 

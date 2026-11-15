@@ -12,10 +12,14 @@ import {
   BarChart3, 
   Settings, 
   LogOut, 
-  Sparkles,
-  ExternalLink,
-  ChevronRight,
-  Factory
+  Sparkles, 
+  ExternalLink, 
+  ChevronRight, 
+  Factory,
+  Truck,
+  Flame,
+  HelpCircle,
+  FileText
 } from 'lucide-react';
 
 export default function AdminSidebar({ isOpen, setIsOpen }) {
@@ -30,9 +34,13 @@ export default function AdminSidebar({ isOpen, setIsOpen }) {
     { label: 'Customers', to: '/admin/customers', icon: Users },
     { label: 'Products', to: '/admin/products', icon: Package },
     { label: 'Code Management', to: '/admin/codes', icon: QrCode },
-    { label: 'Rewards Management', to: '/admin/rewards', icon: Gift },
+    { label: 'Rewards Catalog', to: '/admin/rewards', icon: Gift },
+    { label: 'Reward Fulfillment', to: '/admin/fulfillment', icon: Truck },
+    { label: 'Campaigns', to: '/admin/campaigns', icon: Flame },
     { label: 'Redemptions', to: '/admin/redemptions', icon: CheckSquare },
     { label: 'Fraud Monitoring', to: '/admin/fraud-monitoring', icon: ShieldAlert, badge: pendingAlerts },
+    { label: 'Customer Support', to: '/admin/support', icon: HelpCircle },
+    { label: 'Audit Trail', to: '/admin/audit-trail', icon: FileText },
     { label: 'Analytics', to: '/admin/analytics', icon: BarChart3 },
     { label: 'Settings', to: '/admin/settings', icon: Settings },
   ];

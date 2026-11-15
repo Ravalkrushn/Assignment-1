@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Coins, 
@@ -9,7 +9,8 @@ import {
   TrendingUp, 
   Sparkles, 
   ArrowUpRight, 
-  ShieldCheck 
+  ShieldCheck,
+  Flame
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -21,10 +22,22 @@ import {
   CartesianGrid 
 } from 'recharts';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
 import { customerPointsHistoryChart } from '../../data/dummyAnalytics';
 
 export default function CustomerDashboard() {
   const { currentUser, transactions } = useApp();
+  const [activeCampaigns, setActiveCampaigns] = useState([]);
+
+  useEffect(() => {
+    api.campaigns.getAll({ status: 'Active' })
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.campaigns)) {
+          setActiveCampaigns(res.data.campaigns);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Get recent 4 transactions for this customer
   const recentTransactions = transactions.slice(0, 4);
@@ -117,6 +130,30 @@ export default function CustomerDashboard() {
           </Link>
         </div>
       </div>
+
+      {/* Active Marketing Campaigns Banner */}
+      {activeCampaigns.length > 0 && (
+        <div className="p-5 bg-[#171e19] text-white border-2 border-black rounded-2xl neo-shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-red-500 text-white font-black text-[10px] uppercase rounded border border-black">
+              <Flame className="w-3 h-3 fill-current" />
+              Limited-Time Loyalty Booster Active
+            </div>
+            <h3 className="font-heading font-black text-lg text-[#ffe17c]">
+              {activeCampaigns[0].title}
+            </h3>
+            <p className="text-xs text-[#b7c6c2]">
+              {activeCampaigns[0].bannerText || activeCampaigns[0].description || 'Redeem any eligible product box now to earn bonus points and boost your reward points!'}
+            </p>
+          </div>
+          <Link
+            to="/customer/redeem-code"
+            className="px-4 py-2 bg-[#ffe17c] text-black font-black text-xs uppercase rounded-xl border-2 border-black neo-btn flex-shrink-0 text-center"
+          >
+            Scan & Earn Boost &rarr;
+          </Link>
+        </div>
+      )}
 
       {/* Stats Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

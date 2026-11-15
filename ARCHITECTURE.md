@@ -42,6 +42,7 @@ graph TD
         CL --> CPoints[MyPointsPage /customer/points]
         CL --> CRewards[RewardsPage /customer/rewards]
         CL --> CHistory[RedemptionHistoryPage /customer/history]
+        CL --> CSupport[CustomerSupport /customer/support]
         CL --> CProfile[CustomerProfilePage /customer/profile]
     end
 
@@ -51,8 +52,12 @@ graph TD
         AL --> AProd[ProductManagement /admin/products]
         AL --> ACodes[CodeManagement /admin/codes]
         AL --> ARew[RewardsManagement /admin/rewards]
+        AL --> AFulfill[RewardFulfillment /admin/fulfillment]
+        AL --> ACamp[CampaignManagement /admin/campaigns]
         AL --> ARed[RedemptionManagement /admin/redemptions]
         AL --> AFraud[FraudMonitoring /admin/fraud-monitoring]
+        AL --> ASupp[AdminSupport /admin/support]
+        AL --> AAudit[AdminAuditTrail /admin/audit-trail]
         AL --> AAnal[Analytics /admin/analytics]
         AL --> ASett[AdminSettings /admin/settings]
     end

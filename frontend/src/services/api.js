@@ -130,7 +130,7 @@ export const api = {
     adjust: (data) => request('/points/adjust', { method: 'POST', body: data }),
   },
 
-  // Reward Redemptions
+  // Reward Redemptions & Fulfillment
   redemptions: {
     getMy: (params = {}) => {
       const query = new URLSearchParams(params).toString();
@@ -141,9 +141,11 @@ export const api = {
       const query = new URLSearchParams(params).toString();
       return request(`/redemptions${query ? `?${query}` : ''}`, { method: 'GET' });
     },
+    updateFulfillment: (id, data) => 
+      request(`/redemptions/${id}/fulfillment`, { method: 'PATCH', body: data }),
   },
 
-  // Fraud Monitoring
+  // Fraud Monitoring & Investigation
   fraud: {
     getLogs: (params = {}) => {
       const query = new URLSearchParams(params).toString();
@@ -152,10 +154,52 @@ export const api = {
     getLogById: (id) => request(`/admin/fraud/${id}`, { method: 'GET' }),
     updateStatus: (id, status, note = '') => 
       request(`/admin/fraud/${id}/status`, { method: 'PATCH', body: { status, note } }),
+    addNote: (id, note) =>
+      request(`/admin/fraud/${id}/notes`, { method: 'POST', body: { note } }),
+    blockCustomer: (userId, reason = '') =>
+      request('/admin/fraud/block-customer', { method: 'POST', body: { userId, reason } }),
+    unblockCustomer: (userId) =>
+      request('/admin/fraud/unblock-customer', { method: 'POST', body: { userId } }),
     blockIp: (ipAddress, reason = '') => 
       request('/admin/fraud/block-ip', { method: 'POST', body: { ipAddress, reason } }),
     unblockIp: (ipAddress) => 
       request('/admin/fraud/unblock-ip', { method: 'POST', body: { ipAddress } }),
+  },
+
+  // Campaigns & Promotions
+  campaigns: {
+    getAll: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return request(`/campaigns${query ? `?${query}` : ''}`, { method: 'GET' });
+    },
+    getById: (id) => request(`/campaigns/${id}`, { method: 'GET' }),
+    create: (data) => request('/campaigns', { method: 'POST', body: data }),
+    update: (id, data) => request(`/campaigns/${id}`, { method: 'PUT', body: data }),
+    delete: (id) => request(`/campaigns/${id}`, { method: 'DELETE' }),
+  },
+
+  // Support Tickets & Disputes
+  support: {
+    createTicket: (data) => request('/support', { method: 'POST', body: data }),
+    getMyTickets: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return request(`/support/my${query ? `?${query}` : ''}`, { method: 'GET' });
+    },
+    getTicketById: (id) => request(`/support/${id}`, { method: 'GET' }),
+    replyTicket: (id, data) => request(`/support/${id}/reply`, { method: 'POST', body: data }),
+    getAllTickets: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return request(`/support${query ? `?${query}` : ''}`, { method: 'GET' });
+    },
+    updateTicketStatus: (id, data) => request(`/support/${id}/status`, { method: 'PATCH', body: data }),
+  },
+
+  // Admin Audit Trail
+  audit: {
+    getLogs: (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      return request(`/admin/audit-logs${query ? `?${query}` : ''}`, { method: 'GET' });
+    },
   },
 
   // Admin Analytics & CRM Directory

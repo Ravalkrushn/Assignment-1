@@ -1,4 +1,5 @@
 import { Product } from '../models/Product.js';
+import { logAdminActivity } from '../utils/auditLogger.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getProducts = async (req, res, next) => {
@@ -78,6 +79,16 @@ export const createProduct = async (req, res, next) => {
       status: status || 'active'
     });
 
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'CREATE_PRODUCT',
+      module: 'Products',
+      targetId: product._id,
+      description: `Created new product "${product.productName}" (SKU: ${product.sku}, ${product.pointsPerBox} pts)`,
+      metadata: { sku: product.sku, pointsPerBox: product.pointsPerBox },
+      req
+    });
+
     return apiResponse.success(res, 'Product created successfully.', { product }, 201);
   } catch (error) {
     next(error);
@@ -103,6 +114,16 @@ export const updateProduct = async (req, res, next) => {
 
     await product.save();
 
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'UPDATE_PRODUCT',
+      module: 'Products',
+      targetId: product._id,
+      description: `Updated product "${product.productName}" (SKU: ${product.sku})`,
+      metadata: { sku: product.sku, pointsPerBox: product.pointsPerBox, status: product.status },
+      req
+    });
+
     return apiResponse.success(res, 'Product updated successfully.', { product });
   } catch (error) {
     next(error);
@@ -119,6 +140,16 @@ export const deleteProduct = async (req, res, next) => {
     // Soft delete/deactivate to preserve historical integrity of codes
     product.status = 'inactive';
     await product.save();
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'DELETE_PRODUCT',
+      module: 'Products',
+      targetId: product._id,
+      description: `Deactivated product "${product.productName}" (SKU: ${product.sku})`,
+      metadata: { sku: product.sku },
+      req
+    });
 
     return apiResponse.success(res, 'Product deactivated successfully.');
   } catch (error) {

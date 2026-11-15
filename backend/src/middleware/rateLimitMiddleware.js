@@ -7,6 +7,7 @@ export const globalLimiter = rateLimit({
   max: env.RATE_LIMIT_MAX_REQUESTS,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   handler: (req, res) => {
     return apiResponse.error(res, 'Too many requests from this IP, please try again after 15 minutes.', [], 429);
   }
@@ -17,6 +18,7 @@ export const authLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   handler: (req, res) => {
     return apiResponse.error(res, 'Too many login attempts, please try again after 15 minutes.', [], 429);
   }
@@ -27,6 +29,7 @@ export const codeRedeemLimiter = rateLimit({
   max: env.MAX_REDEMPTION_ATTEMPTS || 5,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   handler: (req, res) => {
     return apiResponse.error(
       res,

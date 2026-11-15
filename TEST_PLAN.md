@@ -41,6 +41,20 @@ This document records the end-to-end testing strategy, automated build verificat
 
 ---
 
+## 1.2 Five Master Feature Enhancements Automated Test Suite (`enhancements.test.js`)
+
+| Test Suite & Scenario | Test Description | Verified Assertions | Status |
+|---|---|---|---|
+| **Feature 1: Reward Fulfillment** | Fulfillment lifecycle transitions | Verifies `Pending` &rarr; `Approved` &rarr; `Processing` &rarr; `Shipped` (with courier tracking #) &rarr; `Delivered` with customer timeline | **PASS** |
+| **Feature 1: Reward Fulfillment** | Rejection with atomic refund | Rejects redemption with reason, refunds spent points atomically to user wallet, and restores inventory stock | **PASS** |
+| **Feature 1: Reward Fulfillment** | Invalid transition defense | Rejects skipping states (e.g. `Pending` to `Delivered`) with HTTP 400 and descriptive allowed transition error | **PASS** |
+| **Feature 2: Admin Audit Trail** | Administrative activity logging & RBAC | Captures admin action (`CREATE_PRODUCT`) in `AuditLog` collection; customer attempt to query audit logs is blocked with HTTP 403 | **PASS** |
+| **Feature 3: Fraud Investigation** | Heuristic risk score & customer suspension | Calculates deterministic `riskScore` (0–100), records forensic investigation note, suspends customer, blocks subsequent scan attempts | **PASS** |
+| **Feature 4: Reward Campaigns** | Multiplier & bonus points calculation | Applies 2x multiplier and +50 bonus points during active campaign, increments campaign counters, writes transaction metadata | **PASS** |
+| **Feature 5: Support & Disputes** | Conversation thread with internal note privacy | Customer opens ticket, admin adds private internal note and public reply; verifies internal note is strictly hidden from customer view | **PASS** |
+
+---
+
 ## 2. Route Navigation & Page Rendering Tests
 
 | Route | Page Component | Key UI Elements Verified | Status |
@@ -49,19 +63,24 @@ This document records the end-to-end testing strategy, automated build verificat
 | `/login` | LoginPage | Split-screen promotional banner, email/password form, 1-click Demo Customer & Demo Admin buttons, password toggle | **PASS** |
 | `/register` | RegisterPage | Full name, email, phone, password matching check, terms checkbox, instant registration toast | **PASS** |
 | `/forgot-password` | ForgotPasswordPage | Email input, simulated reset link submission state, return to login link | **PASS** |
-| `/customer/dashboard` | CustomerDashboard | 4 stats cards (1,250 pts, 2,500 total, 5 rewards, 25 boxes), Recharts 6-month points area chart, reward progress bar, recent activity | **PASS** |
+| `/customer/dashboard` | CustomerDashboard | 4 stats cards, active campaign promotional banner, Recharts 6-month points area chart, reward progress bar, recent activity | **PASS** |
 | `/customer/redeem-code`| RedeemCodePage | Code input, verify & redeem button, inner-box guide diagram, 5 quick-test code chips, confetti trigger, result cards | **PASS** |
 | `/customer/points` | MyPointsPage | 3 balance cards, 12-month expiration notice, filterable ledger table (All / Earned / Spent) | **PASS** |
-| `/customer/rewards` | RewardsPage | Category filter tabs, 8 reward cards, points cost chips, stock badges, redemption confirmation modal | **PASS** |
-| `/customer/history` | RedemptionHistoryPage | Search bar, type filter, table with transaction ref, CSV export button, pagination controls | **PASS** |
+| `/customer/rewards` | RewardsPage | Category filter tabs, 8 reward cards, points cost chips, stock badges, delivery address input, redemption confirmation modal | **PASS** |
+| `/customer/history` | RedemptionHistoryPage | Search bar, type filter, table with transaction ref, live fulfillment tracking modal with timeline, CSV export button, pagination | **PASS** |
+| `/customer/support` | CustomerSupportPage | **Feature 5:** Support ticket listing, Create Ticket modal, category and priority badges, threaded conversation modal with real-time replies | **PASS** |
 | `/customer/profile` | CustomerProfilePage | Customer avatar, workshop info, inline profile editing with save button, change password form | **PASS** |
-| `/admin/dashboard` | AdminDashboard | 6 KPIs (5k customers, 125 SKUs, 50k codes, 12.5k redemptions, 125k points), monthly growth bar chart, popular rewards progress, live feeds | **PASS** |
+| `/admin/dashboard` | AdminDashboard | 6 KPIs, active campaigns summary, monthly growth bar chart, popular rewards progress, live feeds | **PASS** |
 | `/admin/customers` | CustomerManagementPage| Directory search, status filter, customer table, detail modal with transaction history, CSV export | **PASS** |
 | `/admin/products` | ProductManagementPage | SKU table, Add Product modal, Edit Product modal, Delete confirmation modal, points-per-box configuration | **PASS** |
 | `/admin/codes` | CodeManagementPage | Batch code table, status badges (Unused, Redeemed, Expired, Suspicious), Generate Codes modal, CSV export | **PASS** |
 | `/admin/rewards` | RewardsManagementPage | Reward catalog table, Add/Edit reward modal with points requirement & stock, delete modal | **PASS** |
+| `/admin/fulfillment` | RewardFulfillmentPage | **Feature 1:** Multi-stage fulfillment triage board, status update dialog with courier name and tracking code, rejection with refund | **PASS** |
+| `/admin/campaigns` | CampaignManagementPage| **Feature 4:** Promotional campaign list and cards, Create Campaign modal (multiplier, bonus, SKU targeting, dates), status toggle | **PASS** |
 | `/admin/redemptions` | RedemptionManagementPage | Master audit log, customer name, code scanned, points awarded, CSV export, pagination | **PASS** |
-| `/admin/fraud-monitoring` | FraudMonitoringPage | Threat severity badges (Critical, High, Medium, Low), incident search, review modal with forensic pattern & blacklist action | **PASS** |
+| `/admin/fraud-monitoring` | FraudMonitoringPage | **Feature 3:** Threat severity & numeric risk score (0–100), forensic notes thread modal, customer lock/unlock controls | **PASS** |
+| `/admin/support` | AdminSupportPage | **Feature 5:** Dispute resolution desk, category and priority filters, reply modal with private internal staff notes toggle | **PASS** |
+| `/admin/audit-trail` | AdminAuditTrailPage | **Feature 2:** Immutable audit log table, action types, search and module filters, detailed before/after metadata inspection | **PASS** |
 | `/admin/analytics` | AnalyticsPage | Points liability area chart, scan growth line chart, SKU yield rate table, top repeat buyer workshops | **PASS** |
 | `/admin/settings` | AdminSettingsPage | Factory facility profile, loyalty validity policy, heuristic anti-fraud rate limit configuration, Reset Demo Data button | **PASS** |
 

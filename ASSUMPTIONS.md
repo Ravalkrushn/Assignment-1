@@ -36,6 +36,38 @@ This document details all business and engineering assumptions made during the d
 
 ---
 
-## 5. Architectural Separation (Agent 1 vs Agent 2)
+## 5. Architectural Separation (Agent 1 vs Agent 2 & Agent 3)
 - **Assumption:** Agent 1 owns the complete frontend user experience, UI components, Neo-Brutalist design tokens, route navigation, and realistic simulated client-side state with `localStorage` persistence.
-- **Why chosen:** Ensures strict modular separation so Agent 2 can independently implement backend microservices, databases (MongoDB/PostgreSQL), or HSM cryptographic signing without merge conflicts or code overwrites.
+- **Why chosen:** Ensures strict modular separation so Agent 2 can independently implement backend microservices, databases (MongoDB), and HSM cryptographic signing without merge conflicts or code overwrites. Agent 3 serves as the integration and testing specialist unifying client-server contracts.
+
+---
+
+## 6. Reward Fulfillment Lifecycle & Point Refund Guarantees
+- **Assumption:** Reward redemptions for physical items undergo a formal factory fulfillment pipeline (`Pending` &rarr; `Approved` &rarr; `Processing` &rarr; `Shipped` &rarr; `Delivered`), while orders that cannot be fulfilled must be rejected with an explicit mandatory reason.
+- **Atomic Refund Guarantee:** Upon rejection by an administrator, points are atomically credited back to the customer's wallet ledger and the reward item's physical inventory stock is restored in the database.
+- **Customer Tracking Transparency:** Customers can track their order's courier provider, tracking number, expected delivery date, and chronological progress timeline in real-time.
+
+---
+
+## 7. Administrative Audit Logging & Compliance
+- **Assumption:** Every mutating administrative action (creating/updating/deleting products, creating rewards, generating codes, modifying fulfillment, changing system settings, blocking customers) must be permanently logged in an immutable `AuditLog` collection.
+- **Data Protection:** Passwords, tokens, and cryptographic secrets are sanitized and redacted from audit metadata prior to database persistence.
+- **Role-Based Access Control:** Only users with `admin` role are permitted to query audit trail records.
+
+---
+
+## 8. Heuristic Threat Scoring & Account Safety
+- **Assumption:** Threat severity should not be a subjective guess; it is calculated deterministically on a transparent 0–100 scale based on event type, past anomaly count within 24 hours, and suspicious velocity.
+- **Account Blocking:** When an administrator blocks a customer account due to verified fraud, the customer's status is set to `suspended`. The customer's active sessions cannot scan new codes, and subsequent redemption attempts are rejected with an explicit suspension notification.
+
+---
+
+## 9. Marketing Campaigns & Dynamic Point Calculations
+- **Assumption:** Marketing campaigns can boost customer scan rates via multipliers (e.g. 2x Double Points) and flat bonus points (e.g. +50 bonus points) during specific date windows.
+- **Backend as Source of Truth:** Campaign eligibility and point calculations are executed strictly on the backend during `redeemCode`. Frontend displays active campaign banners for awareness but never calculates or controls points.
+
+---
+
+## 10. Customer Support Ticketing & Internal Notes Privacy
+- **Assumption:** Customer inquiries and disputes (illegible scratch codes, delayed reward delivery, points disputes) require collaborative communication between mechanics and factory support staff.
+- **Staff Privacy Isolation:** Administrative operators can record private internal investigation notes within the ticket thread. The backend API strictly strips all internal notes when serving tickets to customer accounts, ensuring internal staff deliberation remains completely confidential.

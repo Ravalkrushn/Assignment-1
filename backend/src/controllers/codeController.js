@@ -4,7 +4,10 @@ import { Product } from '../models/Product.js';
 import { User } from '../models/User.js';
 import { PointTransaction } from '../models/PointTransaction.js';
 import { FraudLog } from '../models/FraudLog.js';
+import { Campaign } from '../models/Campaign.js';
 import { cryptoUtils } from '../utils/cryptoUtils.js';
+import { logAdminActivity } from '../utils/auditLogger.js';
+import { calculateRiskScore } from '../utils/fraudScorer.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const generateCodes = async (req, res, next) => {
@@ -69,6 +72,16 @@ export const generateCodes = async (req, res, next) => {
     // Update product counter
     await Product.findByIdAndUpdate(product._id, {
       $inc: { totalCodesGenerated: parseInt(count, 10) }
+    });
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'GENERATE_CODES',
+      module: 'Codes',
+      targetId: batchId,
+      description: `Generated ${count} cryptographic codes under batch ${batchId} for ${product.productName} (${points} pts each)`,
+      metadata: { batchId, count: parseInt(count, 10), points, sku: product.sku },
+      req
     });
 
     return apiResponse.success(
@@ -194,13 +207,22 @@ export const redeemCode = async (req, res, next) => {
 
     if (!foundCode) {
       // Record failed attempt for heuristic fraud monitoring
+      const prevCount = await FraudLog.countDocuments({
+        $or: [{ userId: req.user._id }, { ipAddress: clientIp }]
+      });
+      const { score, riskLevel } = calculateRiskScore({
+        eventType: 'Brute Force Code Guessing',
+        previousAttempts: prevCount
+      });
+
       await FraudLog.create({
         userId: req.user._id,
         customerName: req.user.fullName,
         email: req.user.email,
         productCodeReference: normalizedCode,
         eventType: 'Brute Force Code Guessing',
-        riskLevel: 'Medium',
+        riskLevel,
+        riskScore: score,
         ipAddress: clientIp,
         userAgent,
         description: `Submitted invalid/non-existent product code: ${normalizedCode}`
@@ -211,13 +233,22 @@ export const redeemCode = async (req, res, next) => {
 
     // Check status
     if (foundCode.status === 'redeemed') {
+      const prevCount = await FraudLog.countDocuments({
+        $or: [{ userId: req.user._id }, { ipAddress: clientIp }]
+      });
+      const { score, riskLevel } = calculateRiskScore({
+        eventType: 'Duplicate Redemption Attempt',
+        previousAttempts: prevCount
+      });
+
       await FraudLog.create({
         userId: req.user._id,
         customerName: req.user.fullName,
         email: req.user.email,
         productCodeReference: normalizedCode,
         eventType: 'Duplicate Redemption Attempt',
-        riskLevel: 'High',
+        riskLevel,
+        riskScore: score,
         ipAddress: clientIp,
         userAgent,
         targetedProduct: foundCode.productName,
@@ -267,8 +298,41 @@ export const redeemCode = async (req, res, next) => {
       return apiResponse.error(res, 'This code was redeemed concurrently by another request.', [], 409);
     }
 
+    // Check for active promotional campaigns
+    const now = new Date();
+    const activeCampaigns = await Campaign.find({
+      status: 'Active',
+      startDate: { $lte: now },
+      endDate: { $gte: now },
+      $or: [
+        { eligibleProducts: { $size: 0 } },
+        { eligibleProducts: updatedCode.productId }
+      ]
+    }).sort({ multiplier: -1, bonusPoints: -1 });
+
+    let appliedCampaign = null;
+    let multiplier = 1;
+    let bonusPoints = 0;
+
+    if (activeCampaigns.length > 0) {
+      appliedCampaign = activeCampaigns[0];
+      multiplier = appliedCampaign.multiplier || 1;
+      bonusPoints = appliedCampaign.bonusPoints || 0;
+
+      // Update campaign counters
+      const bonusCredited = (updatedCode.points * (multiplier - 1)) + bonusPoints;
+      await Campaign.findByIdAndUpdate(appliedCampaign._id, {
+        $inc: {
+          totalRedemptionsCount: 1,
+          totalBonusAwarded: bonusCredited
+        }
+      });
+    }
+
+    const basePoints = updatedCode.points;
+    const pointsAwarded = (basePoints * multiplier) + bonusPoints;
+
     // Award points to user wallet atomically
-    const pointsAwarded = updatedCode.points;
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       {
@@ -281,7 +345,11 @@ export const redeemCode = async (req, res, next) => {
       { new: true }
     );
 
-    // Record point transaction
+    // Record point transaction with campaign metadata
+    const description = appliedCampaign
+      ? `Redeemed product box code for ${updatedCode.productName} (Includes "${appliedCampaign.title}" bonus: +${pointsAwarded - basePoints} pts)`
+      : `Redeemed product box code for ${updatedCode.productName}`;
+
     await PointTransaction.create({
       userId: req.user._id,
       userEmail: req.user.email,
@@ -291,7 +359,7 @@ export const redeemCode = async (req, res, next) => {
       points: pointsAwarded,
       source: 'CODE_REDEMPTION',
       referenceId: normalizedCode,
-      description: `Redeemed product box code for ${updatedCode.productName}`
+      description
     });
 
     // Update product redemption counter
@@ -299,11 +367,18 @@ export const redeemCode = async (req, res, next) => {
       $inc: { totalRedeemed: 1 }
     });
 
+    const celebrationMessage = appliedCampaign
+      ? `Congratulations! You received ${pointsAwarded} points (${basePoints} base + ${pointsAwarded - basePoints} "${appliedCampaign.title}" bonus).`
+      : 'Congratulations! Points added successfully.';
+
     return apiResponse.success(
       res,
-      'Congratulations! Points added successfully.',
+      celebrationMessage,
       {
         pointsEarned: pointsAwarded,
+        basePoints,
+        campaignBonus: pointsAwarded - basePoints,
+        campaignName: appliedCampaign ? appliedCampaign.title : null,
         availablePoints: updatedUser.availablePoints,
         productName: updatedCode.productName,
         sku: updatedCode.sku

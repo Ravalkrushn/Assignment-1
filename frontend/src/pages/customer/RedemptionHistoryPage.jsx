@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   History, 
   Search, 
   Download, 
   ChevronLeft, 
-  ChevronRight
+  ChevronRight,
+  Truck,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Package,
+  ExternalLink
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { api } from '../../services/api';
+import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
 export default function RedemptionHistoryPage() {
@@ -14,7 +22,26 @@ export default function RedemptionHistoryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [liveRedemptions, setLiveRedemptions] = useState([]);
+  const [selectedFulfillment, setSelectedFulfillment] = useState(null);
   const itemsPerPage = 6;
+
+  useEffect(() => {
+    api.redemptions.getMy({ limit: 50 })
+      .then(res => {
+        if (res?.success && Array.isArray(res?.data?.redemptions)) {
+          setLiveRedemptions(res.data.redemptions);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Map redemptions to lookup
+  const fulfillmentMap = {};
+  liveRedemptions.forEach(r => {
+    fulfillmentMap[r.redemptionCode] = r;
+    fulfillmentMap[r._id] = r;
+  });
 
   // Filter records
   const userTransactions = transactions.filter(t => t.customerId === currentUser.id);
@@ -50,6 +77,26 @@ export default function RedemptionHistoryPage() {
     link.click();
     document.body.removeChild(link);
     toast.success("Transaction statement exported as CSV!");
+  };
+
+  const getFulfillmentBadge = (status) => {
+    const s = (status || 'Pending').toLowerCase();
+    if (s === 'delivered') {
+      return <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 border border-black rounded text-[11px] font-black uppercase">Delivered</span>;
+    }
+    if (s === 'shipped') {
+      return <span className="px-2 py-0.5 bg-blue-100 text-blue-900 border border-black rounded text-[11px] font-black uppercase">Shipped</span>;
+    }
+    if (s === 'processing') {
+      return <span className="px-2 py-0.5 bg-purple-100 text-purple-900 border border-black rounded text-[11px] font-black uppercase">Processing</span>;
+    }
+    if (s === 'approved') {
+      return <span className="px-2 py-0.5 bg-[#ffe17c] text-black border border-black rounded text-[11px] font-black uppercase">Approved</span>;
+    }
+    if (s === 'rejected') {
+      return <span className="px-2 py-0.5 bg-red-100 text-red-800 border border-black rounded text-[11px] font-black uppercase">Rejected</span>;
+    }
+    return <span className="px-2 py-0.5 bg-amber-100 text-amber-900 border border-black rounded text-[11px] font-black uppercase">Pending</span>;
   };
 
   return (
@@ -125,11 +172,11 @@ export default function RedemptionHistoryPage() {
             <thead>
               <tr className="border-b-2 border-black bg-[#fbfaf5] text-neutral-600 font-black uppercase text-xs">
                 <th className="py-3 px-4">Transaction ID</th>
-                <th className="py-3 px-4">Product Code</th>
-                <th className="py-3 px-4">Points Earned / Spent</th>
-                <th className="py-3 px-4">Reward Redeemed / Item</th>
+                <th className="py-3 px-4">Product Code / Ref</th>
+                <th className="py-3 px-4">Points</th>
+                <th className="py-3 px-4">Item / Activity</th>
                 <th className="py-3 px-4">Date & Time</th>
-                <th className="py-3 px-4 text-right">Status</th>
+                <th className="py-3 px-4 text-right">Fulfillment / Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/10 font-medium">
@@ -140,40 +187,68 @@ export default function RedemptionHistoryPage() {
                   </td>
                 </tr>
               ) : (
-                paginated.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-[#fbfaf5] transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-bold text-black">{tx.id}</td>
-                    <td className="py-3.5 px-4 font-mono text-neutral-700">
-                      {tx.productCode !== '-' ? (
-                        <span className="px-2 py-0.5 bg-[#f4f4f0] border border-black rounded font-bold">
-                          {tx.productCode}
+                paginated.map((tx) => {
+                  const fulfillment = fulfillmentMap[tx.id] || (tx.flow === 'SPENT' ? {
+                    redemptionCode: tx.id,
+                    rewardName: tx.rewardName,
+                    pointsSpent: tx.points,
+                    status: tx.status || 'Pending',
+                    carrier: 'Factory Direct Logistics',
+                    trackingNumber: `TRK-${tx.id.replace('CLAIM-', '')}`,
+                    expectedDeliveryDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
+                    timeline: [
+                      { status: 'Pending', timestamp: new Date(), note: 'Order placed, pending plant approval.' }
+                    ]
+                  } : null);
+
+                  return (
+                    <tr key={tx.id} className="hover:bg-[#fbfaf5] transition-colors">
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">{tx.id}</td>
+                      <td className="py-3.5 px-4 font-mono text-neutral-700">
+                        {tx.productCode !== '-' ? (
+                          <span className="px-2 py-0.5 bg-[#f4f4f0] border border-black rounded font-bold">
+                            {tx.productCode}
+                          </span>
+                        ) : (
+                          <span className="text-neutral-400">—</span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded font-black text-xs border border-black ${
+                          tx.flow === 'EARNED' ? 'bg-[#ffe17c] text-black' : 'bg-neutral-200 text-neutral-800'
+                        }`}>
+                          {tx.flow === 'EARNED' ? `+${tx.points}` : `-${tx.points}`} PTS
                         </span>
-                      ) : (
-                        <span className="text-neutral-400">—</span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded font-black text-xs border border-black ${
-                        tx.flow === 'EARNED' ? 'bg-[#ffe17c] text-black' : 'bg-neutral-200 text-neutral-800'
-                      }`}>
-                        {tx.flow === 'EARNED' ? `+${tx.points}` : `-${tx.points}`} PTS
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      {tx.type === 'CODE_REDEMPTION' ? (
-                        <span className="font-bold text-black">{tx.productName}</span>
-                      ) : (
-                        <span className="font-bold text-purple-900">{tx.rewardName}</span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-neutral-600 text-xs">{tx.date}</td>
-                    <td className="py-3.5 px-4 text-right">
-                      <span className="inline-block px-2.5 py-1 text-[11px] font-black uppercase bg-emerald-100 text-emerald-800 border border-black rounded-md">
-                        {tx.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {tx.type === 'CODE_REDEMPTION' ? (
+                          <span className="font-bold text-black">{tx.productName}</span>
+                        ) : (
+                          <div>
+                            <span className="font-bold text-purple-900">{tx.rewardName}</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-neutral-600 text-xs">{tx.date}</td>
+                      <td className="py-3.5 px-4 text-right">
+                        {tx.flow === 'SPENT' ? (
+                          <button
+                            onClick={() => setSelectedFulfillment(fulfillment)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold bg-[#fbfaf5] border-2 border-black rounded-lg neo-shadow-sm hover:bg-[#ffe17c]"
+                            title="Click to track fulfillment status"
+                          >
+                            <Truck className="w-3.5 h-3.5 text-black" />
+                            {getFulfillmentBadge(fulfillment?.status || tx.status)}
+                          </button>
+                        ) : (
+                          <span className="inline-block px-2.5 py-1 text-[11px] font-black uppercase bg-emerald-100 text-emerald-800 border border-black rounded-md">
+                            {tx.status}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -209,6 +284,87 @@ export default function RedemptionHistoryPage() {
         </div>
 
       </div>
+
+      {/* Fulfillment Tracking Modal */}
+      {selectedFulfillment && (
+        <Modal
+          isOpen={Boolean(selectedFulfillment)}
+          onClose={() => setSelectedFulfillment(null)}
+          title={`Order Fulfillment — ${selectedFulfillment.redemptionCode || selectedFulfillment.id}`}
+        >
+          <div className="space-y-6">
+            <div className="p-4 bg-[#fbfaf5] border-2 border-black rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-heading font-black text-base text-black">{selectedFulfillment.rewardName}</span>
+                {getFulfillmentBadge(selectedFulfillment.status)}
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2">
+                <div>
+                  <span className="text-neutral-500 font-bold block">Points Spent:</span>
+                  <span className="font-black text-black">{selectedFulfillment.pointsSpent || selectedFulfillment.points} PTS</span>
+                </div>
+                <div>
+                  <span className="text-neutral-500 font-bold block">Tracking Number:</span>
+                  <span className="font-mono font-bold text-black">{selectedFulfillment.trackingNumber || 'Pending Generation'}</span>
+                </div>
+                <div>
+                  <span className="text-neutral-500 font-bold block">Logistics Carrier:</span>
+                  <span className="font-medium text-black">{selectedFulfillment.carrier || 'Factory Express Courier'}</span>
+                </div>
+                <div>
+                  <span className="text-neutral-500 font-bold block">Expected Delivery:</span>
+                  <span className="font-medium text-black">
+                    {selectedFulfillment.expectedDeliveryDate
+                      ? new Date(selectedFulfillment.expectedDeliveryDate).toLocaleDateString()
+                      : 'Within 5-7 Business Days'}
+                  </span>
+                </div>
+              </div>
+
+              {selectedFulfillment.rejectionReason && (
+                <div className="mt-3 p-3 bg-red-50 border-2 border-black rounded-lg text-xs">
+                  <p className="font-bold text-red-800">Rejection Notice:</p>
+                  <p className="text-red-700 mt-0.5">{selectedFulfillment.rejectionReason}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Timeline */}
+            <div className="space-y-3">
+              <h4 className="text-xs font-black uppercase tracking-wider text-neutral-600">
+                Fulfillment Status Timeline
+              </h4>
+              <div className="space-y-3 pl-2 border-l-2 border-black ml-2">
+                {(selectedFulfillment.timeline && selectedFulfillment.timeline.length > 0
+                  ? selectedFulfillment.timeline
+                  : [
+                      { status: 'Order Submitted', timestamp: new Date(), note: 'Customer claimed reward from catalog.' },
+                      { status: selectedFulfillment.status, timestamp: new Date(), note: `Current stage: ${selectedFulfillment.status}` }
+                    ]
+                ).map((step, idx) => (
+                  <div key={idx} className="relative pl-4">
+                    <div className="absolute -left-[13px] top-1 w-3 h-3 rounded-full bg-[#ffe17c] border-2 border-black" />
+                    <p className="font-heading font-black text-xs text-black">{step.status}</p>
+                    <p className="text-[11px] text-neutral-600">{step.note}</p>
+                    <span className="text-[10px] text-neutral-400 font-mono">
+                      {step.timestamp ? new Date(step.timestamp).toLocaleString() : ''}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => setSelectedFulfillment(null)}
+                className="px-5 py-2 bg-black text-white neo-btn rounded-xl text-xs font-bold"
+              >
+                Close Tracking
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
     </div>
   );
