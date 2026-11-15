@@ -1,23 +1,15 @@
-# Production Multi-Stage Node.js Dockerfile
-FROM node:20-alpine AS base
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
-RUN npm ci --only=production
 
-# Copy application source code
+RUN npm ci --omit=dev
+
 COPY . .
 
-# Expose API port
-EXPOSE 5000
-
 ENV NODE_ENV=production
-ENV PORT=5000
 
-# Health check instruction
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:5000/api/health || exit 1
+EXPOSE 5000
 
 CMD ["npm", "start"]
