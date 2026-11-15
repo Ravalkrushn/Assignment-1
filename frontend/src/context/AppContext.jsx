@@ -78,7 +78,19 @@ export const AppProvider = ({ children }) => {
 
   const [rewards, setRewards] = useState(() => {
     const saved = localStorage.getItem('loyaltybox_rewards');
-    return saved ? JSON.parse(saved) : initialRewards;
+    if (!saved) return initialRewards;
+    try {
+      const parsed = JSON.parse(saved);
+      return parsed.map((item) => {
+        const fallback = initialRewards.find((r) => r.id === item.id || r.name === item.name);
+        return {
+          ...item,
+          image: item.image || fallback?.image || ''
+        };
+      });
+    } catch {
+      return initialRewards;
+    }
   });
 
   const [codes, setCodes] = useState(() => {

@@ -14,15 +14,27 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { initialRewards } from '../../data/dummyRewards';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
 
+const CATEGORY_FALLBACK_IMAGES = {
+  'Coupons': 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=500&auto=format&fit=crop&q=80',
+  'Physical Products': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=80',
+  'Safety Gear': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&auto=format&fit=crop&q=80',
+  'Merchandise': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500&auto=format&fit=crop&q=80',
+  'Exclusive Gifts': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80',
+  'Gift Cards': 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=500&auto=format&fit=crop&q=80',
+  'Services': 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=500&auto=format&fit=crop&q=80'
+};
+
 // Reward image with fallback
 function RewardCardImage({ src, alt, category, icon: Icon }) {
   const [hasError, setHasError] = useState(false);
+  const displaySrc = (!hasError && src) ? src : (CATEGORY_FALLBACK_IMAGES[category] || null);
 
-  if (!src || hasError) {
+  if (!displaySrc || (hasError && !CATEGORY_FALLBACK_IMAGES[category])) {
     return (
       <div className="h-36 w-full bg-[#f8f7f2] border-2 border-black rounded-xl flex items-center justify-center neo-shadow-sm p-4 text-center">
         <div className="space-y-1">
@@ -40,7 +52,7 @@ function RewardCardImage({ src, alt, category, icon: Icon }) {
   return (
     <div className="h-36 w-full bg-neutral-100 border-2 border-black rounded-xl overflow-hidden neo-shadow-sm relative group">
       <img
-        src={src}
+        src={displaySrc}
         alt={alt || "Loyalty reward item"}
         loading="lazy"
         onError={() => setHasError(true)}
@@ -197,7 +209,7 @@ export default function RewardsPage() {
 
                 {/* Reward Visual Image */}
                 <RewardCardImage
-                  src={reward.image}
+                  src={reward.image || initialRewards.find((r) => r.id === reward.id || r.name === reward.name)?.image}
                   alt={reward.name}
                   category={reward.category}
                   icon={Icon}
@@ -255,12 +267,14 @@ export default function RewardsPage() {
         onClose={() => setRedeemModalReward(null)}
         title="Confirm Reward Redemption"
       >
-        {redeemModalReward && (
+        {redeemModalReward && (() => {
+          const modalImage = redeemModalReward.image || initialRewards.find((r) => r.id === redeemModalReward.id || r.name === redeemModalReward.name)?.image || CATEGORY_FALLBACK_IMAGES[redeemModalReward.category];
+          return (
           <div className="space-y-5">
-            {redeemModalReward.image && (
+            {modalImage && (
               <div className="h-32 w-full bg-neutral-100 border-2 border-black rounded-xl overflow-hidden neo-shadow-sm">
                 <img
-                  src={redeemModalReward.image}
+                  src={modalImage}
                   alt={redeemModalReward.name}
                   className="w-full h-full object-cover"
                 />
@@ -318,7 +332,8 @@ export default function RewardsPage() {
               </button>
             </div>
           </div>
-        )}
+          );
+        })()}
       </Modal>
 
     </div>
