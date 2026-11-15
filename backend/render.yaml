@@ -27,7 +27,7 @@ services:
       - key: CODE_HASH_SECRET
         generateValue: true
       - key: CLIENT_URL
-        sync: false
+        value: https://assignment-1-ten-pink.vercel.app
       - key: ADMIN_EMAIL
         value: admin@factory.io
       - key: ADMIN_PASSWORD
