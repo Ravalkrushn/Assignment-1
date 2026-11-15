@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
 
 const CATEGORY_FALLBACK_IMAGES = {
-  'Coupons': 'https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=500&auto=format&fit=crop&q=80',
+  'Coupons': '/rewards/coupon-50.jpg',
   'Physical Products': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&auto=format&fit=crop&q=80',
   'Safety Gear': 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&auto=format&fit=crop&q=80',
   'Merchandise': 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=500&auto=format&fit=crop&q=80',

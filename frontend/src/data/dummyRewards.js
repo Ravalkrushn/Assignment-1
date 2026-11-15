@@ -9,7 +9,7 @@ export const initialRewards = [
     description: "Instant ₹50 coupon applicable on any retail partner product box purchase.",
     iconName: "Ticket",
     tag: "Instant Credit",
-    image: "https://images.unsplash.com/photo-1556742049-0a67c5574f73?w=500&auto=format&fit=crop&q=80"
+    image: "/rewards/coupon-50.jpg"
   },
   {
     id: "REW-002",
@@ -21,7 +21,7 @@ export const initialRewards = [
     description: "Flat ₹100 rebate voucher valid across all verified factory dealer outlets.",
     iconName: "Tag",
     tag: "Most Popular",
-    image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=500&auto=format&fit=crop&q=80"
+    image: "/rewards/coupon-100.jpg"
   },
   {
     id: "REW-003",

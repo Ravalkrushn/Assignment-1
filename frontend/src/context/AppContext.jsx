@@ -85,7 +85,7 @@ export const AppProvider = ({ children }) => {
         const fallback = initialRewards.find((r) => r.id === item.id || r.name === item.name);
         return {
           ...item,
-          image: item.image || fallback?.image || ''
+          image: fallback?.image || item.image || ''
         };
       });
     } catch {
