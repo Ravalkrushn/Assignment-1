@@ -6,3 +6,15 @@ dist-ssr
 .env.*
 !.env.example
 .DS_Store
+
+# Prompt and agent instruction files
+agent1
+agent2
+agent3
+promt
+promts
+phase1
+phase2
+*.prompt
+*.promt
+
