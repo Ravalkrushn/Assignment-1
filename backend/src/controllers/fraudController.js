@@ -1,6 +1,7 @@
 import { FraudLog } from '../models/FraudLog.js';
 import { User } from '../models/User.js';
 import { logAdminActivity } from '../utils/auditLogger.js';
+import { escapeRegex } from '../utils/securityUtils.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getFraudLogs = async (req, res, next) => {
@@ -14,12 +15,13 @@ export const getFraudLogs = async (req, res, next) => {
     if (status) query.status = status;
 
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { customerName: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { ipAddress: { $regex: search, $options: 'i' } },
-        { eventType: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { customerName: { $regex: safeSearch, $options: 'i' } },
+        { email: { $regex: safeSearch, $options: 'i' } },
+        { ipAddress: { $regex: safeSearch, $options: 'i' } },
+        { eventType: { $regex: safeSearch, $options: 'i' } },
+        { description: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 

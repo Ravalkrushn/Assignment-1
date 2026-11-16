@@ -5,6 +5,7 @@ import { Reward } from '../models/Reward.js';
 import { PointTransaction } from '../models/PointTransaction.js';
 import { Redemption } from '../models/Redemption.js';
 import { FraudLog } from '../models/FraudLog.js';
+import { escapeRegex } from '../utils/securityUtils.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getDashboardSummary = async (req, res, next) => {
@@ -165,11 +166,12 @@ export const getCustomersDirectory = async (req, res, next) => {
       query.status = status.toLowerCase();
     }
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { fullName: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { businessName: { $regex: search, $options: 'i' } },
-        { city: { $regex: search, $options: 'i' } }
+        { fullName: { $regex: safeSearch, $options: 'i' } },
+        { email: { $regex: safeSearch, $options: 'i' } },
+        { businessName: { $regex: safeSearch, $options: 'i' } },
+        { city: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 

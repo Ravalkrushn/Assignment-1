@@ -1,5 +1,6 @@
 import { Product } from '../models/Product.js';
 import { logAdminActivity } from '../utils/auditLogger.js';
+import { escapeRegex } from '../utils/securityUtils.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getProducts = async (req, res, next) => {
@@ -20,10 +21,11 @@ export const getProducts = async (req, res, next) => {
     }
 
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { productName: { $regex: search, $options: 'i' } },
-        { sku: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { productName: { $regex: safeSearch, $options: 'i' } },
+        { sku: { $regex: safeSearch, $options: 'i' } },
+        { description: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
