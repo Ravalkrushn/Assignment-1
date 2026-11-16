@@ -27,10 +27,49 @@ function resolveApiBaseUrl() {
 
 const API_BASE_URL = resolveApiBaseUrl();
 
+// Concurrency-safe Token Refresh Queue
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function subscribeTokenRefresh(cb) {
+  refreshSubscribers.push(cb);
+}
+
+function onRefreshed(newAccessToken) {
+  refreshSubscribers.forEach((cb) => cb(newAccessToken));
+  refreshSubscribers = [];
+}
+
+async function performTokenRefresh() {
+  const refreshToken = localStorage.getItem('loyaltybox_refresh_token');
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
+
+  const refreshUrl = `${API_BASE_URL}/auth/refresh`;
+  const res = await fetch(refreshUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refreshToken })
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data?.data?.accessToken) {
+    throw new Error(data?.message || 'Token refresh failed');
+  }
+
+  const { accessToken: newAccess, refreshToken: newRefresh } = data.data;
+  localStorage.setItem('loyaltybox_token', newAccess);
+  if (newRefresh) {
+    localStorage.setItem('loyaltybox_refresh_token', newRefresh);
+  }
+  return newAccess;
+}
+
 /**
- * Core HTTP Request Wrapper
+ * Core HTTP Request Wrapper with Concurrency-Safe Automatic 401 Token Refresh
  */
-async function request(endpoint, options = {}) {
+async function request(endpoint, options = {}, isRetry = false) {
   const normEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const primaryUrl = `${API_BASE_URL}${normEndpoint}`;
   
@@ -75,6 +114,53 @@ async function request(endpoint, options = {}) {
         throw offlineError;
       }
       throw err;
+    }
+  }
+
+  // Handle Token Expiry (HTTP 401) with automatic single-retry token refresh
+  const isAuthEndpoint = normEndpoint.startsWith('/auth/login') || normEndpoint.startsWith('/auth/refresh') || normEndpoint.startsWith('/auth/register');
+  if (response.status === 401 && !isRetry && !isAuthEndpoint) {
+    if (isRefreshing) {
+      // Queue concurrent 401 requests to wait for the new access token
+      return new Promise((resolve) => {
+        subscribeTokenRefresh((newToken) => {
+          const nextOptions = {
+            ...options,
+            headers: {
+              ...options.headers,
+              Authorization: `Bearer ${newToken}`
+            }
+          };
+          resolve(request(endpoint, nextOptions, true));
+        });
+      });
+    }
+
+    isRefreshing = true;
+    try {
+      const newAccessToken = await performTokenRefresh();
+      isRefreshing = false;
+      onRefreshed(newAccessToken);
+
+      const nextOptions = {
+        ...options,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${newAccessToken}`
+        }
+      };
+      return request(endpoint, nextOptions, true);
+    } catch (refreshErr) {
+      isRefreshing = false;
+      refreshSubscribers = [];
+      localStorage.removeItem('loyaltybox_token');
+      localStorage.removeItem('loyaltybox_refresh_token');
+      localStorage.removeItem('loyaltybox_user');
+      
+      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+        window.location.href = '/login';
+      }
+      throw refreshErr;
     }
   }
 
