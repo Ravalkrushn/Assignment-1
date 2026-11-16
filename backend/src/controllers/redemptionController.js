@@ -1,5 +1,6 @@
 import { Redemption } from '../models/Redemption.js';
 import { User } from '../models/User.js';
+import { Reward } from '../models/Reward.js';
 import { PointTransaction } from '../models/PointTransaction.js';
 import { logAdminActivity } from '../utils/auditLogger.js';
 import { apiResponse } from '../utils/apiResponse.js';
@@ -151,6 +152,13 @@ export const updateFulfillmentStatus = async (req, res, next) => {
           totalPointsRedeemed: -redemption.pointsSpent
         }
       });
+
+      // Restore catalog reward inventory count
+      if (redemption.rewardId) {
+        await Reward.findByIdAndUpdate(redemption.rewardId, {
+          $inc: { quantity: 1 }
+        });
+      }
 
       // Log point transaction
       await PointTransaction.create({
