@@ -4,6 +4,7 @@ import { Redemption } from '../models/Redemption.js';
 import { PointTransaction } from '../models/PointTransaction.js';
 import { cryptoUtils } from '../utils/cryptoUtils.js';
 import { logAdminActivity } from '../utils/auditLogger.js';
+import { escapeRegex } from '../utils/securityUtils.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getRewards = async (req, res, next) => {
@@ -22,9 +23,10 @@ export const getRewards = async (req, res, next) => {
     }
 
     if (search) {
+      const safeSearch = escapeRegex(search);
       query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { name: { $regex: safeSearch, $options: 'i' } },
+        { description: { $regex: safeSearch, $options: 'i' } }
       ];
     }
 
@@ -51,7 +53,7 @@ export const claimReward = async (req, res, next) => {
   try {
     const rewardId = req.params.id;
 
-    // Check reward
+    // Check reward status and initial availability
     const reward = await Reward.findById(rewardId);
     if (!reward || reward.status !== 'active') {
       return apiResponse.error(res, 'This reward is currently unavailable.', [], 400);
@@ -61,31 +63,12 @@ export const claimReward = async (req, res, next) => {
       return apiResponse.error(res, 'This reward is out of stock.', [], 400);
     }
 
-    // Check customer points
-    const user = await User.findById(req.user._id);
-    if (user.availablePoints < reward.pointsRequired) {
-      return apiResponse.error(
-        res,
-        `Insufficient points: You need ${reward.pointsRequired - user.availablePoints} more points to claim this reward.`,
-        [],
-        400
-      );
-    }
-
-    // Atomic decrement of reward quantity
-    const updatedReward = await Reward.findOneAndUpdate(
-      { _id: reward._id, quantity: { $gt: 0 } },
-      { $inc: { quantity: -1 } },
-      { new: true }
-    );
-
-    if (!updatedReward) {
-      return apiResponse.error(res, 'This reward just went out of stock.', [], 400);
-    }
-
-    // Deduct points from user
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
+    // 1. Atomic conditional deduction of user points (prevents race condition & double spending)
+    const updatedUser = await User.findOneAndUpdate(
+      {
+        _id: req.user._id,
+        availablePoints: { $gte: reward.pointsRequired }
+      },
       {
         $inc: {
           availablePoints: -reward.pointsRequired,
@@ -95,6 +78,37 @@ export const claimReward = async (req, res, next) => {
       { new: true }
     );
 
+    if (!updatedUser) {
+      const currentUser = await User.findById(req.user._id);
+      const diff = reward.pointsRequired - (currentUser?.availablePoints || 0);
+      return apiResponse.error(
+        res,
+        diff > 0
+          ? `Insufficient points: You need ${diff} more points to claim this reward.`
+          : 'Concurrent redemption conflict. Please retry.',
+        [],
+        400
+      );
+    }
+
+    // 2. Atomic decrement of reward quantity
+    const updatedReward = await Reward.findOneAndUpdate(
+      { _id: reward._id, quantity: { $gt: 0 }, status: 'active' },
+      { $inc: { quantity: -1 } },
+      { new: true }
+    );
+
+    if (!updatedReward) {
+      // Rollback deducted points if stock exhausted concurrently
+      await User.findByIdAndUpdate(req.user._id, {
+        $inc: {
+          availablePoints: reward.pointsRequired,
+          totalPointsRedeemed: -reward.pointsRequired
+        }
+      });
+      return apiResponse.error(res, 'This reward just went out of stock.', [], 400);
+    }
+
     // Generate unique claim coupon token
     const claimCode = `CLAIM-${cryptoUtils.generateRandomToken(4).toUpperCase()}`;
 
@@ -102,43 +116,58 @@ export const claimReward = async (req, res, next) => {
     const initialStatus = isDigital ? 'Delivered' : 'Pending';
     const now = new Date();
     const expectedDelivery = isDigital ? now : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const deliveryAddress = req.body?.deliveryAddress || `${user.businessName || user.fullName}, ${user.city || 'Workshop Unit'}, ${user.state || 'India'}`;
+    const deliveryAddress = req.body?.deliveryAddress || `${updatedUser.businessName || updatedUser.fullName}, ${updatedUser.city || 'Workshop Unit'}, ${updatedUser.state || 'India'}`;
 
-    // Record redemption with fulfillment metadata
-    const redemption = await Redemption.create({
-      userId: user._id,
-      customerName: user.fullName,
-      userEmail: user.email,
-      rewardId: reward._id,
-      rewardName: reward.name,
-      pointsSpent: reward.pointsRequired,
-      redemptionCode: claimCode,
-      status: initialStatus,
-      deliveryAddress,
-      expectedDeliveryDate: expectedDelivery,
-      trackingNumber: isDigital ? `VOUCH-${claimCode.slice(-4)}` : '',
-      timeline: [
-        {
-          status: initialStatus,
-          timestamp: now,
-          note: isDigital ? 'Digital claim voucher issued instantly.' : 'Redemption order placed, pending factory dispatch approval.',
-          updatedBy: 'System'
+    let redemption;
+    try {
+      // Record redemption with fulfillment metadata
+      redemption = await Redemption.create({
+        userId: updatedUser._id,
+        customerName: updatedUser.fullName,
+        userEmail: updatedUser.email,
+        rewardId: reward._id,
+        rewardName: reward.name,
+        pointsSpent: reward.pointsRequired,
+        redemptionCode: claimCode,
+        status: initialStatus,
+        deliveryAddress,
+        expectedDeliveryDate: expectedDelivery,
+        trackingNumber: isDigital ? `VOUCH-${claimCode.slice(-4)}` : '',
+        timeline: [
+          {
+            status: initialStatus,
+            timestamp: now,
+            note: isDigital ? 'Digital claim voucher issued instantly.' : 'Redemption order placed, pending factory dispatch approval.',
+            updatedBy: 'System'
+          }
+        ]
+      });
+
+      // Record point transaction
+      await PointTransaction.create({
+        userId: updatedUser._id,
+        userEmail: updatedUser.email,
+        customerName: updatedUser.fullName,
+        type: 'redeemed',
+        flow: 'SPENT',
+        points: reward.pointsRequired,
+        source: 'REWARD_CLAIM',
+        referenceId: claimCode,
+        description: `Claimed catalog reward: ${reward.name}`
+      });
+    } catch (persistErr) {
+      // Rollback both points and reward stock on persistence failure
+      await User.findByIdAndUpdate(req.user._id, {
+        $inc: {
+          availablePoints: reward.pointsRequired,
+          totalPointsRedeemed: -reward.pointsRequired
         }
-      ]
-    });
-
-    // Record point transaction
-    await PointTransaction.create({
-      userId: user._id,
-      userEmail: user.email,
-      customerName: user.fullName,
-      type: 'redeemed',
-      flow: 'SPENT',
-      points: reward.pointsRequired,
-      source: 'REWARD_CLAIM',
-      referenceId: claimCode,
-      description: `Claimed catalog reward: ${reward.name}`
-    });
+      });
+      await Reward.findByIdAndUpdate(reward._id, {
+        $inc: { quantity: 1 }
+      });
+      throw persistErr;
+    }
 
     return apiResponse.success(
       res,
@@ -188,7 +217,20 @@ export const createReward = async (req, res, next) => {
 
 export const updateReward = async (req, res, next) => {
   try {
-    const reward = await Reward.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const { name, description, pointsRequired, quantity, category, image, tag, status } = req.body;
+
+    // Strict field whitelisting to eliminate mass assignment risks
+    const allowedUpdates = {};
+    if (name !== undefined) allowedUpdates.name = typeof name === 'string' ? name.trim() : name;
+    if (description !== undefined) allowedUpdates.description = description;
+    if (pointsRequired !== undefined) allowedUpdates.pointsRequired = Number(pointsRequired);
+    if (quantity !== undefined) allowedUpdates.quantity = Number(quantity);
+    if (category !== undefined) allowedUpdates.category = category;
+    if (image !== undefined) allowedUpdates.image = image;
+    if (tag !== undefined) allowedUpdates.tag = tag;
+    if (status !== undefined) allowedUpdates.status = status;
+
+    const reward = await Reward.findByIdAndUpdate(req.params.id, allowedUpdates, { new: true, runValidators: true });
     if (!reward) {
       return apiResponse.error(res, 'Reward not found.', [], 404);
     }
