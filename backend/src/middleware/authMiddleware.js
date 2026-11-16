@@ -34,3 +34,34 @@ export const protect = async (req, res, next) => {
     return apiResponse.error(res, 'Invalid or expired authentication token. Please re-authenticate.', [], 401);
   }
 };
+
+/**
+ * Optional Authentication Middleware
+ * If a valid Bearer token or cookie is supplied, decodes and attaches user to req.user.
+ * If absent or invalid, silently allows request to proceed as guest without throwing 401.
+ */
+export const optionalProtect = async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies && req.cookies.accessToken) {
+    token = req.cookies.accessToken;
+  }
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, env.JWT_ACCESS_SECRET);
+    const user = await User.findById(decoded.id).select('-password');
+    if (user && user.status !== 'suspended') {
+      req.user = user;
+    }
+  } catch {
+    // Treat invalid or expired token as unauthenticated guest
+  }
+
+  next();
+};

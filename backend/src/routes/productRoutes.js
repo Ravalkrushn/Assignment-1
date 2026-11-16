@@ -6,7 +6,7 @@ import {
   updateProduct,
   deleteProduct
 } from '../controllers/productController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, optionalProtect } from '../middleware/authMiddleware.js';
 import { restrictTo } from '../middleware/roleMiddleware.js';
 import { validateRequest } from '../middleware/validateMiddleware.js';
 import {
@@ -16,8 +16,8 @@ import {
 
 const router = express.Router();
 
-router.get('/', getProducts);
-router.get('/:id', getProductById);
+router.get('/', optionalProtect, getProducts);
+router.get('/:id', optionalProtect, getProductById);
 
 // Admin-only operations
 router.post('/', protect, restrictTo('admin'), createProductValidator, validateRequest, createProduct);

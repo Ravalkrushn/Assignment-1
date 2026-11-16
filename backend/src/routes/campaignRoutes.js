@@ -6,14 +6,14 @@ import {
   updateCampaign,
   deleteCampaign
 } from '../controllers/campaignController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, optionalProtect } from '../middleware/authMiddleware.js';
 import { restrictTo } from '../middleware/roleMiddleware.js';
 
 const router = express.Router();
 
-// Public / Customer can view active campaigns
-router.get('/', getCampaigns);
-router.get('/:id', getCampaignById);
+// Public / Customer can view active campaigns; Admins can view all statuses
+router.get('/', optionalProtect, getCampaigns);
+router.get('/:id', optionalProtect, getCampaignById);
 
 // Admin-only campaign management
 router.post('/', protect, restrictTo('admin'), createCampaign);

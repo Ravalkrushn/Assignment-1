@@ -7,7 +7,7 @@ import {
   updateReward,
   deleteReward
 } from '../controllers/rewardController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, optionalProtect } from '../middleware/authMiddleware.js';
 import { restrictTo } from '../middleware/roleMiddleware.js';
 import { validateRequest } from '../middleware/validateMiddleware.js';
 import {
@@ -17,8 +17,8 @@ import {
 
 const router = express.Router();
 
-router.get('/', getRewards);
-router.get('/:id', getRewardById);
+router.get('/', optionalProtect, getRewards);
+router.get('/:id', optionalProtect, getRewardById);
 router.post('/:id/redeem', protect, claimReward);
 
 // Admin-only operations
