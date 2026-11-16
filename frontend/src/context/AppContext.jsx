@@ -49,27 +49,21 @@ export const AppProvider = ({ children }) => {
     status: t.status || 'Completed'
   });
 
-  // Current logged in user
+  // Current logged in user (Initialized as null / guest unless verified session exists)
   const [currentUser, setCurrentUser] = useState(() => {
     const saved = localStorage.getItem('loyaltybox_user');
-    return saved ? normalizeUser(JSON.parse(saved)) : normalizeUser({
-      id: "CUST-1001",
-      name: "Rahul Sharma",
-      email: "rahul.sharma@workshop.in",
-      phone: "+91 98765 43210",
-      businessName: "Sharma Precision Engineering Works",
-      city: "Pune",
-      state: "Maharashtra",
-      role: "customer",
-      pointsBalance: 1250,
-      availablePoints: 1250,
-      totalPointsEarned: 2500,
-      totalPointsRedeemed: 1250,
-      boxesRedeemed: 25,
-      tier: "Gold VIP",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
-    });
+    const token = localStorage.getItem('loyaltybox_token');
+    if (saved && token) {
+      try {
+        return normalizeUser(JSON.parse(saved));
+      } catch {
+        return null;
+      }
+    }
+    return null;
   });
+
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('loyaltybox_products');
@@ -145,6 +139,57 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('loyaltybox_fraud', JSON.stringify(fraudAlerts));
   }, [fraudAlerts]);
+
+  // Verify token on mount and synchronize authentication state
+  useEffect(() => {
+    const initAuth = async () => {
+      const token = localStorage.getItem('loyaltybox_token');
+      if (token) {
+        try {
+          const meRes = await api.auth.getMe();
+          if (meRes?.success && meRes?.data?.user) {
+            setCurrentUser(normalizeUser(meRes.data.user));
+          } else {
+            localStorage.removeItem('loyaltybox_token');
+            localStorage.removeItem('loyaltybox_refresh_token');
+            localStorage.removeItem('loyaltybox_user');
+            setCurrentUser(null);
+          }
+        } catch {
+          // If offline / network error, retain local session if present
+          const saved = localStorage.getItem('loyaltybox_user');
+          if (saved) {
+            try {
+              setCurrentUser(normalizeUser(JSON.parse(saved)));
+            } catch {
+              setCurrentUser(null);
+            }
+          }
+        }
+      } else {
+        setCurrentUser(null);
+      }
+      setIsAuthLoading(false);
+    };
+
+    initAuth();
+
+    // Multi-tab logout / login synchronization
+    const handleStorageChange = (e) => {
+      if (e.key === 'loyaltybox_token' && !e.newValue) {
+        setCurrentUser(null);
+      } else if (e.key === 'loyaltybox_user' && e.newValue) {
+        try {
+          setCurrentUser(normalizeUser(JSON.parse(e.newValue)));
+        } catch {
+          setCurrentUser(null);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Initial Sync from Backend if running
   const refreshBackendData = useCallback(async () => {
@@ -786,7 +831,7 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  // Logout Helper
+  // Logout Helper: Invalidate backend refresh session and completely clear frontend memory & storage
   const logoutUser = async () => {
     try {
       await api.auth.logout();
@@ -796,6 +841,7 @@ export const AppProvider = ({ children }) => {
     localStorage.removeItem('loyaltybox_token');
     localStorage.removeItem('loyaltybox_refresh_token');
     localStorage.removeItem('loyaltybox_user');
+    setCurrentUser(null);
   };
 
   const resetAllDemoData = () => {
@@ -813,6 +859,7 @@ export const AppProvider = ({ children }) => {
       value={{
         currentUser,
         setCurrentUser,
+        isAuthLoading,
         products,
         rewards,
         codes,
