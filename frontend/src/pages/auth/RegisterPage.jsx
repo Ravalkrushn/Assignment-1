@@ -34,8 +34,19 @@ export default function RegisterPage() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters long.');
+    const cleanPhone = formData.phone.replace(/[\s-]/g, '');
+    if (!/^[+]?[0-9]{10,14}$/.test(cleanPhone)) {
+      toast.error('Please enter a valid phone number (10 to 14 digits).');
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      toast.error('Password must be at least 8 characters long.');
+      return;
+    }
+
+    if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(formData.password)) {
+      toast.error('Password must contain at least one letter and one number.');
       return;
     }
 

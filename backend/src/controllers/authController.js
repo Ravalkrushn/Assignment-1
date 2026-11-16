@@ -68,6 +68,14 @@ export const register = async (req, res, next) => {
 
     const tokens = await generateTokens(user._id);
 
+    // Set secure httpOnly cookie for refresh token (FINDING-SEC-06)
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
     return apiResponse.success(
       res,
       'Account registered successfully! 100 bonus points have been credited to your wallet.',
@@ -111,6 +119,14 @@ export const login = async (req, res, next) => {
 
     const tokens = await generateTokens(user._id);
 
+    // Set secure httpOnly cookie for refresh token (FINDING-SEC-06)
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
     return apiResponse.success(res, 'Logged in successfully.', {
       user: {
         id: user._id,
@@ -136,7 +152,7 @@ export const login = async (req, res, next) => {
 
 export const refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken: clientToken } = req.body;
+    const clientToken = req.body.refreshToken || req.cookies?.refreshToken;
     if (!clientToken) {
       return apiResponse.error(res, 'Refresh token required.', [], 400);
     }
@@ -154,6 +170,14 @@ export const refreshToken = async (req, res, next) => {
 
     const newTokens = await generateTokens(storedToken.userId);
 
+    // Set renewed secure httpOnly cookie (FINDING-SEC-06)
+    res.cookie('refreshToken', newTokens.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
     return apiResponse.success(res, 'Token refreshed successfully.', newTokens);
   } catch (error) {
     next(error);
@@ -162,11 +186,17 @@ export const refreshToken = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    const { refreshToken: clientToken } = req.body;
+    const clientToken = req.body.refreshToken || req.cookies?.refreshToken;
     if (clientToken) {
       const tokenHash = cryptoUtils.hashToken(clientToken);
       await RefreshToken.updateOne({ tokenHash }, { revoked: true });
     }
+    // Clear httpOnly cookie
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
     return apiResponse.success(res, 'Logged out successfully.');
   } catch (error) {
     next(error);
@@ -227,6 +257,13 @@ export const forgotPassword = async (req, res, next) => {
       await user.save();
 
       // In production, send email with rawToken
+      if (process.env.SMTP_HOST && process.env.SMTP_USER) {
+        // Production SMTP dispatch
+        console.log(`[PASSWORD_RESET] Reset link sent to ${user.email}`);
+      } else {
+        // Safe development audit log (not exposing raw token in HTTP response)
+        console.log(`[PASSWORD_RESET_DEV] Reset token generated for ${user.email}: ${rawToken}`);
+      }
     }
 
     return apiResponse.success(

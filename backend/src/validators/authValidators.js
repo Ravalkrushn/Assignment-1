@@ -17,12 +17,21 @@ export const registerValidator = [
   body('phone')
     .trim()
     .notEmpty()
-    .withMessage('Phone number is required'),
+    .withMessage('Phone number is required')
+    .custom((val) => {
+      const sanitized = val.replace(/[\s-]/g, '');
+      if (!/^[+]?[0-9]{10,14}$/.test(sanitized)) {
+        throw new Error('Please enter a valid phone number (10-14 digits)');
+      }
+      return true;
+    }),
   body('password')
     .notEmpty()
     .withMessage('Password is required')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
+    .isLength({ min: 8 })
+    .withMessage('Password must be at least 8 characters long')
+    .matches(/^(?=.*[a-zA-Z])(?=.*\d)/)
+    .withMessage('Password must contain at least one letter and one number'),
   body('confirmPassword')
     .custom((value, { req }) => {
       if (value !== req.body.password) {
@@ -62,6 +71,8 @@ export const resetPasswordValidator = [
   body('password')
     .notEmpty()
     .withMessage('New password is required')
-    .isLength({ min: 6 })
-    .withMessage('New password must be at least 6 characters long')
+    .isLength({ min: 8 })
+    .withMessage('New password must be at least 8 characters long')
+    .matches(/^(?=.*[a-zA-Z])(?=.*\d)/)
+    .withMessage('New password must contain at least one letter and one number')
 ];
