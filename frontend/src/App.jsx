@@ -13,6 +13,8 @@ import LandingPage from './pages/public/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+import ProtectedRoute from './components/common/ProtectedRoute';
 
 // Customer Pages
 import CustomerDashboard from './pages/customer/CustomerDashboard';
@@ -81,10 +83,18 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Route>
 
-          {/* Customer Portal Routes */}
-          <Route path="/customer" element={<CustomerLayout />}>
+          {/* Customer Portal Routes (Protected: Requires Authenticated Customer) */}
+          <Route
+            path="/customer"
+            element={
+              <ProtectedRoute requiredRole="customer">
+                <CustomerLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate to="/customer/dashboard" replace />} />
             <Route path="dashboard" element={<CustomerDashboard />} />
             <Route path="redeem-code" element={<RedeemCodePage />} />
@@ -95,8 +105,15 @@ export default function App() {
             <Route path="profile" element={<CustomerProfilePage />} />
           </Route>
 
-          {/* Factory Admin Portal Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
+          {/* Factory Admin Portal Routes (Protected: Requires Authenticated Admin) */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="customers" element={<CustomerManagementPage />} />
