@@ -184,8 +184,19 @@ export const blockCode = async (req, res, next) => {
       return apiResponse.error(res, 'Code not found.', [], 404);
     }
 
+    const previousStatus = code.status;
     code.status = 'blocked';
     await code.save();
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'BLOCK_CODE',
+      module: 'Codes',
+      targetId: code._id,
+      description: `Blocked packaging security code ${code._id} (Batch: ${code.batchId}, Product: ${code.productName})`,
+      metadata: { batchId: code.batchId, sku: code.sku, previousStatus, status: 'blocked' },
+      req
+    });
 
     return apiResponse.success(res, 'Code successfully blocked.');
   } catch (error) {

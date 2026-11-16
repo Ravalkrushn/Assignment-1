@@ -1,5 +1,6 @@
 import { User } from '../models/User.js';
 import { PointTransaction } from '../models/PointTransaction.js';
+import { logAdminActivity } from '../utils/auditLogger.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
 export const getBalance = async (req, res, next) => {
@@ -131,6 +132,16 @@ export const adjustPoints = async (req, res, next) => {
       source: 'ADMIN_ADJUSTMENT',
       referenceId: `ADMIN-${Date.now()}`,
       description: `Admin manual adjustment: ${reason}`
+    });
+
+    await logAdminActivity({
+      admin: req.user,
+      actionType: 'POINTS_ADJUSTED',
+      module: 'Customers',
+      targetId: user._id,
+      description: `Adjusted points by ${numPoints >= 0 ? '+' : ''}${numPoints} for ${user.fullName} (${user.email}). Reason: ${reason}`,
+      metadata: { targetUser: user.email, pointsDelta: numPoints, reason },
+      req
     });
 
     return apiResponse.success(res, `Points adjusted by ${numPoints} for ${user.fullName}.`, {
