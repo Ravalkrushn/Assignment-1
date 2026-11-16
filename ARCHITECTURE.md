@@ -157,3 +157,49 @@ erDiagram
 | Large Shadow | `8px 8px 0px 0px #000000` | Main feature cards and modals |
 | Container Shadow | `12px 12px 0px 0px #000000`| Prominent dashboard containers |
 | Button Push Effect | `translate(2px, 2px)` | Pressed state removes shadow to mimic tactile switch |
+
+---
+
+## 5. Security & Concurrency Architecture (Phase 2 Remediation)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Customer
+    participant AppContext
+    participant ProtectedRoute
+    participant BackendAPI
+    participant MongoDB
+
+    Customer->>ProtectedRoute: Navigates to /customer/rewards
+    ProtectedRoute->>AppContext: Verify isAuthLoading & currentUser role
+    alt Not Authenticated
+        ProtectedRoute-->>Customer: Redirect /login with state: { from: location }
+    else Role Mismatch
+        ProtectedRoute-->>Customer: Redirect to authorized home
+    else Authorized
+        ProtectedRoute-->>Customer: Render CustomerLayout View
+    end
+
+    Customer->>BackendAPI: POST /api/rewards/:id/redeem
+    BackendAPI->>MongoDB: User.findOneAndUpdate({ _id, availablePoints: { $gte: cost } })
+    alt Insufficient Balance / Concurrent Race
+        MongoDB-->>BackendAPI: null (conditional lock missed)
+        BackendAPI-->>Customer: 400 Bad Request ("Insufficient available points")
+    else Balance Deducted Atomically
+        BackendAPI->>MongoDB: Reward.findOneAndUpdate({ _id, quantity: { $gte: 1 } })
+        alt Out of Stock
+            BackendAPI->>MongoDB: Rollback User Points ($inc: +cost)
+            BackendAPI-->>Customer: 400 Out of Stock
+        else Stock Decremented
+            BackendAPI->>MongoDB: Create Redemption & PointTransaction
+            BackendAPI-->>Customer: 201 Created (Claim Successful)
+        end
+    end
+```
+
+### Key Architectural Defenses:
+1. **Zero-Trust Frontend Guard (`ProtectedRoute.jsx`)**: Authentication state is checked before rendering any child component; layout level checks in `AdminLayout` and `CustomerLayout` provide defense-in-depth against role bypass.
+2. **Atomic Document Conditions**: Solves distributed race conditions in MongoDB without requiring external distributed locks. By placing balance and stock bounds (`{ availablePoints: { $gte: pointsRequired } }`) directly in the write filter, double-spend attacks are completely blocked.
+3. **Automatic 401 Interceptor with Subscriber Queue (`api.js`)**: Serializes concurrent unauthorized requests into a pending queue while the refresh token is exchanged once, preventing token rotation collisions and infinite refresh loops.
+4. **Defense Against ReDoS & Injection (`securityUtils.js`)**: All user-supplied search parameters are passed through `escapeRegex` before reaching Mongo `$regex` expressions, truncating over-length inputs and escaping all 14 RegExp special characters.

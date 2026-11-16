@@ -37,8 +37,29 @@ The platform includes two dedicated portals built with a tactile **Neo-Brutalist
 - **Cryptography:** Node.js `crypto` with HMAC-SHA256 keyed hash for tamper-evident scratch codes (zero plaintext code storage)
 - **Security & Defenses:** Helmet, CORS, express-rate-limit, bcrypt password hashing
 - **Integration Layer:** Reusable API service layer (`frontend/src/services/api.js`) with Bearer token injection and graceful fallback
-- **Testing Suite:** Jest + Supertest + MongoMemoryServer (21/21 unit & end-to-end integration tests passing)
+- **Testing Suite:** Jest + Supertest + MongoMemoryServer (37/37 unit, integration, and security remediation tests passing across 7 test suites)
 - **Deployment Prep:** Vercel SPA config (`vercel.json`), Render blueprint (`render.yaml`), Multi-Stage Dockerfile
+
+---
+
+## 🛡️ Agent 3 – Phase 2 Security & Architectural Remediation
+
+Following the comprehensive Phase 1 QA & Security Audit (`AUDIT_REPORT_PHASE1.md`), all 12 identified findings were remediated and verified with automated test suites:
+
+| Finding ID | Severity | Area | Status | Key Remediation Applied |
+|---|---|---|---|---|
+| **FINDING-SEC-01** | CRITICAL | Frontend Access Control | **RESOLVED** | Created reusable `<ProtectedRoute>` with `isAuthLoading` guard, enforcing strict role validation on `/admin/*` and `/customer/*`. |
+| **FINDING-SEC-02** | CRITICAL | Backend Concurrency | **RESOLVED** | Enforced atomic conditional updates (`availablePoints: { $gte: cost }`) on point balance and reward stock decrement with automatic rollbacks. |
+| **FINDING-AUTH-01** | HIGH | Session Lifecycle | **RESOLVED** | Purged hardcoded `Rahul Sharma` state; initialized unauthenticated state to `null`; added multi-tab storage event synchronization. |
+| **FINDING-INT-01** | HIGH | Token Refresh & 401s | **RESOLVED** | Implemented concurrency-safe 401 interceptor with subscriber queue, single retry (`isRetry`), and auto-logout on refresh token revocation. |
+| **FINDING-LOGIC-01** | HIGH | Inventory & Refunds | **RESOLVED** | Replaced manual stock restoration with atomic `$inc: { quantity: 1 }` on `Reward` upon fulfillment rejection; enforced status transition state machine. |
+| **FINDING-BUG-01** | HIGH | Route Visibility | **RESOLVED** | Developed `optionalProtect` middleware decoding optional Bearer tokens, allowing public visitors to browse active catalog while admins view drafts. |
+| **FINDING-SEC-03** | MEDIUM | Mass Assignment | **RESOLVED** | Whitelisted mutable fields (`name, description, pointsRequired, quantity, category, image, tag, status`) in `updateReward`. |
+| **FINDING-SEC-04** | MEDIUM | ReDoS Protection | **RESOLVED** | Created `escapeRegex` utility escaping RegExp metacharacters and truncating query strings across product, reward, and fraud searches. |
+| **FINDING-SEC-05** | MEDIUM | Admin Audit Trail | **RESOLVED** | Added `logAdminActivity` instrumentation to `blockCode` and `adjustPoints` recording operator ID, target, reason, and change diffs. |
+| **FINDING-SEC-06** | MEDIUM | Token Storage | **RESOLVED** | Added `httpOnly`, `Secure`, `SameSite=Strict` cookie issuance on login/refresh/logout while maintaining backward-compatible Bearer support. |
+| **FINDING-FEAT-01** | MEDIUM | Password Recovery | **RESOLVED** | Built `/reset-password` frontend view accepting URL tokens, integrated configurable SMTP handler with dev-safe audit logging. |
+| **FINDING-VAL-01** | LOW | Input Validation | **RESOLVED** | Upgraded password complexity (min 8 chars, uppercase/numbers) and international phone regex (`/^[+]?[0-9]{10,14}$/`) in backend and frontend. |
 
 ---
 

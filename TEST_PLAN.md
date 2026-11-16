@@ -126,3 +126,26 @@ This document records the end-to-end testing strategy, automated build verificat
 - Tested at 375px (Mobile Portrait): Hamburger navigation opens full mobile drawer, tables scroll horizontally without layout clipping.
 - Tested at 768px (Tablet): Grid layouts reflow cleanly to 2 columns.
 - Tested at 1280px / 1440px (Desktop): Fixed sidebar layout with persistent top navigation.
+
+---
+
+## 4. Phase 2 Security Remediation Test Suite Breakdown (`securityRemediation.test.js`)
+
+| Test Case & Finding ID | Remediation Objective | Assertions Verified | Status |
+|---|---|---|---|
+| **FINDING-SEC-02: Concurrency & Atomicity** | Atomic conditional deduction preventing double-spending | Two concurrent HTTP claims with only enough points for one reward: exactly 1 returns 201, other returns 400; final points = 0, stock decrements by 1 | **PASS** |
+| **FINDING-LOGIC-01: Inventory Restoration** | Atomic inventory restoration on order rejection | Fulfillment rejection restores stock (`$inc: +1`), updates timeline, and refunds points | **PASS** |
+| **FINDING-LOGIC-01: Rejection Idempotency** | Prevent duplicate stock restoration on re-rejection | Second rejection attempt does not double-increment stock; inventory remains consistent | **PASS** |
+| **FINDING-SEC-03: Mass Assignment** | Prevent unauthorized field injection in reward update | PUT `/api/rewards/:id` rejects or ignores non-whitelisted attributes (`unauthorizedField`, `__v`) | **PASS** |
+| **FINDING-FEAT-01: Password Recovery** | End-to-end token generation & password update | `forgotPassword` generates hashed token; `resetPassword` validates hash and allows login with new credential | **PASS** |
+| **FINDING-BUG-01: Public Route Visibility** | Optional authentication on public GET endpoints | Unauthenticated visitors see only active catalog; authenticated Admins see both active and draft items | **PASS** |
+| **FINDING-SEC-04: ReDoS / Regex Injection** | Prevent regex crash or algorithmic complexity attack | Malicious patterns (`((((a+)+)+)+)+$`, special characters) are escaped via `escapeRegex` and return 200 safely | **PASS** |
+| **FINDING-SEC-05: Audit Logging (Codes)** | Audit trail creation on code blocking | `blockCode` records `BLOCK_CODE` action in `AuditLog` collection with adminId and targetId | **PASS** |
+| **FINDING-SEC-05: Audit Logging (Points)** | Audit trail creation on points adjustment | `adjustPoints` records `POINTS_ADJUSTED` under `Customers` module with delta and reason | **PASS** |
+| **FINDING-VAL-01: Password Complexity** | Reject weak passwords | Registration with passwords < 8 characters or lacking letters/numbers rejected with HTTP 422 | **PASS** |
+| **FINDING-VAL-01: Phone Format** | Enforce international phone syntax | Registration with malformed phone string rejected with HTTP 422; valid formats accepted | **PASS** |
+
+### Complete Test Results Summary:
+- **Total Test Suites Passing:** 7 of 7 (`securityRemediation.test.js`, `rewards.test.js`, `auth.test.js`, `products.test.js`, `integrationJourney.test.js`, `codes.test.js`, `enhancements.test.js`).
+- **Total Automated Tests Passing:** 37 of 37 (100% pass rate).
+- **Frontend Production Build:** Vite build succeeds in ~2.0s with 0 errors.

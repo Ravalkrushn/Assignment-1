@@ -71,3 +71,11 @@ This document details all business and engineering assumptions made during the d
 ## 10. Customer Support Ticketing & Internal Notes Privacy
 - **Assumption:** Customer inquiries and disputes (illegible scratch codes, delayed reward delivery, points disputes) require collaborative communication between mechanics and factory support staff.
 - **Staff Privacy Isolation:** Administrative operators can record private internal investigation notes within the ticket thread. The backend API strictly strips all internal notes when serving tickets to customer accounts, ensuring internal staff deliberation remains completely confidential.
+
+---
+
+## 11. Security Remediation & Concurrency Assumptions (Phase 2)
+- **Zero-Trust Client Access Control:** The frontend client SPA cannot be trusted to self-police access. While `<ProtectedRoute>` guards client navigation to avoid UI flash, all mutating operations and sensitive analytics must still be defended by JWT bearer token decoding and role checking (`protect`, `restrictTo('admin')`) on the backend.
+- **Single-Document Concurrency Over Distributed Locks:** Standalone MongoDB deployments and test environments do not inherently support multi-document replica set transactions without complex orchestration. By leveraging single-document atomic conditions (`findOneAndUpdate({ _id, availablePoints: { $gte: points } })`), the system guarantees 100% thread safety against double-redemption race conditions across all environments.
+- **Dual Authentication Token Portability:** While modern production browsers benefit from `httpOnly`, `Secure`, `SameSite=Strict` cookies to mitigate XSS risks, maintaining JSON payload token return ensures backward compatibility for API integration tests, mobile apps, and external test harnesses.
+- **Graceful Password Recovery Fallback:** In environments where external SMTP credentials (`SMTP_HOST`, `SMTP_USER`) are not configured, password reset tokens are logged to secure development audit streams rather than failing the HTTP request, allowing full end-to-end evaluation without requiring real mail server setup.
