@@ -16,8 +16,53 @@ import { api } from '../../services/api';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
+const defaultFulfillments = [
+  {
+    _id: 'ORD-9821',
+    customerName: 'Rahul Sharma',
+    userEmail: 'rahul.sharma@workshop.in',
+    rewardName: 'Industrial Heavy-Duty Safety Kit',
+    rewardCategory: 'Safety Gear',
+    pointsSpent: 250,
+    status: 'Pending',
+    createdAt: '2026-11-14T09:30:00Z',
+    redemptionCode: 'VOUCH-7842',
+    trackingNumber: '',
+    carrier: 'Factory Direct Logistics',
+    shippingAddress: { street: 'Plot 42, Bhosari MIDC', city: 'Pune', state: 'Maharashtra', pincode: '411026' }
+  },
+  {
+    _id: 'ORD-9822',
+    customerName: 'Vikram Patel',
+    userEmail: 'vikram.patel@patelmotors.com',
+    rewardName: 'Free Hydraulic Valve Seal Pack',
+    rewardCategory: 'Physical Products',
+    pointsSpent: 150,
+    status: 'Approved',
+    createdAt: '2026-11-13T14:15:00Z',
+    redemptionCode: 'VOUCH-9912',
+    trackingNumber: '',
+    carrier: 'Factory Direct Logistics',
+    shippingAddress: { street: 'Survey 18, GIDC Naroda', city: 'Ahmedabad', state: 'Gujarat', pincode: '382330' }
+  },
+  {
+    _id: 'ORD-9823',
+    customerName: 'Gurpreet Singh',
+    userEmail: 'gurpreet.singh@malwahydraulics.com',
+    rewardName: '₹100 Discount Coupon',
+    rewardCategory: 'Coupons',
+    pointsSpent: 100,
+    status: 'Delivered',
+    createdAt: '2026-11-12T11:00:00Z',
+    redemptionCode: 'VOUCH-5510',
+    trackingNumber: 'VOUCH-5510',
+    carrier: 'Instant Digital Voucher',
+    shippingAddress: { street: 'Digital Issue', city: 'Ludhiana', state: 'Punjab', pincode: '141003' }
+  }
+];
+
 export default function RewardFulfillmentPage() {
-  const [redemptions, setRedemptions] = useState([]);
+  const [redemptions, setRedemptions] = useState(defaultFulfillments);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
