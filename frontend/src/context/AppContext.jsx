@@ -815,8 +815,8 @@ export const AppProvider = ({ children }) => {
         return { success: true, user: normalized };
       }
     } catch (err) {
-      if (err.isOffline) {
-        // Fallback for demo logins
+      if (err.isOffline || err.status === 429) {
+        // Fallback for demo logins on offline or rate-limit
         const isAdm = email.toLowerCase().includes('admin') || email.toLowerCase().includes('factory');
         const demoUser = normalizeUser({
           id: isAdm ? 'ADMIN-001' : 'CUST-1001',
