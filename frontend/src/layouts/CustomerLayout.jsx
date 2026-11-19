@@ -3,6 +3,7 @@ import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import CustomerSidebar from '../components/customer/CustomerSidebar';
 import CustomerNavbar from '../components/customer/CustomerNavbar';
+import ErrorBoundary from '../components/common/ErrorBoundary';
 
 export default function CustomerLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,7 +37,9 @@ export default function CustomerLayout() {
       <div className="flex-1 lg:pl-72 flex flex-col min-w-0">
         <CustomerNavbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </main>
       </div>
     </div>
