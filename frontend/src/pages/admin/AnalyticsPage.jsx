@@ -237,22 +237,22 @@ export default function AnalyticsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/10 font-medium">
-                {customers.slice(0, 5).map((c) => (
-                  <tr key={c.id} className="hover:bg-[#fbfaf5]">
+                {(Array.isArray(customers) ? customers : []).slice(0, 5).map((c) => (
+                  <tr key={c.id || c._id} className="hover:bg-[#fbfaf5]">
                     <td className="py-3 px-3">
-                      <p className="font-bold text-black">{c.name}</p>
-                      <p className="text-[10px] text-neutral-500">{c.businessName}</p>
+                      <p className="font-bold text-black">{c.name || c.fullName || 'Customer'}</p>
+                      <p className="text-[10px] text-neutral-500">{c.businessName || 'Workshop'}</p>
                     </td>
                     <td className="py-3 px-3">
                       <span className="px-1.5 py-0.5 bg-[#f4f4f0] border border-black rounded text-[10px] font-bold">
-                        {c.tier}
+                        {c.tier || 'Bronze'}
                       </span>
                     </td>
                     <td className="py-3 px-3 font-bold text-black">
-                      {c.totalPointsEarned.toLocaleString()} PTS
+                      {(c.totalPointsEarned ?? 0).toLocaleString()} PTS
                     </td>
                     <td className="py-3 px-3 text-right font-black text-black">
-                      {c.boxesRedeemed} Boxes
+                      {c.boxesRedeemed ?? 0} Boxes
                     </td>
                   </tr>
                 ))}

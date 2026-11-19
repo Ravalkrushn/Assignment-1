@@ -255,17 +255,17 @@ export default function AdminDashboard() {
           </div>
 
           <div className="divide-y divide-black/10 text-xs">
-            {customers.slice(0, 4).map((c) => (
-              <div key={c.id} className="py-3 flex items-center justify-between">
+            {(Array.isArray(customers) ? customers : []).slice(0, 4).map((c) => (
+              <div key={c.id || c._id} className="py-3 flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-black text-sm">{c.name}</p>
-                  <p className="text-neutral-500">{c.businessName} • {c.city}, {c.state}</p>
+                  <p className="font-bold text-black text-sm">{c.name || c.fullName || 'Customer'}</p>
+                  <p className="text-neutral-500">{c.businessName || 'Workshop'} • {c.city || '-'}, {c.state || '-'}</p>
                 </div>
                 <div className="text-right">
                   <span className="inline-block px-2 py-0.5 bg-[#ffe17c] border border-black rounded font-black text-[10px]">
-                    {c.pointsBalance} PTS
+                    {(c.pointsBalance ?? c.availablePoints ?? 0).toLocaleString()} PTS
                   </span>
-                  <span className="block text-[10px] text-neutral-400 mt-0.5">{c.registeredDate}</span>
+                  <span className="block text-[10px] text-neutral-400 mt-0.5">{c.registeredDate || c.joinedDate || '-'}</span>
                 </div>
               </div>
             ))}
