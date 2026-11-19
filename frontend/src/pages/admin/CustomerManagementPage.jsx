@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Users, 
   Search, 
@@ -10,57 +10,92 @@ import { api } from '../../services/api';
 import Modal from '../../components/common/Modal';
 import toast from 'react-hot-toast';
 
+const normalizeCustomer = (c) => {
+  if (!c) return null;
+  const name = c.name || c.fullName || 'Customer';
+  const points = typeof c.pointsBalance === 'number' 
+    ? c.pointsBalance 
+    : (typeof c.availablePoints === 'number' ? c.availablePoints : 0);
+  const earned = typeof c.totalPointsEarned === 'number' ? c.totalPointsEarned : 0;
+  const boxes = typeof c.boxesRedeemed === 'number' ? c.boxesRedeemed : 0;
+  const regDate = c.registeredDate || c.joinedDate || (c.createdAt ? new Date(c.createdAt).toISOString().substring(0, 10) : '2026-11-14');
+
+  return {
+    id: c.id || c._id || `CUST-${Math.random().toString(36).substring(2, 7)}`,
+    _id: c._id || c.id,
+    name,
+    fullName: name,
+    email: c.email || '',
+    phone: c.phone || '',
+    businessName: c.businessName || 'Workshop',
+    city: c.city || '-',
+    state: c.state || '-',
+    tier: c.tier || 'Bronze',
+    pointsBalance: points,
+    totalPointsEarned: earned,
+    boxesRedeemed: boxes,
+    status: c.status ? (c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()) : 'Active',
+    registeredDate: regDate,
+    joinedDate: regDate
+  };
+};
+
 export default function CustomerManagementPage() {
-  const { customers: contextCustomers, transactions } = useApp();
-  const [customers, setCustomers] = useState(contextCustomers);
+  const { customers: contextCustomers = [], transactions = [] } = useApp();
+  const [customers, setCustomers] = useState(() => 
+    Array.isArray(contextCustomers) ? contextCustomers.map(normalizeCustomer).filter(Boolean) : []
+  );
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+  // Sync if context customers update
+  useEffect(() => {
+    if (Array.isArray(contextCustomers) && contextCustomers.length > 0) {
+      setCustomers(contextCustomers.map(normalizeCustomer).filter(Boolean));
+    }
+  }, [contextCustomers]);
+
+  // Fetch live from directory endpoint
   useEffect(() => {
     api.analytics.getDirectory({ limit: 100 })
       .then(res => {
         if (res?.success && Array.isArray(res?.data?.customers) && res.data.customers.length > 0) {
-          setCustomers(res.data.customers.map(c => ({
-            id: c._id || c.id,
-            name: c.fullName || c.name,
-            email: c.email,
-            phone: c.phone,
-            businessName: c.businessName || 'Workshop',
-            city: c.city || '-',
-            state: c.state || '-',
-            tier: c.tier || 'Bronze',
-            pointsBalance: c.availablePoints !== undefined ? c.availablePoints : 0,
-            totalPointsEarned: c.totalPointsEarned || 0,
-            boxesRedeemed: c.boxesRedeemed || 0,
-            status: c.status ? (c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()) : 'Active',
-            joinedDate: c.createdAt ? new Date(c.createdAt).toISOString().substring(0, 10) : '2026-11-14'
-          })));
+          setCustomers(res.data.customers.map(normalizeCustomer).filter(Boolean));
         }
       })
       .catch(() => {});
-  }, [contextCustomers]);
+  }, []);
 
-  const filteredCustomers = customers.filter(c => {
-    const matchesSearch = 
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.city.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    if (statusFilter === 'ACTIVE') return matchesSearch && c.status === 'Active';
-    if (statusFilter === 'INACTIVE') return matchesSearch && c.status === 'Inactive';
-    return matchesSearch;
-  });
+  const safeCustomerList = useMemo(() => {
+    return (Array.isArray(customers) ? customers : []).map(normalizeCustomer).filter(Boolean);
+  }, [customers]);
+
+  const filteredCustomers = useMemo(() => {
+    return safeCustomerList.filter(c => {
+      const q = (searchTerm || '').trim().toLowerCase();
+      const nameMatch = (c.name || '').toLowerCase().includes(q);
+      const emailMatch = (c.email || '').toLowerCase().includes(q);
+      const businessMatch = (c.businessName || '').toLowerCase().includes(q);
+      const cityMatch = (c.city || '').toLowerCase().includes(q);
+      const matchesSearch = !q || nameMatch || emailMatch || businessMatch || cityMatch;
+      
+      const st = (c.status || '').toLowerCase();
+      if (statusFilter === 'ACTIVE') return matchesSearch && st === 'active';
+      if (statusFilter === 'INACTIVE') return matchesSearch && st !== 'active';
+      return matchesSearch;
+    });
+  }, [safeCustomerList, searchTerm, statusFilter]);
 
   const getCustomerTransactions = (customerId) => {
-    return transactions.filter(t => t.customerId === customerId);
+    if (!Array.isArray(transactions) || !customerId) return [];
+    return transactions.filter(t => t.customerId === customerId || t.userId === customerId);
   };
 
   const handleExportCSV = () => {
     const headers = "CustomerID,Name,Email,Phone,BusinessName,City,State,Tier,PointsBalance,TotalEarned,BoxesRedeemed,Status\n";
     const rows = filteredCustomers.map(c => 
-      `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.businessName}","${c.city}","${c.state}","${c.tier}",${c.pointsBalance},${c.totalPointsEarned},${c.boxesRedeemed},"${c.status}"`
+      `"${c.id}","${c.name}","${c.email}","${c.phone}","${c.businessName}","${c.city}","${c.state}","${c.tier}",${c.pointsBalance || 0},${c.totalPointsEarned || 0},${c.boxesRedeemed || 0},"${c.status}"`
     ).join("\n");
 
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
@@ -93,6 +128,7 @@ export default function CustomerManagementPage() {
         </div>
 
         <button
+          type="button"
           onClick={handleExportCSV}
           className="px-5 py-3 bg-white text-black neo-btn rounded-xl font-heading font-bold text-sm flex items-center gap-2"
         >
@@ -121,6 +157,7 @@ export default function CustomerManagementPage() {
           <span className="text-xs font-bold text-neutral-500">Status:</span>
           {['ALL', 'ACTIVE', 'INACTIVE'].map((st) => (
             <button
+              type="button"
               key={st}
               onClick={() => setStatusFilter(st)}
               className={`px-3 py-1.5 text-xs font-bold rounded-lg border-2 border-black transition-all ${
@@ -152,44 +189,53 @@ export default function CustomerManagementPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/10 font-medium">
-              {filteredCustomers.map((c) => (
-                <tr key={c.id} className="hover:bg-[#fbfaf5] transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-black">{c.id}</td>
-                  <td className="py-3.5 px-4">
-                    <p className="font-bold text-black">{c.name}</p>
-                    <p className="text-[11px] text-neutral-500">{c.email}</p>
-                  </td>
-                  <td className="py-3.5 px-4 text-neutral-700">{c.businessName}</td>
-                  <td className="py-3.5 px-4 text-neutral-600">{c.city}, {c.state}</td>
-                  <td className="py-3.5 px-4">
-                    <span className="px-2 py-0.5 bg-[#ffe17c] text-black border border-black rounded text-[11px] font-black">
-                      {c.tier}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 font-bold text-black">
-                    {c.pointsBalance.toLocaleString()} PTS
-                  </td>
-                  <td className="py-3.5 px-4 text-neutral-700 font-bold">
-                    {c.boxesRedeemed} Boxes
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className={`inline-block px-2 py-0.5 text-[10px] font-black uppercase border border-black rounded ${
-                      c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-neutral-200 text-neutral-700'
-                    }`}>
-                      {c.status}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <button
-                      onClick={() => setSelectedCustomer(c)}
-                      className="px-3 py-1.5 bg-black text-white neo-btn rounded-lg text-xs font-bold flex items-center gap-1.5 ml-auto"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Details</span>
-                    </button>
+              {filteredCustomers.length === 0 ? (
+                <tr>
+                  <td colSpan={9} className="py-8 text-center text-neutral-500 font-medium">
+                    No customers found matching current filters.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredCustomers.map((c) => (
+                  <tr key={c.id} className="hover:bg-[#fbfaf5] transition-colors">
+                    <td className="py-3.5 px-4 font-mono font-bold text-black">{c.id}</td>
+                    <td className="py-3.5 px-4">
+                      <p className="font-bold text-black">{c.name}</p>
+                      <p className="text-[11px] text-neutral-500">{c.email}</p>
+                    </td>
+                    <td className="py-3.5 px-4 text-neutral-700">{c.businessName}</td>
+                    <td className="py-3.5 px-4 text-neutral-600">{c.city}, {c.state}</td>
+                    <td className="py-3.5 px-4">
+                      <span className="px-2 py-0.5 bg-[#ffe17c] text-black border border-black rounded text-[11px] font-black">
+                        {c.tier}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 font-bold text-black">
+                      {(c.pointsBalance ?? 0).toLocaleString()} PTS
+                    </td>
+                    <td className="py-3.5 px-4 text-neutral-700 font-bold">
+                      {c.boxesRedeemed ?? 0} Boxes
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className={`inline-block px-2 py-0.5 text-[10px] font-black uppercase border border-black rounded ${
+                        c.status.toLowerCase() === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-neutral-200 text-neutral-700'
+                      }`}>
+                        {c.status}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedCustomer(c)}
+                        className="px-3 py-1.5 bg-black text-white neo-btn rounded-lg text-xs font-bold flex items-center gap-1.5 ml-auto"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Details</span>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -221,7 +267,7 @@ export default function CustomerManagementPage() {
               <div className="text-right">
                 <span className="text-xs font-bold text-black block">Available Points</span>
                 <span className="font-heading font-black text-2xl text-black">
-                  {selectedCustomer.pointsBalance.toLocaleString()}
+                  {(selectedCustomer.pointsBalance ?? 0).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -230,19 +276,19 @@ export default function CustomerManagementPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div className="p-3 bg-[#fbfaf5] border border-black rounded-lg">
                 <span className="text-neutral-500 font-bold block">Email:</span>
-                <span className="font-semibold text-black truncate block">{selectedCustomer.email}</span>
+                <span className="font-semibold text-black truncate block">{selectedCustomer.email || '-'}</span>
               </div>
               <div className="p-3 bg-[#fbfaf5] border border-black rounded-lg">
                 <span className="text-neutral-500 font-bold block">Mobile:</span>
-                <span className="font-semibold text-black">{selectedCustomer.phone}</span>
+                <span className="font-semibold text-black">{selectedCustomer.phone || '-'}</span>
               </div>
               <div className="p-3 bg-[#fbfaf5] border border-black rounded-lg">
                 <span className="text-neutral-500 font-bold block">Boxes Scanned:</span>
-                <span className="font-semibold text-black">{selectedCustomer.boxesRedeemed} Units</span>
+                <span className="font-semibold text-black">{selectedCustomer.boxesRedeemed ?? 0} Units</span>
               </div>
               <div className="p-3 bg-[#fbfaf5] border border-black rounded-lg">
                 <span className="text-neutral-500 font-bold block">Joined Date:</span>
-                <span className="font-semibold text-black">{selectedCustomer.registeredDate}</span>
+                <span className="font-semibold text-black">{selectedCustomer.registeredDate || selectedCustomer.joinedDate || '-'}</span>
               </div>
             </div>
 
@@ -262,14 +308,22 @@ export default function CustomerManagementPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-black/10">
-                    {getCustomerTransactions(selectedCustomer.id).map(t => (
-                      <tr key={t.id}>
-                        <td className="p-2 font-mono">{t.id}</td>
-                        <td className="p-2">{t.type === 'CODE_REDEMPTION' ? t.productName : t.rewardName}</td>
-                        <td className="p-2 font-bold">{t.flow === 'EARNED' ? `+${t.points}` : `-${t.points}`}</td>
-                        <td className="p-2 text-neutral-500">{t.date}</td>
+                    {getCustomerTransactions(selectedCustomer.id).length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="p-4 text-center text-neutral-500 font-medium">
+                          No recent transactions found for this customer.
+                        </td>
                       </tr>
-                    ))}
+                    ) : (
+                      getCustomerTransactions(selectedCustomer.id).map(t => (
+                        <tr key={t.id || t._id}>
+                          <td className="p-2 font-mono">{t.id || t._id}</td>
+                          <td className="p-2">{t.type === 'CODE_REDEMPTION' ? t.productName : t.rewardName}</td>
+                          <td className="p-2 font-bold">{t.flow === 'EARNED' ? `+${t.points}` : `-${t.points}`}</td>
+                          <td className="p-2 text-neutral-500">{t.date || (t.createdAt ? new Date(t.createdAt).toLocaleDateString() : '-')}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

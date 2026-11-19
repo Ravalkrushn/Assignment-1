@@ -93,8 +93,33 @@ export const AppProvider = ({ children }) => {
   });
 
   const [customers, setCustomers] = useState(() => {
-    const saved = localStorage.getItem('loyaltybox_customers');
-    return saved ? JSON.parse(saved) : initialCustomers;
+    try {
+      const saved = localStorage.getItem('loyaltybox_customers');
+      if (!saved) return initialCustomers;
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed) || parsed.length === 0) return initialCustomers;
+      return parsed.map(c => ({
+        id: c._id || c.id || '',
+        _id: c._id || c.id || '',
+        name: c.fullName || c.name || 'Customer',
+        fullName: c.fullName || c.name || 'Customer',
+        email: c.email || '',
+        phone: c.phone || '',
+        businessName: c.businessName || 'Workshop',
+        city: c.city || '-',
+        state: c.state || '-',
+        tier: c.tier || 'Bronze',
+        pointsBalance: typeof c.availablePoints === 'number' ? c.availablePoints : (typeof c.pointsBalance === 'number' ? c.pointsBalance : 0),
+        availablePoints: typeof c.availablePoints === 'number' ? c.availablePoints : (typeof c.pointsBalance === 'number' ? c.pointsBalance : 0),
+        totalPointsEarned: c.totalPointsEarned || 0,
+        totalPointsRedeemed: c.totalPointsRedeemed || 0,
+        boxesRedeemed: c.boxesRedeemed || 0,
+        status: c.status ? (c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()) : 'Active',
+        registeredDate: c.createdAt ? new Date(c.createdAt).toISOString().substring(0, 10) : (c.registeredDate || '2026-11-14')
+      }));
+    } catch {
+      return initialCustomers;
+    }
   });
 
   const [transactions, setTransactions] = useState(() => {
@@ -271,7 +296,25 @@ export const AppProvider = ({ children }) => {
       if (token && currentUser?.role === 'admin') {
         const custRes = await api.analytics.getDirectory().catch(() => null);
         if (custRes?.success && Array.isArray(custRes?.data?.customers)) {
-          setCustomers(custRes.data.customers);
+          setCustomers(custRes.data.customers.map(c => ({
+            id: c._id || c.id || '',
+            _id: c._id || c.id || '',
+            name: c.fullName || c.name || 'Customer',
+            fullName: c.fullName || c.name || 'Customer',
+            email: c.email || '',
+            phone: c.phone || '',
+            businessName: c.businessName || 'Workshop',
+            city: c.city || '-',
+            state: c.state || '-',
+            tier: c.tier || 'Bronze',
+            pointsBalance: typeof c.availablePoints === 'number' ? c.availablePoints : (typeof c.pointsBalance === 'number' ? c.pointsBalance : 0),
+            availablePoints: typeof c.availablePoints === 'number' ? c.availablePoints : (typeof c.pointsBalance === 'number' ? c.pointsBalance : 0),
+            totalPointsEarned: c.totalPointsEarned || 0,
+            totalPointsRedeemed: c.totalPointsRedeemed || 0,
+            boxesRedeemed: c.boxesRedeemed || 0,
+            status: c.status ? (c.status.charAt(0).toUpperCase() + c.status.slice(1).toLowerCase()) : 'Active',
+            registeredDate: c.createdAt ? new Date(c.createdAt).toISOString().substring(0, 10) : (c.registeredDate || '2026-11-14')
+          })));
         }
 
         const fraudRes = await api.fraud.getLogs().catch(() => null);
