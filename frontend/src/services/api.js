@@ -158,12 +158,20 @@ async function request(endpoint, options = {}, isRetry = false) {
     } catch (refreshErr) {
       isRefreshing = false;
       refreshSubscribers = [];
-      localStorage.removeItem('loyaltybox_token');
-      localStorage.removeItem('loyaltybox_refresh_token');
-      localStorage.removeItem('loyaltybox_user');
-      
-      if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+
+      // Only force redirect to login if we had an actual bearer token that failed refresh,
+      // and not in demo/mock fallback mode or when refresh token was simply unavailable.
+      const existingToken = localStorage.getItem('loyaltybox_token');
+      const isDemoToken = existingToken && existingToken.startsWith('demo_');
+
+      if (!isDemoToken) {
+        localStorage.removeItem('loyaltybox_token');
+        localStorage.removeItem('loyaltybox_refresh_token');
+        localStorage.removeItem('loyaltybox_user');
+        
+        if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
+          window.location.href = '/login';
+        }
       }
       throw refreshErr;
     }

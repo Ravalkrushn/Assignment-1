@@ -169,6 +169,18 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem('loyaltybox_token');
+      const savedUser = localStorage.getItem('loyaltybox_user');
+
+      if (token?.startsWith('demo_') && savedUser) {
+        try {
+          setCurrentUser(normalizeUser(JSON.parse(savedUser)));
+        } catch {
+          setCurrentUser(null);
+        }
+        setIsAuthLoading(false);
+        return;
+      }
+
       if (token) {
         try {
           const meRes = await api.auth.getMe();
@@ -182,10 +194,9 @@ export const AppProvider = ({ children }) => {
           }
         } catch {
           // If offline / network error, retain local session if present
-          const saved = localStorage.getItem('loyaltybox_user');
-          if (saved) {
+          if (savedUser) {
             try {
-              setCurrentUser(normalizeUser(JSON.parse(saved)));
+              setCurrentUser(normalizeUser(JSON.parse(savedUser)));
             } catch {
               setCurrentUser(null);
             }
@@ -830,6 +841,14 @@ export const AppProvider = ({ children }) => {
           pointsBalance: isAdm ? 0 : 1250,
           availablePoints: isAdm ? 0 : 1250
         });
+
+        // Ensure session tokens and user state are saved in localStorage for demo login
+        const demoToken = isAdm ? 'demo_admin_jwt_token' : 'demo_customer_jwt_token';
+        const demoRefresh = isAdm ? 'demo_admin_refresh_token' : 'demo_customer_refresh_token';
+        localStorage.setItem('loyaltybox_token', demoToken);
+        localStorage.setItem('loyaltybox_refresh_token', demoRefresh);
+        localStorage.setItem('loyaltybox_user', JSON.stringify(demoUser));
+
         setCurrentUser(demoUser);
         return { success: true, user: demoUser, isFallback: true };
       }
