@@ -8,12 +8,17 @@
 const rawEnvUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '';
 
 function resolveApiBaseUrl() {
-  if (!rawEnvUrl) {
-    // If running in production browser (e.g. on Vercel), use relative '/api'
-    // so Vercel rewrites reverse-proxy it directly to Render with zero CORS issues!
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+  // If running in production browser on Vercel (or any non-localhost production domain),
+  // ALWAYS use the relative '/api' reverse-proxy configured in vercel.json!
+  // This completely eliminates CORS preflight blocks and keeps all requests same-origin.
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (host !== 'localhost' && host !== '127.0.0.1') {
       return '/api';
     }
+  }
+
+  if (!rawEnvUrl) {
     return 'http://localhost:5000/api';
   }
 
